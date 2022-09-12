@@ -11,11 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Web", "Web\St
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{C99D5E73-F6EC-405D-A9E9-34F4F76AFFAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentSystem.Data", "Data\StudentSystem.Data\StudentSystem.Data.csproj", "{4A95E804-D4E6-4669-8115-1620343D97C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Data", "Data\StudentSystem.Data\StudentSystem.Data.csproj", "{4A95E804-D4E6-4669-8115-1620343D97C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentSystem.Data.Models", "Data\StudentSystem.Data.Models\StudentSystem.Data.Models.csproj", "{51CE3977-F7D7-4AF5-8F38-58E54F43C33E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Data.Models", "Data\StudentSystem.Data.Models\StudentSystem.Data.Models.csproj", "{51CE3977-F7D7-4AF5-8F38-58E54F43C33E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentSystem.Data.Common", "Data\StudentSystem.Data.Common\StudentSystem.Data.Common.csproj", "{1CB674A7-AE75-43E8-A287-B0893DB6B46F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Data.Common", "Data\StudentSystem.Data.Common\StudentSystem.Data.Common.csproj", "{1CB674A7-AE75-43E8-A287-B0893DB6B46F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F600AA8D-6916-457A-B64E-6D82BDBDBF1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Services", "Services\StudentSystem.Services\StudentSystem.Services.csproj", "{620A3958-FC62-4328-8BB5-83E365644159}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentSystem.Web.ViewModels", "StudentSystem.Web.ViewModels", "{6A78885B-FB23-4344-82B5-381F2E0B8C05}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.ViewModels", "Web\StudentSystem.Web.ViewModels\StudentSystem.ViewModels\StudentSystem.ViewModels.csproj", "{FA7B43CF-051C-463F-B7CF-352616955A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +47,14 @@ Global
 		{1CB674A7-AE75-43E8-A287-B0893DB6B46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CB674A7-AE75-43E8-A287-B0893DB6B46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CB674A7-AE75-43E8-A287-B0893DB6B46F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620A3958-FC62-4328-8BB5-83E365644159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620A3958-FC62-4328-8BB5-83E365644159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620A3958-FC62-4328-8BB5-83E365644159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620A3958-FC62-4328-8BB5-83E365644159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA7B43CF-051C-463F-B7CF-352616955A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA7B43CF-051C-463F-B7CF-352616955A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA7B43CF-051C-463F-B7CF-352616955A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA7B43CF-051C-463F-B7CF-352616955A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +65,9 @@ Global
 		{4A95E804-D4E6-4669-8115-1620343D97C2} = {C99D5E73-F6EC-405D-A9E9-34F4F76AFFAA}
 		{51CE3977-F7D7-4AF5-8F38-58E54F43C33E} = {C99D5E73-F6EC-405D-A9E9-34F4F76AFFAA}
 		{1CB674A7-AE75-43E8-A287-B0893DB6B46F} = {C99D5E73-F6EC-405D-A9E9-34F4F76AFFAA}
+		{620A3958-FC62-4328-8BB5-83E365644159} = {F600AA8D-6916-457A-B64E-6D82BDBDBF1A}
+		{6A78885B-FB23-4344-82B5-381F2E0B8C05} = {1AE456AE-3282-47A9-8CD2-3D21798299F1}
+		{FA7B43CF-051C-463F-B7CF-352616955A90} = {6A78885B-FB23-4344-82B5-381F2E0B8C05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AB81343-52AE-41A2-85BE-FC278FBCC637}

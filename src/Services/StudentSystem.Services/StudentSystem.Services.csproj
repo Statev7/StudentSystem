@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\StudentSystem.Data\StudentSystem.Data.csproj" />
+    <ProjectReference Include="..\..\Web\StudentSystem.Web.ViewModels\StudentSystem.ViewModels\StudentSystem.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,8 @@
 namespace StudentSystem.Web
 {
+    using System;
+    using System.Reflection;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -8,6 +11,7 @@ namespace StudentSystem.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    using StudentSystem.Services.Course;
     using StudentSystem.Web.Data;
 
     public class Startup
@@ -30,7 +34,12 @@ namespace StudentSystem.Web
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
+
             services.AddControllersWithViews();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            this.RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,5 +72,10 @@ namespace StudentSystem.Web
                 endpoints.MapRazorPages();
             });
         }
+
+        private void RegisterServices(IServiceCollection services)
+        {
+            services.AddTransient<ICourseService, CourseService>();
+        } 
     }
 }

@@ -14,6 +14,7 @@
         }
 
         protected StudentSystemDbContext DbContext { get; }
+
         protected IMapper Mapper { get; }
     }
 }

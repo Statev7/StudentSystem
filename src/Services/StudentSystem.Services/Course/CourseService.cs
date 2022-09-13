@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Services.Course
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -29,6 +30,8 @@
         public async Task CreateAsync(CreateCourseBindingModel course)
         {
             var courseToAdd = this.Mapper.Map<Course>(course);
+
+            courseToAdd.CreatedOn = DateTime.UtcNow;
 
             await this.DbContext.Courses.AddAsync(courseToAdd);
             await this.DbContext.SaveChangesAsync();

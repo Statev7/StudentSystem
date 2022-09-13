@@ -17,6 +17,10 @@
         [MinLength(CourseDescriptionMinLength)]
         public string Description { get; set; }
 
+        [Required]
+        [Url]
+        public string ImageURL { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }

@@ -1,10 +1,19 @@
 ﻿@model IEnumerable<AllCoursesViewModel>
 
-<div>
+<div class="row">
 	@foreach (var course in @Model)
 	{
-		<span>@course.Name - @course.Description</span>
-		<span>@course.StartDate - @course.EndDate</span>
-		<hr />
+		<div class="card ml-3" style="width: 18rem;">
+			<img class="card-img-top h-100" src="@course.ImageURL" alt="@course.Name - @course.StartDate">
+			<div class="card-body bg-light" style="font-family: Georgia, 'Times New Roman', Times, serif">
+				<h5 class="card-title font-weight-bold">Курс: @course.Name</h5>
+				<hr>
+
+				<p class="card-text">
+					@course.StartDate.ToString("d-MMMM yyyy")
+					<span class="float-right">@course.Duration @(course.Duration > 1 ? "седмици" : "седмица")</span>
+				</p>
+			</div>
+		</div>
 	}
 </div>

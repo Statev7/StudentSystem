@@ -7,7 +7,7 @@
         public const int CourseNameMaxLength = 128;
         public const int CourseNameMinLength = 2;
         public const int CourseDescriptionMaxLength = 10000;
-        public const int CourseDescriptionMinLength = 50;
+        public const int CourseDescriptionMinLength = 10;
 
         //Exam
 

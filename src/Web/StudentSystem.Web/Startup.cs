@@ -6,6 +6,7 @@ namespace StudentSystem.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -75,6 +76,7 @@ namespace StudentSystem.Web
 
         private void RegisterServices(IServiceCollection services)
         {
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddTransient<ICourseService, CourseService>();
         } 
     }

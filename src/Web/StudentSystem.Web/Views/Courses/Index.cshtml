@@ -1,18 +1,24 @@
 ﻿@model IEnumerable<AllCoursesViewModel>
 
+@{
+	ViewData["Title"] = "All courses";
+}
+
 <div class="row">
 	@foreach (var course in @Model)
 	{
 		<div class="card ml-3" style="width: 18rem;">
 			<img class="card-img-top h-100" src="@course.ImageURL" alt="@course.Name - @course.StartDate">
 			<div class="card-body bg-light" style="font-family: Georgia, 'Times New Roman', Times, serif">
-				<h5 class="card-title font-weight-bold">Курс: @course.Name</h5>
+				<h5 class="card-title font-weight-bold">Course: @course.Name</h5>
 				<hr>
 
 				<p class="card-text">
-					@course.StartDate.ToString("d-MMMM yyyy")
-					<span class="float-right">@course.Duration @(course.Duration > 1 ? "седмици" : "седмица")</span>
+					@course.StartDate.ToString("d-MMMM yyyy", CultureInfo.InvariantCulture)
+					<span class="float-right">@course.Duration @(course.Duration > 1 ? "weeks" : "week")</span>
 				</p>
+				<a class="btn btn-primary" asp-controller="Courses" asp-action="Delete" asp-route-id="@course.Id">Delete</a>
+				<a class="btn btn-primary float-right" asp-controller="Courses" asp-action="Update" asp-route-id="@course.Id">Update</a>
 			</div>
 		</div>
 	}

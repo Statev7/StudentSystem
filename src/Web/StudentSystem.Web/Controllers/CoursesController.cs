@@ -19,7 +19,7 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var courses = this.courseService.GetAll();
+            var courses = this.courseService.GetAll<AllCoursesViewModel>();
 
             return View(courses);
         }

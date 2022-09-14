@@ -1,4 +1,4 @@
-﻿namespace StudentSystem.Web.MappingConfiguration
+﻿namespace StudentSystem.Web.Infrastructure.MappingConfiguration
 {
     using AutoMapper;
 
@@ -13,6 +13,7 @@
             this.CreateMap<CreateCourseBindingModel, Course>();
             this.CreateMap<Course, DetailCourseViewModel>();
             this.CreateMap<UpdateCourseBindingModel, Course>().ReverseMap();
+            this.CreateMap<Course, CourseIdNameViewModel>();
         }
     }
 }

@@ -7,7 +7,7 @@
 
     public interface ICourseService
     {
-        IEnumerable<AllCoursesViewModel> GetAll();
+        IEnumerable<TEntity> GetAll<TEntity>();
 
         TEntity GetById<TEntity>(int id);
 

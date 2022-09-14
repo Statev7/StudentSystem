@@ -24,11 +24,11 @@
         {
         }
 
-        public IEnumerable<AllCoursesViewModel> GetAll()
+        public IEnumerable<TEntity> GetAll<TEntity>()
             => this.DbContext
                 .Courses
                 .Where(x => !x.IsDeleted)
-                .ProjectTo<AllCoursesViewModel>(this.Mapper.ConfigurationProvider)
+                .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider)
                 .ToList();
 
         public TEntity GetById<TEntity>(int id)

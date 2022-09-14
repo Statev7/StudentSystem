@@ -1,0 +1,15 @@
+﻿@model IEnumerable<AllLessonsViewModel>
+
+<div class="row">
+	@foreach (var lesson in Model)
+	{
+		<div>
+			<span>@lesson.Title</span>
+			<br>
+			<span>@lesson.Date - @lesson.Begining - @lesson.End</span>
+			<br>
+			<span>@lesson.CourseName - @lesson.Content</span>
+		</div>
+	}
+</div>
+

@@ -13,6 +13,7 @@ namespace StudentSystem.Web
     using Microsoft.Extensions.Hosting;
 
     using StudentSystem.Services.Course;
+    using StudentSystem.Services.Lesson;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
 
@@ -80,7 +81,9 @@ namespace StudentSystem.Web
         private void RegisterServices(IServiceCollection services)
         {
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
             services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<ILessonService, LessonService>();
         } 
     }
 }

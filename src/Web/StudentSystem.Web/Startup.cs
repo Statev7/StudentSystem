@@ -14,6 +14,7 @@ namespace StudentSystem.Web
 
     using StudentSystem.Services.Course;
     using StudentSystem.Web.Data;
+    using StudentSystem.Web.Infrastructure.Extensions;
 
     public class Startup
     {
@@ -56,6 +57,8 @@ namespace StudentSystem.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.MigrateDatabaseAsync().GetAwaiter().GetResult();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -13,14 +13,16 @@
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Web.Data;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using StudentSystem.ViewModels.Lesson;
+    using System.Globalization;
 
     public class CourseService : BaseService, ICourseService
     {
         public CourseService(
-            StudentSystemDbContext dbContext, 
+            StudentSystemDbContext dbContext,
             IMapper mapper,
             IActionContextAccessor actionContextAccessor)
-            :base(dbContext, mapper, actionContextAccessor)
+            : base(dbContext, mapper, actionContextAccessor)
         {
         }
 
@@ -59,7 +61,7 @@
         {
             var courseToUpdate = this.DbContext.Courses.Find(course.Id);
 
-            if (courseToUpdate == null) 
+            if (courseToUpdate == null)
             {
                 return false;
             }
@@ -71,6 +73,30 @@
             await this.DbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public DetailCourseViewModel GetDetails(int id)
+        {
+            var course = this.DbContext.Courses
+                .Where(x => x.Id == id)
+                .Select(c => new DetailCourseViewModel
+                {
+                    Name = c.Name,
+                    Description = c.Description,
+                    StartDate = c.StartDate.ToString("d MMMM yyyy", CultureInfo.InvariantCulture),
+                    EndDate = c.EndDate.ToString("d MMMM yyyy", CultureInfo.InvariantCulture),
+                    Lessons = c.Lessons
+                            .Where(l => !l.IsDeleted)
+                            .Select(l => new LessonIdNameViewModel
+                            {
+                                Id = l.Id,
+                                Title = l.Title,
+                            })
+                            .ToList()
+                })
+                .FirstOrDefault();
+
+            return course;
         }
 
         public async Task<bool> DeleteAsync(int id)

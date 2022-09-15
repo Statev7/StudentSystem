@@ -15,6 +15,8 @@
 
         Task<bool> UpdateAsync(UpdateCourseBindingModel course);
 
+        DetailCourseViewModel GetDetails(int id);
+
         Task<bool> DeleteAsync(int id);
     }
 }

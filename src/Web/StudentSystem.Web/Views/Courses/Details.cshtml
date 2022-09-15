@@ -1,42 +1,41 @@
-﻿@model StudentSystem.ViewModels.Course.DetailCourseViewModel
+﻿@model DetailCourseViewModel
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
+	var count = 0;
 }
 
-<h1>Details</h1>
 
 <div>
-    <h4>DetailCourseViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+	<div class="text-center mt-5 shadow-sm p-3 mb-5 text-white rounded" style="background-color: #563D7C">
+		<h3>@Model.Name</h3>
+		<span>Start date: @Model.StartDate</span>
+	</div>
+	<div class="mt-5 shadow p-3 mb-5 bg-white rounded">
+		<div class="p-3">
+			<h3>Lessons</h3>
+		</div>
+		<div class="container overflow-hidden">
+			<div class="row gx-5 mb-3">
+				@foreach (var lesson in Model.Lessons)
+				{
+					<div class="col-6">
+						<a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.Id" style="text-decoration: none;">
+							<div class="p-2 mt-1 border" style="background-color: #f1f1f1">
+								<span class="lesson-title">@(++count). @lesson.Title</span>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<div class="offset-md-2 col-sm col-md-8 mt-5 shadow p-3 bg-white rounded">
+		<div>
+			<h5>Description</h5>
+		</div>
+		<div>
+			@Model.Description
+		</div>
+	</div>
 </div>

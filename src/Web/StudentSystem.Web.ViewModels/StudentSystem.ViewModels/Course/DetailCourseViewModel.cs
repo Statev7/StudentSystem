@@ -1,6 +1,9 @@
 ﻿namespace StudentSystem.ViewModels.Course
 {
     using System;
+    using System.Collections.Generic;
+
+    using StudentSystem.ViewModels.Lesson;
 
     public class DetailCourseViewModel
 	{
@@ -8,8 +11,10 @@
 
         public string Description { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public string EndDate { get; set; }
+
+        public IEnumerable<LessonIdNameViewModel> Lessons { get; set; }
     }
 }

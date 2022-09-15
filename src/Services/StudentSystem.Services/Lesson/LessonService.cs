@@ -35,6 +35,15 @@
                 .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider)
                 .ToList();
 
+        public TEntity GetById<TEntity>(int id)
+        {
+            var lesson = this.DbContext.Lessons.Find(id);
+
+            var lessonToReturn = this.Mapper.Map<TEntity>(lesson);
+            return lessonToReturn;
+        }
+                
+
         public CreateLessonBindingModel GetViewModelForCreate() 
             => new CreateLessonBindingModel()
             {

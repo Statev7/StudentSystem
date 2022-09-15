@@ -73,10 +73,10 @@
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var course = this.courseService.GetById<DetailCourseViewModel>(id);
+            var course = this.courseService.GetDetails(id);
             if (course == null)
             {
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "Home");
             }
 
             return this.View(course);

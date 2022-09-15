@@ -45,5 +45,13 @@
 
 			return this.RedirectToAction(nameof(this.Index));
 		}
+
+		[HttpGet]
+		public IActionResult Details(int id)
+		{
+			var lesson = this.lessonService.GetById<DetailsLessonViewModel>(id);
+
+			return this.View(lesson);
+		}
 	}
 }

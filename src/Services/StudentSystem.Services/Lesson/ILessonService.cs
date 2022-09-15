@@ -10,6 +10,8 @@
     {
         IEnumerable<TEntity> GetAll<TEntity>();
 
+        TEntity GetById<TEntity>(int id);
+
         CreateLessonBindingModel GetViewModelForCreate();
 
         Task CreateAsync(CreateLessonBindingModel lesson);

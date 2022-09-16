@@ -4,16 +4,22 @@
 
 	using Microsoft.AspNetCore.Mvc;
 
+	using StudentSystem.Services.Course;
 	using StudentSystem.Services.Lesson;
+	using StudentSystem.ViewModels.Course;
 	using StudentSystem.ViewModels.Lesson;
 
 	public class LessonsController : Controller
 	{
 		private readonly ILessonService lessonService;
+		private readonly ICourseService courseService;
 
-		public LessonsController(ILessonService lessonService)
+		public LessonsController(
+			ILessonService lessonService, 
+			ICourseService courseService)
 		{
 			this.lessonService = lessonService;
+			this.courseService = courseService;
 		}
 
 		[HttpGet]
@@ -27,7 +33,12 @@
 		[HttpGet]
 		public IActionResult Create()
 		{
-			var lesson = this.lessonService.GetViewModelForCreate();
+			var lesson = new CreateLessonBindingModel()
+			{
+				Begining = null,
+				End = null,
+				Courses = this.courseService.GetAll<CourseIdNameViewModel>()
+			};
 
 			return this.View(lesson);
 		}
@@ -37,9 +48,15 @@
 		{
             if (!this.ModelState.IsValid)
             {
-				lesson.Courses = this.lessonService.GetAllCourses();
+				lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
                 return this.View(lesson);
             }
+
+			var isCourseValid = this.courseService.GetById<CourseIdNameViewModel>(lesson.CourseId) != null;
+            if (!isCourseValid)
+			{
+				this.RedirectToAction("Index", "Home");
+			}
 
             await this.lessonService.CreateAsync(lesson);
 

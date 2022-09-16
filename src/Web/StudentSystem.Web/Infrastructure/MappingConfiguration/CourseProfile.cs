@@ -24,6 +24,7 @@
             this.CreateMap<CreateCourseBindingModel, Course>();
             this.CreateMap<UpdateCourseBindingModel, Course>().ReverseMap();
             this.CreateMap<Course, CourseIdNameViewModel>();
+            this.CreateMap<Course, CourseNameViewModel>();
         }
     }
 }

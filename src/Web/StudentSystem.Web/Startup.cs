@@ -80,8 +80,6 @@ namespace StudentSystem.Web
 
         private void RegisterServices(IServiceCollection services)
         {
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
         } 

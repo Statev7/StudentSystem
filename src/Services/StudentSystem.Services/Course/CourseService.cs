@@ -12,7 +12,6 @@
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Web.Data;
-    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using StudentSystem.ViewModels.Lesson;
     using System.Globalization;
 
@@ -20,9 +19,8 @@
     {
         public CourseService(
             StudentSystemDbContext dbContext,
-            IMapper mapper,
-            IActionContextAccessor actionContextAccessor)
-            : base(dbContext, mapper, actionContextAccessor)
+            IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -35,13 +33,10 @@
 
         public TEntity GetById<TEntity>(int id)
         {
-            var course = this.DbContext.Courses.Find(id);
-
-            if (course == null)
-            {
-                //TODO: Change error key and message!
-                this.AddModelError("Error", "Entity with this id does not exist");
-            }
+            var course = this.DbContext
+                .Courses
+                .Where(c => !c.IsDeleted)
+                .SingleOrDefault(c => c.Id == id);
 
             var courseToReturn = this.Mapper.Map<TEntity>(course);
             return courseToReturn;

@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using StudentSystem.Web.Infrastructure.Attributes;
 
     using static StudentSystem.Data.Common.Constants;
 

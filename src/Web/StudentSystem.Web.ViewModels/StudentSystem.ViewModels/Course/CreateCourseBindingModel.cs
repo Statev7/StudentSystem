@@ -3,8 +3,6 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using StudentSystem.Web.Infrastructure.Attributes;
-
     using static StudentSystem.Data.Common.Constants;
 
     public class CreateCourseBindingModel
@@ -24,7 +22,6 @@
         [Display(Name = "Image Url")]
         public string ImageURL { get; set; }
 
-        [IsBeforeUtcNow]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
 

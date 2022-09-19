@@ -12,6 +12,7 @@ namespace StudentSystem.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Lesson;
     using StudentSystem.Web.Data;
@@ -35,7 +36,7 @@ namespace StudentSystem.Web
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();

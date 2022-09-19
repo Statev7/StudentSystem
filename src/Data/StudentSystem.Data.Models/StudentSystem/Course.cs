@@ -13,6 +13,7 @@
         public Course()
         {
             this.Lessons = new HashSet<Lesson>();
+            this.UserCourses = new HashSet<UserCourse>();
         }
 
         [Required]
@@ -37,5 +38,7 @@
         public Exam Exam { get; set; }
 
         public ICollection<Lesson> Lessons { get; set; }
+
+        public ICollection<UserCourse> UserCourses { get; set; }
     }
 }

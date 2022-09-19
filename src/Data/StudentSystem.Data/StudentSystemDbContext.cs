@@ -5,7 +5,7 @@
 
     using StudentSystem.Data.Models.StudentSystem;
 
-    public class StudentSystemDbContext : IdentityDbContext
+    public class StudentSystemDbContext : IdentityDbContext<ApplicationUser>
     {
         public StudentSystemDbContext(DbContextOptions<StudentSystemDbContext> options)
             : base(options)
@@ -19,6 +19,8 @@
         public DbSet<Exam> Exams { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<UserCourse> UserCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

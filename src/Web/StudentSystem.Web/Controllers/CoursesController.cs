@@ -88,6 +88,9 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
+            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION]
+                = string.Format(NotificationsConstants.SUCCESSFULLY_UPDATE_COURSE_MESSAGE, courseToUpdate.Name);
+
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -118,10 +121,8 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            var course = this.courseService.GetById<CourseNameViewModel>(id);
-
-            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION] 
-                = string.Format(NotificationsConstants.SUCCESSFULLY_DELETE_COURSE_MESSAGE, course.Name);
+            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION]
+                = NotificationsConstants.SUCCESSFULLY_DELETE_COURSE_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
         }

@@ -10,7 +10,8 @@
         // Courses messages
 
         public const string SUCCESSFULLY_CREATED_COURSE_MESSAGE = "Successfully created a {0} course";
-        public const string SUCCESSFULLY_DELETE_COURSE_MESSAGE = "Successfully delete a {0} course";
+        public const string SUCCESSFULLY_DELETE_COURSE_MESSAGE = "Successfully delete a course";
+        public const string SUCCESSFULLY_UPDATE_COURSE_MESSAGE = "Successfully update a {0} course";
         public const string INVALID_COURSE_MESSAGE = "No such course exists";
 
         //Date message

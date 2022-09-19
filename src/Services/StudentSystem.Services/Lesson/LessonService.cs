@@ -23,7 +23,7 @@
 
         public IEnumerable<TEntity> GetAll<TEntity>()
             => this.DbContext.Lessons
-                .Where(l => !l.IsDeleted)
+                .Where(l => !l.Course.IsDeleted && !l.IsDeleted)
                 .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider)
                 .ToList();
 

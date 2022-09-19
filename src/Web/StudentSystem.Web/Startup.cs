@@ -1,12 +1,9 @@
 namespace StudentSystem.Web
 {
-    using System;
     using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +12,7 @@ namespace StudentSystem.Web
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Lesson;
+    using StudentSystem.Services.Module;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
 
@@ -36,7 +34,12 @@ namespace StudentSystem.Web
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>()
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireDigit = false;
+                })
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();
@@ -83,6 +86,7 @@ namespace StudentSystem.Web
         {
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
+            services.AddTransient<IModuleService, ModuleService>();
         } 
     }
 }

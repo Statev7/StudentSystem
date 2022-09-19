@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.ViewModels.Course;
 
     public interface ICourseService

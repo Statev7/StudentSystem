@@ -76,6 +76,7 @@
                 .Where(x => x.Id == id)
                 .Select(c => new DetailCourseViewModel
                 {
+                    Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
                     StartDate = c.StartDate.ToString("d MMMM yyyy", CultureInfo.InvariantCulture),

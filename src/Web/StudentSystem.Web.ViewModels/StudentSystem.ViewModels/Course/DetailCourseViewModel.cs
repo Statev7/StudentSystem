@@ -1,12 +1,13 @@
 ﻿namespace StudentSystem.ViewModels.Course
 {
-    using System;
     using System.Collections.Generic;
 
     using StudentSystem.ViewModels.Lesson;
 
     public class DetailCourseViewModel
 	{
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

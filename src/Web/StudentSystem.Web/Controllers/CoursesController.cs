@@ -1,9 +1,12 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Web.Common;
@@ -13,7 +16,8 @@
     {
         private readonly ICourseService courseService;
 
-        public CoursesController(ICourseService courseService)
+        public CoursesController(
+            ICourseService courseService)
         {
             this.courseService = courseService;
         }

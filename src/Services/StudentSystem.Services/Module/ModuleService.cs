@@ -1,48 +1,37 @@
 ﻿namespace StudentSystem.Services.Module
 {
     using System;
-    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Abstaction;
     using StudentSystem.Web.Data;
+    using StudentSystem.Web.Infrastructure.Extensions;
 
     public class ModuleService : BaseService, IModuleService
     {
-        private readonly UserManager<ApplicationUser> userManager;
-
         public ModuleService(
             StudentSystemDbContext dbContext, 
-            IMapper mapper,
-            UserManager<ApplicationUser> userManager) 
+            IMapper mapper) 
             : base(dbContext, mapper)
         {
-            this.userManager = userManager;
         }
 
-        public async Task<bool> RegisterForCourseAsync(Course course, string userId)
+        public async Task<bool> RegisterForCourseAsync(Course course, ClaimsPrincipal user)
         {
-            var user = this.userManager.Users
-                .Include(u => u.UserCourses)
-                .ToListAsync()
-                .Result
-                .SingleOrDefault(u => u.Id == userId);
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var isUserInCourseAlready = user.UserCourses.Any(uc => uc.CourseId == course.Id);
-            if (isUserInCourseAlready)
+            if (user.IsUserInCourseAlready(this.DbContext, course.Id, userId))
             {
                 return false;
             }
 
             var userCourse = new UserCourse()
             {
-                ApplicationUser = user,
+                ApplicationUserId = userId,
                 Course = course,
                 CreatedOn = DateTime.UtcNow
             };

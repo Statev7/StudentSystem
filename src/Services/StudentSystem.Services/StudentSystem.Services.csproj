@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\StudentSystem.Data\StudentSystem.Data.csproj" />
+    <ProjectReference Include="..\..\Web\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Web\StudentSystem.Web.ViewModels\StudentSystem.ViewModels\StudentSystem.ViewModels.csproj" />
   </ItemGroup>
 

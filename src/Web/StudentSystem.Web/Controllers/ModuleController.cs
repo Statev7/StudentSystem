@@ -36,9 +36,9 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = this.User;
 
-            var isValid = await this.moduleService.RegisterForCourseAsync(course, userId);
+            var isValid = await this.moduleService.RegisterForCourseAsync(course, user);
             if (!isValid)
             {
                 this.TempData[NotificationsConstants.ERROR_NOTIFICATION]

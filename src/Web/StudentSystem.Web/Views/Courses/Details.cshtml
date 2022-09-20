@@ -3,12 +3,19 @@
 @{
 	ViewData["Title"] = "Details";
 	var count = 0;
+
+	var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
+@inject StudentSystemDbContext dbContext
+
 <div>
-	<div>
-		<a asp-controller="Module" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Click here</a>
-	</div>
+	@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
+	{
+		<div>
+			<a asp-controller="Module" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Click here</a>
+		</div>
+	}
 	<div class="text-center mt-5 shadow-sm p-3 mb-5 text-white rounded" style="background-color: #563D7C">
 		<h3>@Model.Name</h3>
 		<span>Start date: @Model.StartDate</span>

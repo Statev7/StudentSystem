@@ -1,4 +1,4 @@
-﻿namespace StudentSystem.Web.Infrastructure.MappingConfiguration
+﻿namespace StudentSystem.Web.MappingConfiguration
 {
     using System.Globalization;
 

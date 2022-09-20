@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\Data\StudentSystem.Data\StudentSystem.Data.csproj" />
     <ProjectReference Include="..\..\Services\StudentSystem.Services\StudentSystem.Services.csproj" />
     <ProjectReference Include="..\StudentSystem.Web.Common\StudentSystem.Web.Common.csproj" />
+    <ProjectReference Include="..\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

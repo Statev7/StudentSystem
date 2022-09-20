@@ -4,7 +4,7 @@
 
     public static class MyValidator
     {
-        public static bool CompareDates(DateTime firstDate, DateTime secondDate) 
+        public static bool CompareDates(DateTime firstDate, DateTime secondDate)
             => secondDate > firstDate;
     }
 }

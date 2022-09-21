@@ -11,6 +11,7 @@
     using StudentSystem.Services.Module;
     using StudentSystem.Web.Common;
 
+    [AutoValidateAntiforgeryToken]
     public class ModuleController : Controller
     {
         private readonly IModuleService moduleService;

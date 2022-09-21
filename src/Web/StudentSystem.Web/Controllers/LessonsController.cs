@@ -8,8 +8,11 @@
 	using StudentSystem.Services.Lesson;
 	using StudentSystem.ViewModels.Course;
 	using StudentSystem.ViewModels.Lesson;
+	using StudentSystem.Web.Common;
+	using StudentSystem.Web.Infrastructure.Helpers;
 
-	public class LessonsController : Controller
+	[AutoValidateAntiforgeryToken]
+    public class LessonsController : Controller
 	{
 		private readonly ILessonService lessonService;
 		private readonly ICourseService courseService;
@@ -49,18 +52,41 @@
             if (!this.ModelState.IsValid)
             {
 				lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
+
                 return this.View(lesson);
             }
 
-			var isCourseValid = this.courseService.GetById<CourseIdNameViewModel>(lesson.CourseId) != null;
-            if (!isCourseValid)
+			var isCourseExist = this.courseService.GetById<CourseIdNameViewModel>(lesson.CourseId) != null;
+            if (!isCourseExist)
 			{
-				this.RedirectToAction("Index", "Home");
-			}
+				this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 
+					= NotificationsConstants.INVALID_COURSE_MESSAGE;
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            var result = MyValidator.ValidateDates(
+                lesson.Begining.Value,
+                lesson.End.Value,
+                nameof(lesson.Begining),
+                nameof(lesson.End), 
+				true);
+
+            if (!result.isValid)
+            {
+				this.TempData[NotificationsConstants.ERROR_NOTIFICATION] = result.errorMessage;
+
+                lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
+
+                return this.View(lesson);
+            }
 
             await this.lessonService.CreateAsync(lesson);
 
-			return this.RedirectToAction(nameof(this.Index));
+			this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION] 
+				= NotificationsConstants.SUCCESSFULLY_CREATED_LESSON_MESSAGE;
+
+            return this.RedirectToAction(nameof(this.Index));
 		}
 
 		[HttpGet]

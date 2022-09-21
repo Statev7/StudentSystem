@@ -17,6 +17,10 @@
         public const string SUCCESSFULLY_REGISTERED_FOR_COURSE_MESSAGE = "You have successfully registered for the {0} course";
 
         //Date message
-        public const string INVALID_DATE_MESSAGE = "{0} cannot be earlier than {1}";
+        public const string SECOND_DATE_CANNOT_BE_EARLIER_MESSAGE = "{0} cannot be earlier than {1}";
+        public const string START_DATE_MESSAGE = "The start date cannot be earlier {0}";
+
+        //Lessons
+        public const string SUCCESSFULLY_CREATED_LESSON_MESSAGE = "Successfully created a new lesson";
     }
 }

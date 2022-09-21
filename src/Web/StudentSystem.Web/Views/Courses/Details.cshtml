@@ -10,12 +10,6 @@
 @inject StudentSystemDbContext dbContext
 
 <div>
-	@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
-	{
-		<div>
-			<a asp-controller="Module" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Click here</a>
-		</div>
-	}
 	<div class="text-center mt-5 shadow-sm p-3 mb-5 text-white rounded" style="background-color: #563D7C">
 		<h3>@Model.Name</h3>
 		<span>Start date: @Model.StartDate</span>
@@ -39,7 +33,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="offset-md-2 col-sm col-md-8 mt-5 shadow p-3 bg-white rounded">
+	<div class="text-center">
+		<button id="show-description-btn" class="w-25 p-2 btn btn-primary">Show More</button>
+	</div>
+	<div id="description-box" class="d-none offset-md-1 col-sm col-md-10 mt-5 shadow p-3 bg-white rounded">
 		<div>
 			<h5>Description</h5>
 		</div>
@@ -47,4 +44,29 @@
 			@Model.Description
 		</div>
 	</div>
+	@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
+	{
+		<div>
+			<a asp-controller="Module" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Click here</a>
+		</div>
+	}
 </div>
+
+<script>
+	let btnElement = document.getElementById('show-description-btn');
+	btnElement.addEventListener('click', () => {
+
+		let descriptionBoxElement = document.getElementById('description-box');
+
+		if (descriptionBoxElement.classList.contains('d-none')){
+
+			descriptionBoxElement.classList.remove('d-none');
+			btnElement.innerHTML = 'Show Less';
+		}
+		else{
+
+			descriptionBoxElement.classList.add('d-none');
+			btnElement.innerHTML = 'Show More';
+		}
+	});
+</script>

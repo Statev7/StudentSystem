@@ -1,17 +1,16 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
-    using System.Security.Claims;
+    using System;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Web.Common;
     using StudentSystem.Web.Infrastructure.Helpers;
 
+    [AutoValidateAntiforgeryToken]
     public class CoursesController : Controller
     {
         private readonly ICourseService courseService;
@@ -42,12 +41,12 @@
                 return this.View(course);
             }
 
-            //If the second date is earlier that the first, the method return false
-            var isValid = MyValidator.CompareDates(course.StartDate, course.EndDate);
-            if (!isValid)
+            var result = MyValidator
+                .ValidateDates(course.StartDate, course.EndDate, "Start date", "End date");
+
+            if (!result.isValid)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] = 
-                    string.Format(NotificationsConstants.INVALID_DATE_MESSAGE, "End date", "start date");
+                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] = result.errorMessage;
 
                 return this.View(course);
             }

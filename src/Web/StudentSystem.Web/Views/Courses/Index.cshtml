@@ -8,7 +8,7 @@
 	@foreach (var course in @Model)
 	{
 		<a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">
-			<div class="card ml-3" style="width: 18rem;">
+			<div class="card mt-2 ml-3" style="width: 18rem;">
 				<div>
 					<img class="card-img-top h-100" src="@course.ImageURL" alt="@course.Name - @course.StartDate">
 					<div class="course-body card-body">

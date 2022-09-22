@@ -4,7 +4,7 @@
 	ViewData["Title"] = "All courses";
 }
 
-<div class="row">
+<div class="row offset-2 col-8">
 	@foreach (var course in @Model)
 	{
 		<a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">

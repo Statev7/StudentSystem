@@ -9,22 +9,23 @@
 
 @inject StudentSystemDbContext dbContext
 
-<div>
-	<div class="text-center mt-5 shadow-sm p-3 mb-5 text-white rounded" style="background-color: #563D7C">
-		<h3>@Model.Name</h3>
-		<span>Start date: @Model.StartDate</span>
-	</div>
-	<div class="mt-5 shadow p-3 mb-5 bg-white rounded">
-		<div class="p-3">
+<div class="text-center p-4" style="background-color: #F1F1F1">
+	<h1>@Model.Name</h1>
+	<h6>Start date: @Model.StartDate</h6>
+</div>
+<div class="container">
+	<div class="shadow-box mt-5 mb-5">
+		<div class="p-3 text-center">
 			<h3>Lessons</h3>
+			<hr />
 		</div>
 		<div class="container overflow-hidden">
 			<div class="row gx-5 mb-3">
 				@foreach (var lesson in Model.Lessons)
 				{
-					<div class="col-6">
+					<div class="col-sm-12 col-md-6">
 						<a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.Id" style="text-decoration: none;">
-							<div class="p-2 mt-1 border" style="background-color: #f1f1f1">
+							<div class="p-2 mt-1 border" style="background-color: #f1f1f1;">
 								<span class="lesson-title">@(++count). @lesson.Title</span>
 							</div>
 						</a>
@@ -34,9 +35,9 @@
 		</div>
 	</div>
 	<div class="text-center">
-		<button id="show-description-btn" class="w-25 p-2 btn btn-primary">Show More</button>
+		<button id="show-description-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Show More</button>
 	</div>
-	<div id="description-box" class="d-none offset-md-1 col-sm col-md-10 mt-5 shadow p-3 bg-white rounded">
+	<div id="description-box" class="shadow-box d-none offset-md-1 col-sm col-md-10 mb-3 p-3">
 		<div>
 			<h5>Description</h5>
 		</div>
@@ -44,12 +45,18 @@
 			@Model.Description
 		</div>
 	</div>
-	@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
-	{
-		<div>
-			<a asp-controller="Module" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Click here</a>
-		</div>
-	}
+	<div class="text-center">
+		@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
+		{
+			<a 
+				asp-controller="Module" 
+				asp-action="Apply" 
+				asp-route-id="@Model.Id" 
+				class="btn btn-primary rounded-pill w-25 p-2">
+				Register for course
+			</a>
+		}
+	</div>
 </div>
 
 <script>
@@ -58,12 +65,12 @@
 
 		let descriptionBoxElement = document.getElementById('description-box');
 
-		if (descriptionBoxElement.classList.contains('d-none')){
+		if (descriptionBoxElement.classList.contains('d-none')) {
 
 			descriptionBoxElement.classList.remove('d-none');
 			btnElement.innerHTML = 'Show Less';
 		}
-		else{
+		else {
 
 			descriptionBoxElement.classList.add('d-none');
 			btnElement.innerHTML = 'Show More';

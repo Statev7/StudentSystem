@@ -85,7 +85,20 @@ body {
 
 .lesson-title {
     color: #565656;
-    font-size: 18px;
-    font-family: sans-serif;
+    font-size: 20px;
+    font-family: serif;
 }
 
+.shadow-box {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+
+.nav-text-color{
+    color:#bedae6;
+}
+
+.nav-text-color:hover{
+    color: white;
+}

@@ -4,17 +4,21 @@ namespace StudentSystem.Web
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Data.Seed;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Lesson;
     using StudentSystem.Services.Module;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
+
+    using static StudentSystem.Data.Seed.Launcher;
 
     public class Startup
     {
@@ -40,6 +44,7 @@ namespace StudentSystem.Web
                     options.Password.RequireUppercase = false;
                     options.Password.RequireDigit = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();
@@ -64,6 +69,8 @@ namespace StudentSystem.Web
             }
 
             app.MigrateDatabaseAsync().GetAwaiter().GetResult();
+            SeedDataBase(app).GetAwaiter().GetResult();
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

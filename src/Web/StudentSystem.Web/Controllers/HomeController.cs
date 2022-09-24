@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-using StudentSystem.Web.Models;
-
-namespace StudentSystem.Web.Controllers
+﻿namespace StudentSystem.Web.Controllers
 {
+    using System.Diagnostics;
+
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
+    using StudentSystem.Web.Models;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,11 +17,6 @@ namespace StudentSystem.Web.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

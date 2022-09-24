@@ -2,16 +2,19 @@
 {
 	using System.Threading.Tasks;
 
+	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 
 	using StudentSystem.Services.Course;
 	using StudentSystem.Services.Lesson;
 	using StudentSystem.ViewModels.Course;
 	using StudentSystem.ViewModels.Lesson;
-	using StudentSystem.Web.Common;
 	using StudentSystem.Web.Infrastructure.Helpers;
 
-	[AutoValidateAntiforgeryToken]
+    using static StudentSystem.Web.Common.NotificationsConstants;
+    using static StudentSystem.Web.Common.GlobalConstants;
+
+    [AutoValidateAntiforgeryToken]
     public class LessonsController : Controller
 	{
 		private readonly ILessonService lessonService;
@@ -34,7 +37,8 @@
 		}
 
 		[HttpGet]
-		public IActionResult Create()
+        [Authorize(Roles = ADMIN_ROLE)]
+        public IActionResult Create()
 		{
 			var lesson = new CreateLessonBindingModel()
 			{
@@ -47,7 +51,8 @@
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(CreateLessonBindingModel lesson)
+        [Authorize(Roles = ADMIN_ROLE)]
+        public async Task<IActionResult> Create(CreateLessonBindingModel lesson)
 		{
             if (!this.ModelState.IsValid)
             {
@@ -59,8 +64,7 @@
 			var isCourseExist = this.courseService.GetById<CourseIdNameViewModel>(lesson.CourseId) != null;
             if (!isCourseExist)
 			{
-				this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 
-					= NotificationsConstants.INVALID_COURSE_MESSAGE;
+				this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
                 return this.RedirectToAction(nameof(this.Index));
             }
@@ -74,7 +78,7 @@
 
             if (!result.isValid)
             {
-				this.TempData[NotificationsConstants.ERROR_NOTIFICATION] = result.errorMessage;
+				this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
                 lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
 
@@ -83,8 +87,7 @@
 
             await this.lessonService.CreateAsync(lesson);
 
-			this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION] 
-				= NotificationsConstants.SUCCESSFULLY_CREATED_LESSON_MESSAGE;
+			this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_CREATED_LESSON_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
 		}

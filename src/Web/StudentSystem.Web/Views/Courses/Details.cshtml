@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	<div class="text-center">
-		@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId))
+		@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId) && !this.User.IsInRole(GlobalConstants.ADMIN_ROLE))
 		{
 			<a 
 				asp-controller="Module" 

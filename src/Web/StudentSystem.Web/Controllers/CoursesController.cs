@@ -1,14 +1,16 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
-    using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
-    using StudentSystem.Web.Common;
     using StudentSystem.Web.Infrastructure.Helpers;
+
+    using static StudentSystem.Web.Common.NotificationsConstants;
+    using static StudentSystem.Web.Common.GlobalConstants;
 
     [AutoValidateAntiforgeryToken]
     public class CoursesController : Controller
@@ -30,10 +32,12 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = ADMIN_ROLE)]
         public IActionResult Create()
             => this.View();
 
         [HttpPost]
+        [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Create(CreateCourseBindingModel course)
         {
             if (!this.ModelState.IsValid)
@@ -46,27 +50,27 @@
 
             if (!result.isValid)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] = result.errorMessage;
+                this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
                 return this.View(course);
             }
 
             await this.courseService.CreateAsync(course);
 
-            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION] =
-                string.Format(NotificationsConstants.SUCCESSFULLY_CREATED_COURSE_MESSAGE, course.Name);
+            this.TempData[SUCCESS_NOTIFICATION] = 
+                string.Format(SUCCESSFULLY_CREATED_COURSE_MESSAGE, course.Name);
 
             return this.RedirectToAction(nameof(this.Index));
         }
 
         [HttpGet]
+        [Authorize(Roles = ADMIN_ROLE)]
         public IActionResult Update(int id)
         {
             var courseToUpdate = this.courseService.GetById<UpdateCourseBindingModel>(id);
             if (courseToUpdate == null)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION]
-                    = NotificationsConstants.INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
                 return this.RedirectToAction(nameof(this.Index));
             }
@@ -75,6 +79,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Update(UpdateCourseBindingModel courseToUpdate)
         {
             if (!this.ModelState.IsValid)
@@ -85,14 +90,13 @@
             var isUpdated = await courseService.UpdateAsync(courseToUpdate);
             if (!isUpdated)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 
-                    = NotificationsConstants.INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION]
-                = string.Format(NotificationsConstants.SUCCESSFULLY_UPDATE_COURSE_MESSAGE, courseToUpdate.Name);
+            this.TempData[SUCCESS_NOTIFICATION]
+                = string.Format(SUCCESSFULLY_UPDATE_COURSE_MESSAGE, courseToUpdate.Name);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -103,8 +107,7 @@
             var course = this.courseService.GetDetails(id);
             if (course == null)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 
-                    = NotificationsConstants.INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
                 return this.RedirectToAction(nameof(this.Index));
             }
@@ -113,19 +116,18 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Delete(int id)
         {
             var isDeleted = await this.courseService.DeleteAsync(id);
             if (!isDeleted)
             {
-                this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 
-                    = NotificationsConstants.INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[NotificationsConstants.SUCCESS_NOTIFICATION]
-                = NotificationsConstants.SUCCESSFULLY_DELETE_COURSE_MESSAGE;
+            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_COURSE_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
         }

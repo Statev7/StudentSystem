@@ -6,5 +6,7 @@
     public class InformationAboutStudentViewModel
     {
         public IEnumerable<CourseLessonScheduleViewModel> Courses { get; set; }
+
+        public IEnumerable<ListCoursesViewModel> LatestCourses { get; set; }
     }
 }

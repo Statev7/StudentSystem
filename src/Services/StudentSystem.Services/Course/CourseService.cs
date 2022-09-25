@@ -42,6 +42,14 @@
             return courseToReturn;
         }
 
+        public IEnumerable<ListCoursesViewModel> GetTheLatestCourses()
+            => this.DbContext
+                .Courses
+                .OrderBy(x => x.StartDate)
+                .ProjectTo<ListCoursesViewModel>(this.Mapper.ConfigurationProvider)
+                .Take(5)
+                .ToList();
+
         public async Task CreateAsync(CreateCourseBindingModel course)
         {
             var courseToAdd = this.Mapper.Map<Course>(course);

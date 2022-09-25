@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.ViewModels.Course;
 
     public interface ICourseService
@@ -11,6 +10,8 @@
         IEnumerable<TEntity> GetAll<TEntity>();
 
         TEntity GetById<TEntity>(int id);
+
+        IEnumerable<ListCoursesViewModel> GetTheLatestCourses();
 
         Task CreateAsync(CreateCourseBindingModel course);
 

@@ -26,7 +26,7 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var courses = this.courseService.GetAll<AllCoursesViewModel>();
+            var courses = this.courseService.GetAll<ListCoursesViewModel>();
 
             return View(courses);
         }

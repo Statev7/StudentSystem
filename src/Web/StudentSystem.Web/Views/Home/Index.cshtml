@@ -8,54 +8,66 @@
 	var isValid = this.User.GetId() != null && this.User.IsInRole(GlobalConstants.STUDENT_ROLE);
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
 	@if (isValid)
 	{
 		<div class="row">
-			<div class="border rounded" style="width: 18rem; height: 288px">
-				<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
-					<h5>My Courses</h5>
-				</div>
-				<div class="h-75 p-3" style="overflow-y: auto">
-					@foreach (var course in Model.Courses)
-					{
-						<div>
-							<a style="color: #565656; font-size: 18px" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">
-								@course.Name
-							</a>
-							<hr>
-						</div>
-					}
-				</div>
-			</div>
-			<div class="border rounded ml-5" style="width: 18rem; height: 288px">
-				<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
-					<h5>My schedule</h5>
-				</div>
-				<div class="h-75 p-3" style="overflow-y: auto">
-					@foreach (var course in Model.Courses)
-					{
-						@foreach (var lesson in course.Lessons)
+			<div class="col-md-4 mt-2">
+				<div class="border rounded"style="height: 350px">
+					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+						<h5>My Courses</h5>
+					</div>
+					<div class="h-75 p-3" style="overflow-y: auto">
+						@foreach (var course in Model.Courses)
 						{
 							<div>
-								<a style="color: #565656; font-size: 18px" asp-controller="Lessons" asp-action="Details" asp-route-id="@course.Id">
-									@lesson.Title
+								<a style="color: #565656; font-size: 18px" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">
+									@course.Name
 								</a>
+								<hr>
 							</div>
-							<div>
-								@course.Name
-							</div>
-							<span style="font-size: 15px">
-								@{
-									var beginingDateToString = @lesson.Begining.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-									var startingTimeAsString = @lesson.Begining.ToString("hh:mm", CultureInfo.InvariantCulture);
-									var endTimeAsString = @lesson.End.ToString("hh:mm", CultureInfo.InvariantCulture);
-								}
-								@beginingDateToString from @startingTimeAsString - @endTimeAsString
-							</span>
-							<hr />
 						}
-					}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mt-2">
+				<div class="border rounded" style="height: 350px">
+					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+						<h5>My schedule</h5>
+					</div>
+					<div class="h-75 p-3" style="overflow-y: auto">
+						@foreach (var course in Model.Courses)
+						{
+							@foreach (var lesson in course.Lessons)
+							{
+								<div>
+									<a style="color: #565656; font-size: 18px" asp-controller="Lessons" asp-action="Details" asp-route-id="@course.Id">
+										@lesson.Title
+									</a>
+								</div>
+								<div>
+									@course.Name
+								</div>
+								<span style="font-size: 15px">
+									@{
+										var beginingDateToString = @lesson.Begining.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+										var startingTimeAsString = @lesson.Begining.ToString("hh:mm", CultureInfo.InvariantCulture);
+										var endTimeAsString = @lesson.End.ToString("hh:mm", CultureInfo.InvariantCulture);
+									}
+									@beginingDateToString from @startingTimeAsString - @endTimeAsString
+								</span>
+								<hr />
+							}
+						}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mt-2">
+				<div class="border rounded" style="height: 350px">
+					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+						<h5>My Resources</h5>
+					</div>
+					<div class="h-75 p-3" style="overflow-y: auto"></div>
 				</div>
 			</div>
 		</div>

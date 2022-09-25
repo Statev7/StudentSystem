@@ -12,7 +12,7 @@
     {
         public CourseProfile()
         {
-            this.CreateMap<Course, AllCoursesViewModel>()
+            this.CreateMap<Course, ListCoursesViewModel>()
                 .ForMember(d => d.StartDate, conf => conf
                     .MapFrom(s => s.StartDate.ToString("d-MMMM yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.Duration, conf => conf

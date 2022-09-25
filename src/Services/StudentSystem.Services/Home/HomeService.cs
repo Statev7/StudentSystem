@@ -6,6 +6,7 @@
     using AutoMapper;
 
     using StudentSystem.Services.Abstaction;
+    using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Home;
     using StudentSystem.ViewModels.Lesson;
@@ -13,10 +14,15 @@
 
     public class HomeService : BaseService, IHomeService
     {
-        public HomeService(StudentSystemDbContext dbContext, IMapper mapper) 
+        private readonly ICourseService courseService;
+
+        public HomeService(
+            StudentSystemDbContext dbContext, 
+            IMapper mapper,
+            ICourseService courseService) 
             : base(dbContext, mapper)
         {
-
+            this.courseService = courseService;
         }
 
         public InformationAboutStudentViewModel GetInformation(string userId) 
@@ -41,7 +47,8 @@
                                        End = l.End
                                    })
                                })
-                               .ToList()
+                               .ToList(),
+                    LatestCourses = this.courseService.GetTheLatestCourses().ToList()
                 })
                 .FirstOrDefault();
     }

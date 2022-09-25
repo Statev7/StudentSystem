@@ -26,12 +26,18 @@
                 Name = USER_ROLE
             };
 
+            var studentRole = new IdentityRole
+            {
+                Name = STUDENT_ROLE
+            };
+
             var adminRole = new IdentityRole
             {
                 Name = ADMIN_ROLE
             };
 
             await roleManager.CreateAsync(userRole);
+            await roleManager.CreateAsync(studentRole);
             await roleManager.CreateAsync(adminRole);
         }
     }

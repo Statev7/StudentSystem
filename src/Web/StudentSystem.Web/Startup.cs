@@ -13,6 +13,7 @@ namespace StudentSystem.Web
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Data.Seed;
     using StudentSystem.Services.Course;
+    using StudentSystem.Services.Home;
     using StudentSystem.Services.Lesson;
     using StudentSystem.Services.Module;
     using StudentSystem.Web.Data;
@@ -91,6 +92,7 @@ namespace StudentSystem.Web
 
         private void RegisterServices(IServiceCollection services)
         {
+            services.AddTransient<IHomeService, HomeService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IModuleService, ModuleService>();

@@ -36,5 +36,8 @@
 
             return isInCourse;
         }
+
+        public static string GetId(this ClaimsPrincipal claimsPrincipal)
+            => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

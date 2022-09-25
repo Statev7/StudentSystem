@@ -1,22 +1,29 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
     using System.Diagnostics;
+    using System.Security.Claims;
 
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
 
+    using StudentSystem.Services.Home;
+    using StudentSystem.Web.Infrastructure.Extensions;
     using StudentSystem.Web.Models;
 
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly IHomeService homeService;
+
+        public HomeController(IHomeService homeService)
         {
-            
+            this.homeService = homeService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var userId = this.User.GetId();
+            var information = this.homeService.GetInformation(userId);
+
+            return View(information);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

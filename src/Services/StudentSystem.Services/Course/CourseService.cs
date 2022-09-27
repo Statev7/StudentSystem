@@ -23,11 +23,18 @@
         {
         }
 
-        public IQueryable<TEntity> GetAll<TEntity>()
-            => this.DbContext
-                .Courses
-                .Where(x => !x.IsDeleted)
-                .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider);
+        public IQueryable<TEntity> GetAll<TEntity>(bool withDeleted = false)
+        {
+            var quaery = this.DbContext.Courses.AsQueryable();
+
+            if (!withDeleted)
+            {
+                quaery = quaery
+                    .Where(x => !x.IsDeleted);
+            }
+
+            return quaery.ProjectTo<TEntity>(this.Mapper.ConfigurationProvider);
+        }
 
         public TEntity GetById<TEntity>(int id)
         {

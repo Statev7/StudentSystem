@@ -7,7 +7,7 @@
 
     public interface ICourseService
     {
-        IQueryable<TEntity> GetAll<TEntity>();
+        IQueryable<TEntity> GetAll<TEntity>(bool withDeleted = false);
 
         TEntity GetById<TEntity>(int id);
 

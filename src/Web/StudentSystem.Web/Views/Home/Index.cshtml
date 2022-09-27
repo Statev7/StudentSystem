@@ -45,13 +45,13 @@
 								</a>
 							</div>
 							<div>
-								Course name
+								@lesson.CourseName
 							</div>
 							<span style="font-size: 15px">
 								@{
 									var beginingDateToString = @lesson.Begining.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-									var startingTimeAsString = @lesson.Begining.ToString("hh:mm", CultureInfo.InvariantCulture);
-									var endTimeAsString = @lesson.End.ToString("hh:mm", CultureInfo.InvariantCulture);
+									var startingTimeAsString = @lesson.Begining.ToString("HH:mm");
+									var endTimeAsString = @lesson.End.ToString("HH:mm"); 
 								}
 								@beginingDateToString from @startingTimeAsString - @endTimeAsString
 							</span>

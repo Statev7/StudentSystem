@@ -15,17 +15,25 @@
     public class LessonService : BaseService, ILessonService
     {
         public LessonService(
-            StudentSystemDbContext dbContext, 
-            IMapper mapper) 
+            StudentSystemDbContext dbContext,
+            IMapper mapper)
             : base(dbContext, mapper)
         {
         }
 
-        public IEnumerable<TEntity> GetAll<TEntity>()
-            => this.DbContext.Lessons
-                .Where(l => !l.Course.IsDeleted && !l.IsDeleted)
-                .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider)
-                .ToList();
+        public IEnumerable<TEntity> GetAll<TEntity>(bool withDeleted = false)
+        {
+            var quaery = this.DbContext.Lessons.AsQueryable();
+
+            if (!withDeleted)
+            {
+                quaery = quaery
+                    .Where(x => !x.IsDeleted);
+            }
+
+            return quaery.ProjectTo<TEntity>(this.Mapper.ConfigurationProvider);
+        }
+
 
         public TEntity GetById<TEntity>(int id)
         {
@@ -33,7 +41,7 @@
 
             var lessonToReturn = this.Mapper.Map<TEntity>(lesson);
             return lessonToReturn;
-        }      
+        }
 
         public async Task CreateAsync(CreateLessonBindingModel lesson)
         {

@@ -15,11 +15,11 @@
         {
             if (canBeInSameDay)
             {
-                if (firstDate.Date.Day < DateTime.UtcNow.Date.Day) return GetResult();
+                if (firstDate < DateTime.UtcNow) return GetResult();
             }
             else
             {
-                if (firstDate.Date.Day <= DateTime.UtcNow.Date.Day) return GetResult(1);
+                if (firstDate < DateTime.UtcNow || firstDate.Date == DateTime.UtcNow.Date) return GetResult(1);
             }
 
             if(firstDate > secondDate)

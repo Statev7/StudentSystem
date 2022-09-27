@@ -7,7 +7,7 @@
 
     public interface ILessonService
     {
-        IEnumerable<TEntity> GetAll<TEntity>();
+        IEnumerable<TEntity> GetAll<TEntity>(bool withDeleted = false);
 
         TEntity GetById<TEntity>(int id);
 

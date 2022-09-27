@@ -52,15 +52,17 @@
                                       .Select(l => new LessonScheduleServiceModel
                                       {
                                           Id = l.Id,
+                                          CourseName = us.Course.Name,
                                           Title = l.Title,
                                           Begining = l.Begining,
                                           End = l.End
-                                      }).ToList()
+                                      })
+                                      .ToList()
                         })
                     })
                     .FirstOrDefault();
 
-            StudentInformationViewModel studentInformation = ConvertToViewModels(studentResources);
+            StudentInformationViewModel studentInformation = this.ConvertToViewModels(studentResources);
 
             return studentInformation;
 
@@ -68,6 +70,7 @@
 
         private StudentInformationViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
         {
+            // TODO: Change this sh*t
             var coursesAsViewModels = new List<CourseIdNameViewModel>();
             var lessonsAsViewModels = new List<LessonScheduleViewModel>();
 

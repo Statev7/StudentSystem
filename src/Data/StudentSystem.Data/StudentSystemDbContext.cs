@@ -16,8 +16,6 @@
 
         public DbSet<Lesson> Lessons { get; set; }
 
-        public DbSet<Exam> Exams { get; set; }
-
         public DbSet<Resource> Resources { get; set; }
 
         public DbSet<UserCourse> UserCourses { get; set; }

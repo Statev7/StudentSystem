@@ -24,9 +24,5 @@
         public int? LessonId { get; set; }
 
         public Lesson Lesson { get; set; }
-
-        public int? ExamId { get; set; }
-
-        public Exam Exam { get; set; }
     }
 }

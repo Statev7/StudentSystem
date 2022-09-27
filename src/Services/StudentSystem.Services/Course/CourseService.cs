@@ -1,7 +1,6 @@
 ﻿namespace StudentSystem.Services.Course
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -24,12 +23,11 @@
         {
         }
 
-        public IEnumerable<TEntity> GetAll<TEntity>()
+        public IQueryable<TEntity> GetAll<TEntity>()
             => this.DbContext
                 .Courses
                 .Where(x => !x.IsDeleted)
-                .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider)
-                .ToList();
+                .ProjectTo<TEntity>(this.Mapper.ConfigurationProvider);
 
         public TEntity GetById<TEntity>(int id)
         {
@@ -41,14 +39,6 @@
             var courseToReturn = this.Mapper.Map<TEntity>(course);
             return courseToReturn;
         }
-
-        public IEnumerable<ListCoursesViewModel> GetTheLatestCourses()
-            => this.DbContext
-                .Courses
-                .OrderBy(x => x.StartDate)
-                .ProjectTo<ListCoursesViewModel>(this.Mapper.ConfigurationProvider)
-                .Take(5)
-                .ToList();
 
         public async Task CreateAsync(CreateCourseBindingModel course)
         {

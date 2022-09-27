@@ -1,17 +1,15 @@
 ﻿namespace StudentSystem.Services.Course
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using StudentSystem.ViewModels.Course;
 
     public interface ICourseService
     {
-        IEnumerable<TEntity> GetAll<TEntity>();
+        IQueryable<TEntity> GetAll<TEntity>();
 
         TEntity GetById<TEntity>(int id);
-
-        IEnumerable<ListCoursesViewModel> GetTheLatestCourses();
 
         Task CreateAsync(CreateCourseBindingModel course);
 

@@ -10,7 +10,7 @@
 
         public string ImageURL { get; set; }
 
-        public string StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         //From automapper.
         public double Duration { get; set; }

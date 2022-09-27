@@ -5,6 +5,7 @@
     using AutoMapper;
 
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.Lesson.Models;
     using StudentSystem.ViewModels.Lesson;
 
     public class LessonProfile : Profile
@@ -21,6 +22,7 @@
 
             this.CreateMap<Lesson, DetailsLessonViewModel>();
             this.CreateMap<Lesson, LessonIdNameViewModel>();
+            this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>();
 
         }
     }

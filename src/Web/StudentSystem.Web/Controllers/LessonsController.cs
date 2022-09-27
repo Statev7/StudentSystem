@@ -13,8 +13,9 @@
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
+	using System.Linq;
 
-    [AutoValidateAntiforgeryToken]
+	[AutoValidateAntiforgeryToken]
     public class LessonsController : Controller
 	{
 		private readonly ILessonService lessonService;
@@ -44,7 +45,7 @@
 			{
 				Begining = null,
 				End = null,
-				Courses = this.courseService.GetAll<CourseIdNameViewModel>()
+				Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList()
 			};
 
 			return this.View(lesson);
@@ -56,7 +57,7 @@
 		{
             if (!this.ModelState.IsValid)
             {
-				lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
+				lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
 
                 return this.View(lesson);
             }
@@ -80,7 +81,7 @@
             {
 				this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
-                lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>();
+                lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
 
                 return this.View(lesson);
             }

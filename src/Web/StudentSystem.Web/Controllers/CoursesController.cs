@@ -1,5 +1,7 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -26,7 +28,10 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var courses = this.courseService.GetAll<ListCoursesViewModel>();
+            var courses = this.courseService
+                .GetAll<ListCoursesViewModel>()
+                .Where(c => c.StartDate > DateTime.UtcNow)
+                .ToList();
 
             return View(courses);
         }

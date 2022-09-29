@@ -1,15 +1,101 @@
-﻿@model IEnumerable<AllLessonsViewModel>
+﻿@model PageLessonViewModel
 
-<div class="row">
-	@foreach (var lesson in Model)
+@{
+	ViewData["Title"] = "Lessons";
+
+	var previousPage = Model.CurrentPage - 1;
+	if (previousPage < 1)
 	{
+		previousPage = 1;
+	}
+
+	var nextPage = Model.CurrentPage + 1;
+}
+
+<div class="container">
+	<div class="mt-5 border-bottom pb-2">
+		<form id="form_id" method="get">
+			<div class="d-flex justify-content-between align-items-center">
+				<div>
+					<select asp-for="CourseId" class="form-control" onkeypress="document.getElementById('form_id').submit()">
+						<option value="0">All</option>
+						@foreach (var course in Model.Courses)
+						{
+							<option value="@course.Id">@course.Name</option>
+						}
+					</select>
+				</div>
+				<div>
+					<a class="btn btn-primary" asp-controller="Lessons" asp-action="Create">Create new lesson</a>
+				</div>
+			</div>
+		</form>
+	</div>
+	@if (Model.Lessons.Any())
+	{
+		<table class="table mt-3">
+			<tbody class="border-bottom">
+				<tr>
+					<th class="border-0">
+						<div>
+							<h3>Title</h3>
+						</div>
+					</th>
+				</tr>
+				@foreach (var lesson in Model.Lessons)
+				{
+					<tr>
+						<td>
+							<div class="d-flex justify-content-between align-items-center">
+								<div style="font-size: 20px;">
+									<span>@lesson.Title</span>
+								</div>
+								<div>
+									<a class="options-bar"
+							   asp-controller="Lessons"
+							   asp-action="Update"
+							   asp-route-id="@lesson.Id">
+										<span>Update</span>
+									</a>
+									<span>|</span>
+									<a class="options-bar"
+							   asp-controller="Lessons"
+							   asp-action="Update"
+							   asp-route-id="@lesson.Id">
+										<span>Delete</span>
+									</a>
+
+								</div>
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+
 		<div>
-			<span>@lesson.Title</span>
-			<br>
-			<span>@lesson.Date - @lesson.Begining - @lesson.End</span>
-			<br>
-			<span>@lesson.CourseName - @lesson.Content</span>
+			<a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+				asp-controller="Lessons"
+				asp-action="Index"
+				asp-route-currentPage=@previousPage
+				asp-route-courseId="@Model.CourseId">
+				&lt;&lt;
+			</a>
+			<a class="btn btn-primary float-right @(Model.Lessons.Count() < Model.LessonsPerPage ? "disabled" : string.Empty)
+			   asp-controller="Lessons"
+			   asp-action="Index"
+			   asp-route-currentPage=@nextPage
+			   asp-route-courseId="@Model.CourseId">
+					>>
+			</a>
+		</div>
+	}
+	else
+	{
+		<div class="mt-5 text-center text-danger">
+			<h1>No lessons to display</h1>
 		</div>
 	}
 </div>
+
 

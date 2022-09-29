@@ -1,7 +1,5 @@
 ﻿namespace StudentSystem.ViewModels.Lesson
 {
-    using System;
-
     public class AllLessonsViewModel
     {
         public string Title { get; set; }

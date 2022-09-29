@@ -23,6 +23,8 @@
             this.CreateMap<Lesson, DetailsLessonViewModel>();
             this.CreateMap<Lesson, LessonIdNameViewModel>();
             this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>();
+            this.CreateMap<Lesson, LessonPagingViewModel>();
+            this.CreateMap<UpdateLessonBindingModel, Lesson>().ReverseMap();
 
         }
     }

@@ -1,6 +1,7 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
-	using System.Threading.Tasks;
+    using System.Linq;
+    using System.Threading.Tasks;
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,14 @@
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
-	using System.Linq;
 
 	[AutoValidateAntiforgeryToken]
+	[Authorize(Roles = ADMIN_ROLE)]
     public class LessonsController : Controller
 	{
+		//TODO: This can come from quary. Thing about this!
+		private const int LESSON_PER_PAGE = 8;
+
 		private readonly ILessonService lessonService;
 		private readonly ICourseService courseService;
 
@@ -30,9 +34,9 @@
 		}
 
 		[HttpGet]
-		public IActionResult Index()
+		public IActionResult Index(int courseId, int currentPage = 1)
 		{
-			var lessons = this.lessonService.GetAll<AllLessonsViewModel>();
+			var lessons = this.lessonService.Paging(courseId, currentPage, LESSON_PER_PAGE);
 
 			return View(lessons);
 		}
@@ -91,6 +95,24 @@
 			this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_CREATED_LESSON_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
+		}
+
+		[HttpGet]
+		public IActionResult Update(int id)
+		{
+			var lesson = this.lessonService.GetById<UpdateLessonBindingModel>(id);
+
+			lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
+
+			return this.View(lesson);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Update(UpdateLessonBindingModel lesson)
+		{
+			var isUpdated = await this.lessonService.UpdateAsync(lesson);
+
+			return this.RedirectToAction(nameof(this.Index));
 		}
 
 		[HttpGet]

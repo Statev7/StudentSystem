@@ -1,14 +1,9 @@
 ﻿namespace StudentSystem.Services.Resource
 {
-    using System.Linq;
-    using System.Threading.Tasks;
+    using StudentSystem.Services.Abstaction;
 
-    using StudentSystem.ViewModels.Resource;
-
-    public interface IResourceService
+    public interface IResourceService : IBaseService
     {
-        IQueryable<TEntity> GetAll<TEntity>(bool withDeleted = false);
-
-        Task CreateAsync(CreateResourceBindingModel resource);
+        
     }
 }

@@ -1,12 +1,10 @@
 ﻿@using StudentSystem.ViewModels.Home
 
 @model StudentInformationViewModel
-
-
 @{
 	ViewData["Title"] = "Home";
 
-	var isValid = this.User.GetId() != null && this.User.IsInRole(GlobalConstants.STUDENT_ROLE);
+	var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE);
 }
 
 <div class="container mt-5">
@@ -69,5 +67,9 @@
 			</div>
 		</div>
 	</div>
+	}
+	else
+	{
+		<span>Hi</span>
 	}
 </div>

@@ -1,22 +1,15 @@
 ﻿namespace StudentSystem.Services.Course
 {
-    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using StudentSystem.Services.Abstaction;
     using StudentSystem.ViewModels.Course;
 
-    public interface ICourseService
+    public interface ICourseService : IBaseService
     {
-        IQueryable<TEntity> GetAll<TEntity>(bool withDeleted = false);
-
-        TEntity GetById<TEntity>(int id);
-
-        Task CreateAsync(CreateCourseBindingModel course);
-
-        Task<bool> UpdateAsync(UpdateCourseBindingModel course);
+        Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user);
 
         DetailCourseViewModel GetDetails(int id);
-
-        Task<bool> DeleteAsync(int id);
     }
 }

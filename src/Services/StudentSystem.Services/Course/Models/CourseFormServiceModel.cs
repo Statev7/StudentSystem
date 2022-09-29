@@ -1,11 +1,11 @@
-﻿namespace StudentSystem.ViewModels.Course
+﻿namespace StudentSystem.Services.Course.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
     using static StudentSystem.Data.Common.Constants;
 
-    public class CreateCourseBindingModel
+    public class CourseFormServiceModel
     {
         [Required]
         [MaxLength(CourseNameMaxLength)]

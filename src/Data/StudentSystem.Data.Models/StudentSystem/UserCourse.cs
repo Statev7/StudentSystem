@@ -4,7 +4,7 @@
 
     using Data.Models.Abstraction;
 
-    public class UserCourse : BaseModel<int>
+    public class UserCourse : BaseModel
     {
         [Required]
         public string ApplicationUserId { get; set; }

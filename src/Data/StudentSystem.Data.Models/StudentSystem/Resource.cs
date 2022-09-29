@@ -7,7 +7,7 @@
 
     using static Data.Common.Constants;
 
-    public class Resource : BaseModel<int>, IDeletableEntity
+    public class Resource : BaseModel
     {
         [Required]
         [MaxLength(ResourceNameMaxLength)]
@@ -16,10 +16,6 @@
         [Required]
         [MaxLength(ResourceURLMaxLength)]
         public string URL { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
 
         public int? LessonId { get; set; }
 

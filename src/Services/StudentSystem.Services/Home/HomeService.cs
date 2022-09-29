@@ -6,7 +6,6 @@
 
     using AutoMapper;
 
-    using StudentSystem.Services.Abstaction;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Course.Models;
     using StudentSystem.Services.Home.Models;
@@ -16,17 +15,17 @@
     using StudentSystem.ViewModels.Lesson;
     using StudentSystem.Web.Data;
 
-    public class HomeService : BaseService, IHomeService
+    public class HomeService : IHomeService
     {
-        private readonly ICourseService courseService;
+        private readonly StudentSystemDbContext dbContext;
+        private readonly IMapper mapper;
 
         public HomeService(
             StudentSystemDbContext dbContext, 
-            IMapper mapper,
-            ICourseService courseService) 
-            : base(dbContext, mapper)
+            IMapper mapper) 
         {
-            this.courseService = courseService;
+            this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         public StudentInformationViewModel GetInformation(string userId)
@@ -36,7 +35,7 @@
                 return new StudentInformationViewModel();
             }
 
-            var studentResources = this.DbContext
+            var studentResources = this.dbContext
                     .Users
                     .Where(u => u.Id == userId)
                     .Select(u => new StudentInformationServiceModel
@@ -65,7 +64,6 @@
             StudentInformationViewModel studentInformation = this.ConvertToViewModels(studentResources);
 
             return studentInformation;
-
         }
 
         private StudentInformationViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
@@ -76,7 +74,7 @@
 
             foreach (var course in studentResources.Courses)
             {
-                var mapped = this.Mapper.Map<CourseIdNameViewModel>(course);
+                var mapped = this.mapper.Map<CourseIdNameViewModel>(course);
 
                 coursesAsViewModels.Add(mapped);
             }
@@ -85,7 +83,7 @@
             {
                 foreach (var lesson in course.Lessons)
                 {
-                    var mapped = this.Mapper.Map<LessonScheduleViewModel>(lesson);
+                    var mapped = this.mapper.Map<LessonScheduleViewModel>(lesson);
 
                     lessonsAsViewModels.Add(mapped);
                 }

@@ -12,7 +12,7 @@
     {
         public LessonProfile()
         {
-            this.CreateMap<Lesson, CreateLessonBindingModel>().ReverseMap();
+            this.CreateMap<Lesson, LessonFormServiceModel>().ReverseMap();
 
             this.CreateMap<Lesson, AllLessonsViewModel>()
                 .ForMember(d => d.CourseName, conf => conf.MapFrom(s => s.Course.Name))
@@ -24,7 +24,6 @@
             this.CreateMap<Lesson, LessonIdNameViewModel>();
             this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>();
             this.CreateMap<Lesson, LessonPagingViewModel>();
-            this.CreateMap<UpdateLessonBindingModel, Lesson>().ReverseMap();
 
         }
     }

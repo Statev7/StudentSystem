@@ -14,16 +14,19 @@
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
 
-    public class ModuleService : BaseService, IModuleService
+    public class ModuleService : IModuleService
     {
+        private readonly StudentSystemDbContext dbContext;
+        private readonly IMapper mapper;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ModuleService(
             StudentSystemDbContext dbContext, 
             IMapper mapper,
             UserManager<ApplicationUser> userManager) 
-            : base(dbContext, mapper)
         {
+            this.dbContext = dbContext;
+            this.mapper = mapper;
             this.userManager = userManager;
         }
 
@@ -31,7 +34,7 @@
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (user.IsUserInCourseAlready(this.DbContext, course.Id, userId))
+            if (user.IsUserInCourseAlready(this.dbContext, course.Id, userId))
             {
                 return false;
             }
@@ -45,12 +48,12 @@
 
             if (!user.IsInRole(GlobalConstants.STUDENT_ROLE))
             {
-                var userFromDb = this.DbContext.Users.Find(userId);
+                var userFromDb = this.dbContext.Users.Find(userId);
                 await userManager.AddToRoleAsync(userFromDb, GlobalConstants.STUDENT_ROLE);
             }
 
             course.UserCourses.Add(userCourse);
-            await this.DbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return true;
         }

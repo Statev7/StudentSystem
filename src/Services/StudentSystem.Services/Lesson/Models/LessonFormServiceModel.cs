@@ -1,4 +1,4 @@
-﻿namespace StudentSystem.ViewModels.Lesson
+﻿namespace StudentSystem.Services.Lesson.Models
 {
     using System;
     using System.Collections.Generic;
@@ -8,10 +8,8 @@
 
     using static StudentSystem.Data.Common.Constants;
 
-    public class UpdateLessonBindingModel
-	{
-		public int Id { get; set; }
-
+    public class LessonFormServiceModel
+    {
         [Required]
         [MaxLength(LessonTitleMaxLength)]
         [MinLength(LessonTitleMinLength)]

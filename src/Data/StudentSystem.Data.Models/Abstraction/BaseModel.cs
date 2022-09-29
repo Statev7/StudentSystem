@@ -2,12 +2,16 @@
 {
     using System;
 
-    public class BaseModel<TEntity>
+    public class BaseModel
     {
-        public TEntity Id { get; set; }
+        public int Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
     }
 }

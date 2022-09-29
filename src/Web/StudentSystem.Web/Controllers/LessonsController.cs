@@ -14,6 +14,7 @@
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
+	using StudentSystem.Services.Lesson.Models;
 
 	[AutoValidateAntiforgeryToken]
 	[Authorize(Roles = ADMIN_ROLE)]
@@ -45,11 +46,13 @@
         [Authorize(Roles = ADMIN_ROLE)]
         public IActionResult Create()
 		{
-			var lesson = new CreateLessonBindingModel()
+			var lesson = new LessonFormServiceModel()
 			{
 				Begining = null,
 				End = null,
-				Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList()
+				Courses = this.courseService
+					.GetAllAsQueryable<CourseIdNameViewModel>()
+					.ToList()
 			};
 
 			return this.View(lesson);
@@ -57,16 +60,18 @@
 
 		[HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
-        public async Task<IActionResult> Create(CreateLessonBindingModel lesson)
+        public async Task<IActionResult> Create(LessonFormServiceModel lesson)
 		{
             if (!this.ModelState.IsValid)
             {
-				lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
+				lesson.Courses = this.courseService
+					.GetAllAsQueryable<CourseIdNameViewModel>()
+					.ToList();
 
                 return this.View(lesson);
             }
 
-			var isCourseExist = this.courseService.GetById<CourseIdNameViewModel>(lesson.CourseId) != null;
+			var isCourseExist = await this.courseService.GetByIdAsync<CourseIdNameViewModel>(lesson.CourseId) != null;
             if (!isCourseExist)
 			{
 				this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
@@ -85,7 +90,9 @@
             {
 				this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
-                lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
+                lesson.Courses = this.courseService
+					.GetAllAsQueryable<CourseIdNameViewModel>()
+					.ToList();
 
                 return this.View(lesson);
             }
@@ -98,29 +105,70 @@
 		}
 
 		[HttpGet]
-		public IActionResult Update(int id)
+		public async Task<IActionResult> Update(int id)
 		{
-			var lesson = this.lessonService.GetById<UpdateLessonBindingModel>(id);
+			var lesson = await this.lessonService.GetByIdAsync<LessonFormServiceModel>(id);
 
-			lesson.Courses = this.courseService.GetAll<CourseIdNameViewModel>().ToList();
+			if (lesson == null)
+			{
+                this.TempData[ERROR_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+			lesson.Courses = this.courseService.GetAllAsQueryable<CourseIdNameViewModel>().ToList();
 
 			return this.View(lesson);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Update(UpdateLessonBindingModel lesson)
+		public async Task<IActionResult> Update(int id, LessonFormServiceModel lesson)
 		{
-			var isUpdated = await this.lessonService.UpdateAsync(lesson);
+			if (!ModelState.IsValid)
+			{
+				lesson.Courses = this.courseService
+					.GetAllAsQueryable<CourseIdNameViewModel>()
+					.ToList();
+
+				return this.View(lesson);
+			}
+
+			var isUpdated = await this.lessonService.UpdateAsync(id, lesson);
+			if (!isUpdated)
+			{
+				this.TempData[WARNING_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+
+				return this.RedirectToAction(nameof(this.Index));
+            }
+
+			this.TempData[SUCCESS_NOTIFICATION] = string.Format(SUCCESSFULLY_UPDATE_LESSON_MESSAGE, lesson.Title);
 
 			return this.RedirectToAction(nameof(this.Index));
 		}
 
 		[HttpGet]
-		public IActionResult Details(int id)
+		public async Task<IActionResult> Details(int id)
 		{
-			var lesson = this.lessonService.GetById<DetailsLessonViewModel>(id);
+			var lesson = await this.lessonService.GetByIdAsync<DetailsLessonViewModel>(id);
 
 			return this.View(lesson);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var isDeleted = await this.lessonService.DeleteAsync(id);
+
+			if (!isDeleted)
+			{
+                this.TempData[WARNING_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+			this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_LESSON_MESSAGE;
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
 	}
 }

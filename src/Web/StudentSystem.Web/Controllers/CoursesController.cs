@@ -10,9 +10,12 @@
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Web.Infrastructure.Helpers;
+    using StudentSystem.Services.Course.Models;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
+    using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Web.Common;
 
     [AutoValidateAntiforgeryToken]
     public class CoursesController : Controller
@@ -29,7 +32,7 @@
         public IActionResult Index()
         {
             var courses = this.courseService
-                .GetAll<ListCoursesViewModel>()
+                .GetAllAsQueryable<ListCoursesViewModel>()
                 .Where(c => c.StartDate > DateTime.UtcNow)
                 .ToList();
 
@@ -43,7 +46,7 @@
 
         [HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
-        public async Task<IActionResult> Create(CreateCourseBindingModel course)
+        public async Task<IActionResult> Create(CourseFormServiceModel course)
         {
             if (!this.ModelState.IsValid)
             {
@@ -70,9 +73,9 @@
 
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            var courseToUpdate = this.courseService.GetById<UpdateCourseBindingModel>(id);
+            var courseToUpdate = await this.courseService.GetByIdAsync<CourseFormServiceModel>(id);
             if (courseToUpdate == null)
             {
                 this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
@@ -85,14 +88,14 @@
 
         [HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
-        public async Task<IActionResult> Update(UpdateCourseBindingModel courseToUpdate)
+        public async Task<IActionResult> Update(int id, CourseFormServiceModel courseToUpdate)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(courseToUpdate);
             }
 
-            var isUpdated = await courseService.UpdateAsync(courseToUpdate);
+            var isUpdated = await courseService.UpdateAsync(id, courseToUpdate);
             if (!isUpdated)
             {
                 this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
@@ -135,6 +138,33 @@
             this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_COURSE_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Apply(int id)
+        {
+            var course = await this.courseService.GetByIdAsync<CourseIdNameViewModel>(id);
+            if (course == null)
+            {
+                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var user = this.User;
+
+            var isValid = await this.courseService.RegisterForCourseAsync(id, user);
+            if (!isValid)
+            {
+                this.TempData[ERROR_NOTIFICATION] = ALREADY_IN_COURSE_MESSAGE;
+
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            this.TempData[SUCCESS_NOTIFICATION]
+                = string.Format(SUCCESSFULLY_REGISTERED_FOR_COURSE_MESSAGE, course.Name);
+
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

@@ -8,7 +8,7 @@
 
     using static Data.Common.Constants;
 
-    public class Course : BaseModel<int>, IDeletableEntity
+    public class Course : BaseModel
     {
         public Course()
         {
@@ -30,10 +30,6 @@
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
 
         public ICollection<Lesson> Lessons { get; set; }
 

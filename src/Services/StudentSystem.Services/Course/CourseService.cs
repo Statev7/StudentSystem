@@ -2,74 +2,57 @@
 {
     using System;
     using System.Linq;
+    using System.Globalization;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
 
     using StudentSystem.Services.Abstaction;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Web.Data;
     using StudentSystem.ViewModels.Lesson;
-    using System.Globalization;
+    using StudentSystem.Web.Common;
+    using StudentSystem.Web.Infrastructure.Extensions;
 
-    public class CourseService : BaseService, ICourseService
+    public class CourseService : BaseService<Course>, ICourseService
     {
+        private readonly UserManager<ApplicationUser> userManager;
+
         public CourseService(
             StudentSystemDbContext dbContext,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager)
             : base(dbContext, mapper)
         {
+            this.userManager = userManager;
         }
 
-        public IQueryable<TEntity> GetAll<TEntity>(bool withDeleted = false)
+        public async Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user)
         {
-            var quaery = this.DbContext.Courses.AsQueryable();
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (!withDeleted)
-            {
-                quaery = quaery
-                    .Where(x => !x.IsDeleted);
-            }
-
-            return quaery.ProjectTo<TEntity>(this.Mapper.ConfigurationProvider);
-        }
-
-        public TEntity GetById<TEntity>(int id)
-        {
-            var course = this.DbContext
-                .Courses
-                .Where(c => !c.IsDeleted)
-                .SingleOrDefault(c => c.Id == id);
-
-            var courseToReturn = this.Mapper.Map<TEntity>(course);
-            return courseToReturn;
-        }
-
-        public async Task CreateAsync(CreateCourseBindingModel course)
-        {
-            var courseToAdd = this.Mapper.Map<Course>(course);
-
-            courseToAdd.CreatedOn = DateTime.UtcNow;
-
-            await this.DbContext.Courses.AddAsync(courseToAdd);
-            await this.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<bool> UpdateAsync(UpdateCourseBindingModel course)
-        {
-            var courseToUpdate = this.DbContext.Courses.Find(course.Id);
-
-            if (courseToUpdate == null)
+            if (user.IsUserInCourseAlready(this.DbContext, courseId, userId))
             {
                 return false;
             }
 
-            this.Mapper.Map(course, courseToUpdate);
-            courseToUpdate.ModifiedOn = DateTime.UtcNow;
+            var userCourse = new UserCourse()
+            {
+                ApplicationUserId = userId,
+                CourseId = courseId,
+                CreatedOn = DateTime.UtcNow
+            };
 
-            this.DbContext.Update(courseToUpdate);
+            if (!user.IsInRole(GlobalConstants.STUDENT_ROLE))
+            {
+                var userFromDb = this.DbContext.Users.Find(userId);
+                await userManager.AddToRoleAsync(userFromDb, GlobalConstants.STUDENT_ROLE);
+            }
+
+            await this.DbContext.AddAsync(userCourse);
             await this.DbContext.SaveChangesAsync();
 
             return true;
@@ -98,24 +81,6 @@
                 .FirstOrDefault();
 
             return course;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var course = this.GetById<Course>(id);
-
-            if (course == null)
-            {
-                return false;
-            }
-
-            course.IsDeleted = true;
-            course.DeletedOn = DateTime.UtcNow;
-
-            this.DbContext.Update(course);
-            await this.DbContext.SaveChangesAsync();
-
-            return true;
         }
     }
 }

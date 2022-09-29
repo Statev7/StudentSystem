@@ -20,8 +20,7 @@
                             : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7)));
 
             this.CreateMap<Course, DetailCourseViewModel>();
-            this.CreateMap<CreateCourseBindingModel, Course>();
-            this.CreateMap<UpdateCourseBindingModel, Course>().ReverseMap();
+            this.CreateMap<Course, CourseFormServiceModel>().ReverseMap();
             this.CreateMap<Course, CourseIdNameViewModel>();
             this.CreateMap<CourseLessonScheduleServiceModel, CourseIdNameViewModel>();
         }

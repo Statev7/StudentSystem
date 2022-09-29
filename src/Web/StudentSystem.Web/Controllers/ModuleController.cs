@@ -28,7 +28,7 @@
         [Authorize]
         public async Task<IActionResult> Apply(int id)
         {
-            var course = this.courseService.GetById<Course>(id);
+            var course = await this.courseService.GetByIdAsync<Course>(id);
             if (course == null)
             {
                 this.TempData[NotificationsConstants.ERROR_NOTIFICATION] 

@@ -6,7 +6,6 @@
 
     using AutoMapper;
 
-    using StudentSystem.Services.Course;
     using StudentSystem.Services.Course.Models;
     using StudentSystem.Services.Home.Models;
     using StudentSystem.Services.Lesson.Models;

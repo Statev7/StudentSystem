@@ -20,14 +20,17 @@
     public class CourseService : BaseService<Course>, ICourseService
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public CourseService(
             StudentSystemDbContext dbContext,
             IMapper mapper,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
             : base(dbContext, mapper)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public async Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user)
@@ -46,14 +49,17 @@
                 CreatedOn = DateTime.UtcNow
             };
 
+            var userFromDb = this.DbContext.Users.Find(userId);
+
             if (!user.IsInRole(GlobalConstants.STUDENT_ROLE))
             {
-                var userFromDb = this.DbContext.Users.Find(userId);
                 await userManager.AddToRoleAsync(userFromDb, GlobalConstants.STUDENT_ROLE);
             }
 
             await this.DbContext.AddAsync(userCourse);
             await this.DbContext.SaveChangesAsync();
+
+            await this.signInManager.RefreshSignInAsync(userFromDb);
 
             return true;
         }

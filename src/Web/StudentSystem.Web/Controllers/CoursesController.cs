@@ -14,8 +14,6 @@
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
-    using StudentSystem.Data.Models.StudentSystem;
-    using StudentSystem.Web.Common;
 
     [AutoValidateAntiforgeryToken]
     public class CoursesController : Controller

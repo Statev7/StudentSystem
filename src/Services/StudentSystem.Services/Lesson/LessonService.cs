@@ -35,6 +35,10 @@
             {
                 currentPage = 1;
             }
+            else if(currentPage > totalPages)
+            {
+                currentPage = (int)totalPages;
+            }
 
             if (courseId != 0)
             {

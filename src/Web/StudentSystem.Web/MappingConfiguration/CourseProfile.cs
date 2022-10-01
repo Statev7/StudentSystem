@@ -23,6 +23,7 @@
             this.CreateMap<Course, CourseFormServiceModel>().ReverseMap();
             this.CreateMap<Course, CourseIdNameViewModel>();
             this.CreateMap<CourseLessonScheduleServiceModel, CourseIdNameViewModel>();
+            this.CreateMap<Course, CourseUsersServiceModel>();
         }
     }
 }

@@ -91,5 +91,8 @@
 
             return true;
         }
+
+        public async Task<bool> IsExistAsync(int id)
+            => await this.DbSet.AnyAsync(x => x.Id == id);
     }
 }

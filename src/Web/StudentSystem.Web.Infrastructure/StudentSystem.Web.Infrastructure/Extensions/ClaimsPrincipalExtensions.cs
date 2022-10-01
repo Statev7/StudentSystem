@@ -2,14 +2,15 @@
 {
     using System.Linq;
     using System.Security.Claims;
+    using Microsoft.AspNetCore.Identity;
 
-    using StudentSystem.Web.Data;
+    using StudentSystem.Data.Models.StudentSystem;
 
     public static class ClaimsPrincipalExtensions
     {
-        public static bool IsUserInCourseAlready(
+        public static bool IsUserInCourse(
             this ClaimsPrincipal claimsPrincipal,
-            StudentSystemDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
             int courseId,
             string userId)
         {
@@ -18,7 +19,7 @@
                 return false;
             }
 
-            var user = dbContext
+            var user = userManager
                 .Users
                 .Select(u => new
                 {

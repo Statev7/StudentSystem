@@ -16,6 +16,7 @@
     using StudentSystem.ViewModels.Lesson;
     using StudentSystem.Web.Common;
     using StudentSystem.Web.Infrastructure.Extensions;
+    using StudentSystem.ViewModels.Review;
 
     public class CourseService : BaseService<Course>, ICourseService
     {
@@ -37,7 +38,7 @@
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (user.IsUserInCourseAlready(this.DbContext, courseId, userId))
+            if (user.IsUserInCourse(this.userManager, courseId, userId))
             {
                 return false;
             }
@@ -66,7 +67,7 @@
 
         public DetailCourseViewModel GetDetails(int id)
         {
-            var course = this.DbContext.Courses
+            var course = this.DbSet
                 .Where(x => x.Id == id)
                 .Select(c => new DetailCourseViewModel
                 {
@@ -82,7 +83,21 @@
                                 Id = l.Id,
                                 Title = l.Title,
                             })
-                            .ToList()
+                            .ToList(),
+                    CreateReviewModel = new CreateReviewBindingModel
+                    {
+                        CourseId = c.Id
+                    },
+                    Reviews = c.Reviews
+                        .Where(r => !r.IsDeleted)
+                        .OrderByDescending(r => r.CreatedOn)
+                        .Select(r => new ReviewViewModel
+                        {
+                            Id = r.Id,
+                            Content = r.Content,
+                            UserId = r.UserId,
+                            Username = r.User.UserName
+                        })
                 })
                 .FirstOrDefault();
 

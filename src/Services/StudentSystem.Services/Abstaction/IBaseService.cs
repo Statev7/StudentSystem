@@ -14,5 +14,7 @@
         Task<bool> UpdateAsync<T>(int id, T model);
 
         Task<bool> DeleteAsync(int id);
+
+        Task<bool> IsExistAsync(int id);
     }
 }

@@ -4,7 +4,7 @@
 @{
 	ViewData["Title"] = "Home";
 
-	var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE);
+	var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
 }
 
 <div class="container mt-5">

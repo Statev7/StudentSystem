@@ -4,10 +4,10 @@
 	ViewData["Title"] = "Details";
 	var count = 0;
 
-	var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var userId = this.User.GetId();
 }
 
-@inject StudentSystemDbContext dbContext
+@inject UserManager<ApplicationUser> userManager
 
 <div class="text-center p-4" style="background-color: #F1F1F1">
 	<h1>@Model.Name</h1>
@@ -35,45 +35,99 @@
 		</div>
 	</div>
 	<div class="text-center">
-		<button id="show-description-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Show More</button>
+		<button id="show-information-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Show More</button>
 	</div>
-	<div id="description-box" class="shadow-box d-none offset-md-1 col-sm col-md-10 mb-3 p-3">
-		<div>
+	<div id="information-box" class="d-none">
+		<div class="shadow-box offset-md-1 col-sm col-md-10 mb-5 p-3">
 			<h5>Description</h5>
+			<div>
+				@Model.Description
+			</div>
 		</div>
-		<div>
-			@Model.Description
+		<div class="shadow-box offset-md-1 col-sm col-md-10 mb-5 p-3">
+			<h5 class="mb-3">Reviews</h5>
+			<div>
+				@foreach (var review in Model.Reviews)
+				{
+					<div class="card mb-4">
+						<div class="card-body">
+							<p>@review.Content</p>
+
+							<div class="d-flex justify-content-between">
+								<div class="d-flex flex-row align-items-center">
+									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+									 height="25" />
+									<p class="small pl-2 mb-0 ms-2">@review.Username</p>
+								</div>
+								<div class="d-flex flex-row align-items-center">
+									@if (review.UserId == this.User.GetId() || this.User.IsInRole(GlobalConstants.ADMIN_ROLE))
+									{
+										<div>
+											<a class="options-bar"
+											   asp-controller="Reviews"
+											   asp-action="Update"
+											   asp-route-id=@review.Id>Update
+										   </a>
+											<span>|</span>
+											<a class="options-bar"
+											   asp-controller="Reviews"
+											   asp-action="Delete"
+											   asp-route-id=@review.Id>Delete
+											</a>
+										</div>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
 		</div>
 	</div>
 	<div class="text-center">
-		@if (!this.User.IsUserInCourseAlready(dbContext, Model.Id, userId) && !this.User.IsInRole(GlobalConstants.ADMIN_ROLE))
+		@if (!this.User.IsUserInCourse(userManager, Model.Id, userId))
 		{
-			<a 
-				asp-controller="Courses" 
-				asp-action="Apply" 
-				asp-route-id="@Model.Id" 
-				class="btn btn-primary rounded-pill w-25 p-2">
+			<a asp-controller="Courses"
+		   asp-action="Apply"
+		   asp-route-id="@Model.Id"
+		   class="btn btn-primary rounded-pill w-25 p-2">
 				Register for course
 			</a>
+		}
+		else if (this.User.IsUserInCourse(userManager, Model.Id, userId) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE))
+		{
+			<div class="text-center mb-3">
+				<button id="show-review-form-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Leave a review</button>
+			</div>
+			<div id="review-form" class="d-none offset-md-1 col-sm col-md-10">
+				<partial name="_ReviewFormPartial" model="@Model.CreateReviewModel">
+			</div>
 		}
 	</div>
 </div>
 
 <script>
-	let btnElement = document.getElementById('show-description-btn');
-	btnElement.addEventListener('click', () => {
+	let informationBtn = document.getElementById('show-information-btn');
+	let reviewBtn = document.getElementById('show-review-form-btn');
 
-		let descriptionBoxElement = document.getElementById('description-box');
+	informationBtn.addEventListener('click', () => someFunc('information-box'));
+	reviewBtn.addEventListener('click', () => someFunc('review-form'));
 
-		if (descriptionBoxElement.classList.contains('d-none')) {
+	function someFunc(elementId) {
 
-			descriptionBoxElement.classList.remove('d-none');
-			btnElement.innerHTML = 'Show Less';
+		let box = document.getElementById(elementId);
+
+		if (box.classList.contains('d-none')) {
+			box.classList.remove('d-none');
+			switch (elementId) {
+				case 'information-box': informationBtn.innerHTML = 'Show Less'; break;
+			}
 		}
 		else {
-
-			descriptionBoxElement.classList.add('d-none');
-			btnElement.innerHTML = 'Show More';
+			box.classList.add('d-none');
+			switch (elementId) {
+				case 'information-box': informationBtn.innerHTML = 'Show More'; break;
+			}
 		}
-	});
+	}
 </script>

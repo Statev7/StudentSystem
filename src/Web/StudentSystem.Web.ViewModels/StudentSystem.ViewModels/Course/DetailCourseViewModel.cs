@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Review;
 
     public class DetailCourseViewModel
 	{
@@ -17,5 +18,9 @@
         public string EndDate { get; set; }
 
         public IEnumerable<LessonIdNameViewModel> Lessons { get; set; }
+        
+        public CreateReviewBindingModel CreateReviewModel { get; set; }
+
+        public IEnumerable<ReviewViewModel> Reviews { get; set; }
     }
 }

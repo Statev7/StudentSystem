@@ -27,5 +27,9 @@
         public const int ResourceNameMaxLength = 128;
         public const int ResourceNameMinLength = 6;
         public const int ResourceURLMaxLength = 2048;
+
+        // Review
+
+        public const int ReviewContentMaxLength = 10000;
     }
 }

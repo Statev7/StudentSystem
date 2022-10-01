@@ -33,6 +33,8 @@
 
         public ICollection<Lesson> Lessons { get; set; }
 
+        public ICollection<Review> Reviews { get; set; }
+
         public ICollection<UserCourse> UserCourses { get; set; }
     }
 }

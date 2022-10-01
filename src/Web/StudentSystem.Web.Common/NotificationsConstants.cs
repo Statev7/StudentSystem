@@ -25,5 +25,9 @@
         public const string SUCCESSFULLY_UPDATE_LESSON_MESSAGE = "Successfully update a {0} lesson";
         public const string SUCCESSFULLY_DELETE_LESSON_MESSAGE = "Successfully delete a lesson";
         public const string INVALID_LESSON_MESSAGE = "No such lesson exists";
+
+        //Reviw
+        public const string NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE
+            = "To leave a review, you must be registered in the course";
     }
 }

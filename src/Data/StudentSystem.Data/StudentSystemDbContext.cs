@@ -18,6 +18,8 @@
 
         public DbSet<Resource> Resources { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
         public DbSet<UserCourse> UserCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

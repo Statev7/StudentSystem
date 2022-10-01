@@ -14,6 +14,7 @@ namespace StudentSystem.Web
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Home;
     using StudentSystem.Services.Lesson;
+    using StudentSystem.Services.Review;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
 
@@ -93,6 +94,7 @@ namespace StudentSystem.Web
             services.AddTransient<IHomeService, HomeService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
+            services.AddTransient<IReviewService, ReviewService>();
         } 
     }
 }

@@ -18,8 +18,6 @@
         public string EndDate { get; set; }
 
         public IEnumerable<LessonIdNameViewModel> Lessons { get; set; }
-        
-        public CreateReviewBindingModel CreateReviewModel { get; set; }
 
         public IEnumerable<ReviewViewModel> Reviews { get; set; }
     }

@@ -1,10 +1,12 @@
-﻿@model DetailCourseViewModel
+﻿@using StudentSystem.Services.Review.Models
+@model DetailCourseViewModel
 
 @{
 	ViewData["Title"] = "Details";
 	var count = 0;
 
 	var userId = this.User.GetId();
+	ViewBag.CourseId = Model.Id;
 }
 
 @inject UserManager<ApplicationUser> userManager
@@ -66,13 +68,15 @@
 											<a class="options-bar"
 											   asp-controller="Reviews"
 											   asp-action="Update"
-											   asp-route-id=@review.Id>Update
+											   asp-route-id=@review.Id
+											   asp-route-courseId="@Model.Id">Update
 										   </a>
 											<span>|</span>
 											<a class="options-bar"
 											   asp-controller="Reviews"
 											   asp-action="Delete"
-											   asp-route-id=@review.Id>Delete
+											   asp-route-reviewId=@review.Id
+											   asp-route-courseId="@Model.Id">Delete
 											</a>
 										</div>
 									}
@@ -88,19 +92,22 @@
 		@if (!this.User.IsUserInCourse(userManager, Model.Id, userId))
 		{
 			<a asp-controller="Courses"
-		   asp-action="Apply"
-		   asp-route-id="@Model.Id"
-		   class="btn btn-primary rounded-pill w-25 p-2">
+				asp-action="Apply"
+				asp-route-id="@Model.Id"
+				class="btn btn-primary rounded-pill w-25 p-2">
 				Register for course
 			</a>
 		}
-		else if (this.User.IsUserInCourse(userManager, Model.Id, userId) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE))
+		else if (this.User.IsUserInCourse(userManager, Model.Id, userId) || this.User.IsAdministrator())
 		{
 			<div class="text-center mb-3">
 				<button id="show-review-form-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Leave a review</button>
 			</div>
 			<div id="review-form" class="d-none offset-md-1 col-sm col-md-10">
-				<partial name="_ReviewFormPartial" model="@Model.CreateReviewModel">
+				@{
+					var model = new ReviewFormServiceModel();
+				}
+				<partial name="_ReviewFormPartial" model="model">
 			</div>
 		}
 	</div>

@@ -9,7 +9,9 @@
 	{
 		public ReviewProfile()
 		{
-			this.CreateMap<ReviewFormServiceModel, Review>();
+			this.CreateMap<CreateReviewServiceModel, Review>();
+			this.CreateMap<Review, ReviewUserIdServiceModel>();
+			this.CreateMap<Review, ReviewFormServiceModel>().ReverseMap();
 		}
 	}
 }

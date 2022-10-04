@@ -14,9 +14,10 @@
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Web.Data;
     using StudentSystem.ViewModels.Lesson;
-    using StudentSystem.Web.Common;
     using StudentSystem.Web.Infrastructure.Extensions;
     using StudentSystem.ViewModels.Review;
+
+    using static StudentSystem.Web.Common.GlobalConstants;
 
     public class CourseService : BaseService<Course>, ICourseService
     {
@@ -52,9 +53,9 @@
 
             var userFromDb = this.DbContext.Users.Find(userId);
 
-            if (!user.IsInRole(GlobalConstants.STUDENT_ROLE))
+            if (!user.IsInRole(STUDENT_ROLE))
             {
-                await userManager.AddToRoleAsync(userFromDb, GlobalConstants.STUDENT_ROLE);
+                await userManager.AddToRoleAsync(userFromDb, STUDENT_ROLE);
             }
 
             await this.DbContext.AddAsync(userCourse);
@@ -84,10 +85,6 @@
                                 Title = l.Title,
                             })
                             .ToList(),
-                    CreateReviewModel = new CreateReviewBindingModel
-                    {
-                        CourseId = c.Id
-                    },
                     Reviews = c.Reviews
                         .Where(r => !r.IsDeleted)
                         .OrderByDescending(r => r.CreatedOn)

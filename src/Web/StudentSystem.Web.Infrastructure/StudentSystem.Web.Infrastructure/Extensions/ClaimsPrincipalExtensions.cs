@@ -6,6 +6,8 @@
 
     using StudentSystem.Data.Models.StudentSystem;
 
+    using static StudentSystem.Web.Common.GlobalConstants;
+
     public static class ClaimsPrincipalExtensions
     {
         public static bool IsUserInCourse(
@@ -40,5 +42,8 @@
 
         public static string GetId(this ClaimsPrincipal claimsPrincipal)
             => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public static bool IsAdministrator(this ClaimsPrincipal claimsPrincipal)
+            => claimsPrincipal.IsInRole(ADMIN_ROLE);
     }
 }

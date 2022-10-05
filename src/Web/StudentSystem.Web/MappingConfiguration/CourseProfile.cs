@@ -13,7 +13,7 @@
     {
         public CourseProfile()
         {
-            this.CreateMap<Course, ListCoursesViewModel>()
+            this.CreateMap<Course, CourseViewModel>()
                 .ForMember(d => d.Duration, conf => conf
                     .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1 
                             ? 1 

@@ -4,6 +4,6 @@
 
     public interface IHomeService
     {
-        StudentInformationViewModel GetInformation(string userId);
+        HomeViewModel GetInformation(string userId);
     }
 }

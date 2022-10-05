@@ -6,6 +6,7 @@
 
     using AutoMapper;
 
+    using StudentSystem.Services.Course;
     using StudentSystem.Services.Course.Models;
     using StudentSystem.Services.Home.Models;
     using StudentSystem.Services.Lesson.Models;
@@ -18,20 +19,23 @@
     {
         private readonly StudentSystemDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly ICourseService courseService;
 
         public HomeService(
             StudentSystemDbContext dbContext, 
-            IMapper mapper) 
+            IMapper mapper,
+            ICourseService courseService) 
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.courseService = courseService;
         }
 
-        public StudentInformationViewModel GetInformation(string userId)
+        public HomeViewModel GetInformation(string userId)
         {
             if (userId == null)
             {
-                return new StudentInformationViewModel();
+                return new HomeViewModel();
             }
 
             var studentResources = this.dbContext
@@ -60,14 +64,19 @@
                     })
                     .FirstOrDefault();
 
-            StudentInformationViewModel studentInformation = this.ConvertToViewModels(studentResources);
+            var model = this.ConvertToViewModels(studentResources);
+            model.OpenCourses = this.courseService
+                .GetAllAsQueryable<CourseViewModel>()
+                .Where(x => x.StartDate > DateTime.UtcNow)
+                .OrderBy(x => x.StartDate)
+                .Take(3)
+                .ToList();
 
-            return studentInformation;
+            return model;
         }
 
-        private StudentInformationViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
+        private HomeViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
         {
-            // TODO: Change this sh*t
             var coursesAsViewModels = new List<CourseIdNameViewModel>();
             var lessonsAsViewModels = new List<LessonScheduleViewModel>();
 
@@ -88,11 +97,12 @@
                 }
             }
 
-            var studentInformation = new StudentInformationViewModel
+            var studentInformation = new HomeViewModel
             {
                 Courses = coursesAsViewModels,
                 Lessons = lessonsAsViewModels.OrderBy(x => x.Begining),
             };
+
             return studentInformation;
         }
     }

@@ -14,6 +14,8 @@
     public abstract class BaseService<TEntity> : IBaseService
         where TEntity : BaseModel
     {
+        private const int MIN_PAGE_VALUE = 1; 
+
         protected BaseService(StudentSystemDbContext dbContext, IMapper mapper)
         {
             this.DbContext = dbContext;
@@ -38,6 +40,28 @@
             }
 
             return query.ProjectTo<T>(this.Mapper.ConfigurationProvider);
+        }
+
+        public IQueryable<T> PageingAsQueryable<T>(int currentPage, int lessonsPerPage)
+        {
+            var query = this.GetAllAsQueryable<T>();
+
+            var totalPages = Math.Ceiling(query.Count() / (double)lessonsPerPage);
+
+            if (currentPage < MIN_PAGE_VALUE)
+            {
+                currentPage = MIN_PAGE_VALUE;
+            }
+            else if(currentPage > totalPages)
+            {
+                currentPage = (int)totalPages;
+            }
+
+             query = query
+                .Skip((currentPage - 1) * lessonsPerPage)
+                .Take(lessonsPerPage);
+
+            return query;
         }
 
         public async Task<T> GetByIdAsync<T>(int id) 
@@ -94,5 +118,17 @@
 
         public async Task<bool> IsExistAsync(int id)
             => await this.DbSet.AnyAsync(x => x.Id == id);
+
+        public async Task<int> GetCountAsync(bool withDeleted = false)
+        {
+            if (withDeleted)
+            {
+                return await this.DbSet.CountAsync();
+            }
+
+            return await this.DbSet
+                .Where(x => x.IsDeleted == false)
+                .CountAsync();
+        }
     }
 }

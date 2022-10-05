@@ -1,6 +1,5 @@
 ﻿namespace StudentSystem.Services.Lesson
 {
-    using System;
     using System.Linq;
 
     using AutoMapper;
@@ -25,39 +24,25 @@
             this.courseService = courseService;
         }
 
-        public PageLessonViewModel Paging(int courseId, int currentPage, int lessonsPerPage)
+        public PageLessonViewModel GetAllLessonsPaged(int courseId, int currentPage, int lessonsPerPage)
         {
-            var query = this.GetAllAsQueryable<LessonPagingViewModel>();
-
-            var totalPages = Math.Ceiling((double)query.Count() / lessonsPerPage);
-
-            if (currentPage < 1)
-            {
-                currentPage = 1;
-            }
-            else if(currentPage > totalPages)
-            {
-                currentPage = (int)totalPages;
-            }
+            var query = this.PageingAsQueryable<LessonPagingViewModel>(currentPage, lessonsPerPage);
 
             if (courseId != 0)
             {
-                query = query.Where(x => x.CourseId == courseId);
+                query = query
+                    .Where(x => x.CourseId == courseId);
             }
 
-            var lessons = query
-                .Skip((currentPage - 1) * lessonsPerPage)
-                .Take(lessonsPerPage)
-                .ToList();
-
-
+            var lessons = query.ToList();
             var model = new PageLessonViewModel
             {
                 Lessons = lessons,
                 Courses = this.courseService.GetAllAsQueryable<CourseIdNameViewModel>().ToList(),
                 CourseId = courseId,
                 CurrentPage = currentPage,
-                LessonsPerPage = lessonsPerPage
+                LessonsPerPage = lessonsPerPage,
+                TotalLessons = this.GetCountAsync().GetAwaiter().GetResult(),
             };
 
             return model;

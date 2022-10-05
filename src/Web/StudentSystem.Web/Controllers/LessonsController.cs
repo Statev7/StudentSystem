@@ -20,8 +20,7 @@
 	[Authorize(Roles = ADMIN_ROLE)]
     public class LessonsController : Controller
 	{
-		//TODO: This can come from quary. Thing about this!
-		private const int LESSON_PER_PAGE = 8;
+		private const int LESSON_PER_PAGE = 3;
 
 		private readonly ILessonService lessonService;
 		private readonly ICourseService courseService;
@@ -35,9 +34,9 @@
 		}
 
 		[HttpGet]
-		public IActionResult Index(int courseId, int currentPage = 1)
+		public IActionResult Index(int courseId, int currentPage)
 		{
-			var lessons = this.lessonService.Paging(courseId, currentPage, LESSON_PER_PAGE);
+			var lessons = this.lessonService.GetAllLessonsPaged(courseId, currentPage, LESSON_PER_PAGE);
 
 			return View(lessons);
 		}

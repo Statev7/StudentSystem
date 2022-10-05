@@ -15,5 +15,7 @@
 		public int CurrentPage { get; set; } = 1;
 
 		public int LessonsPerPage { get; set; }
+
+		public int TotalLessons { get; set; }
 	}
 }

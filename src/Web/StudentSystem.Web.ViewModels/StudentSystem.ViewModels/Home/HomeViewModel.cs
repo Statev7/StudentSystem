@@ -5,10 +5,12 @@
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Lesson;
 
-    public class StudentInformationViewModel
+    public class HomeViewModel
     {
         public IEnumerable<CourseIdNameViewModel> Courses { get; set; }
 
         public IEnumerable<LessonScheduleViewModel> Lessons { get; set; }
+
+        public IEnumerable<CourseViewModel> OpenCourses { get; set; }
     }
 }

@@ -30,7 +30,7 @@
         public IActionResult Index()
         {
             var courses = this.courseService
-                .GetAllAsQueryable<ListCoursesViewModel>()
+                .GetAllAsQueryable<CourseViewModel>()
                 .Where(c => c.StartDate > DateTime.UtcNow)
                 .ToList();
 

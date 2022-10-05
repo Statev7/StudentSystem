@@ -9,6 +9,8 @@
 		previousPage = 1;
 	}
 
+	var totalPages = Math.Ceiling(Model.TotalLessons / (double)Model.LessonsPerPage);
+	var hasNext = totalPages > Model.CurrentPage;
 	var nextPage = Model.CurrentPage + 1;
 }
 
@@ -51,20 +53,13 @@
 									<span>@lesson.Title</span>
 								</div>
 								<div>
-									<a class="options-bar"
-							   asp-controller="Lessons"
-							   asp-action="Update"
-							   asp-route-id="@lesson.Id">
+									<a class="options-bar" asp-action="Update" asp-route-id="@lesson.Id">
 										<span>Update</span>
 									</a>
 									<span>|</span>
-									<a class="options-bar"
-							   asp-controller="Lessons"
-							   asp-action="Delete"
-							   asp-route-id="@lesson.Id">
+									<a class="options-bar" asp-action="Delete" asp-route-id="@lesson.Id">
 										<span>Delete</span>
 									</a>
-
 								</div>
 							</div>
 						</td>
@@ -72,22 +67,25 @@
 				}
 			</tbody>
 		</table>
-
 		<div>
-			<a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
-				asp-controller="Lessons"
-				asp-action="Index"
-				asp-route-currentPage=@previousPage
-				asp-route-courseId="@Model.CourseId">
-				&lt;&lt;
-			</a>
-			<a class="btn btn-primary float-right @(Model.Lessons.Count() < Model.LessonsPerPage ? "disabled" : string.Empty)
-			   asp-controller="Lessons"
-			   asp-action="Index"
-			   asp-route-currentPage=@nextPage
-			   asp-route-courseId="@Model.CourseId">
-					>>
-			</a>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<li class="page-item @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+						<a class="page-link" asp-route-currentPage=@previousPage asp-route-courseId="@Model.CourseId">Previous</a>
+					</li>
+					@for (int pageIndex = 1; pageIndex <= totalPages; pageIndex++)
+					{
+						<li class="page-item">
+							<a class="page-link" asp-route-currentPage=@pageIndex asp-route-courseId="@Model.CourseId">
+								@pageIndex
+							</a>
+						</li>
+					}
+					<li class="page-item @(hasNext == false ? "disabled" : string.Empty)">
+						<a class="page-link" asp-route-currentPage=@nextPage asp-route-courseId="@Model.CourseId">Next</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	}
 	else

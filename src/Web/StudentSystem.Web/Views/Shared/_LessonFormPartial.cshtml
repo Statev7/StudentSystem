@@ -1,6 +1,6 @@
 ﻿@model LessonFormServiceModel
 
-<div class="offset-2 col-8">
+<div class="offset-3 col-6 mt-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -10,7 +10,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control"></textarea>
+                <textarea asp-for="Content" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,8 +31,8 @@
                     }
                 </select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+            <div class="form-group text-center">
+                <input type="submit" value="Submit" class="btn btn-primary w-50" />
             </div>
         </form>
 </div>

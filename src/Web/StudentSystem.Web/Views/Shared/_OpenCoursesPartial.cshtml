@@ -1,18 +1,23 @@
-﻿@model IEnumerable<ListCoursesViewModel>
+﻿@model IEnumerable<CourseViewModel>
+
+@{
+	var stringFormat = "d-MMMM yyyy";
+}
 
 <div class="row">
 	@foreach (var course in @Model)
 	{
 		<a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">
-			<div class="card mt-2 ml-3" style="width: 18rem;">
+			<div class="card mt-2 ml-2" style="width: 18rem;">
 				<div>
-					<img class="card-img-top" style="height: 175px" src="@course.ImageURL" alt="@course.Name - @course.StartDate">
+					<img class="card-img-top" style="height: 175px" src="@course.ImageURL"
+					 alt="@course.Name - @course.StartDate.ToString(stringFormat, CultureInfo.InvariantCulture)">
 					<div class="course-body card-body">
 						<h4 class="card-title" style="color: #234465">Course: @course.Name</h4>
 						<hr>
 						<div class="card-text">
 							<span>
-								@course.StartDate
+								@course.StartDate.ToString(stringFormat, CultureInfo.InvariantCulture)
 							</span>
 							<span class="float-right">
 								@course.Duration @(course.Duration > 1 ? "weeks" : "week")

@@ -13,7 +13,7 @@
 
     using static StudentSystem.Web.Common.NotificationsConstants;
 
-    public class ReviewsController : Controller
+    public class CourseReviewsController : Controller
     {
         private const string DELETE = "delete";
         private const string UPDATE = "update";
@@ -22,7 +22,7 @@
         private readonly ICourseService courseService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ReviewsController(
+        public CourseReviewsController(
             IReviewService reviewService, 
             ICourseService courseService,
             UserManager<ApplicationUser> userManager)

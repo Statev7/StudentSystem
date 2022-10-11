@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Data.Seed.Implementation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -21,24 +22,18 @@
                 return;
             }
 
-            var userRole = new IdentityRole
+            var roles = new List<IdentityRole>()
             {
-                Name = USER_ROLE
+                new IdentityRole(USER_ROLE),
+                new IdentityRole(STUDENT_ROLE),
+                new IdentityRole(MODERATOR_ROLE),
+                new IdentityRole(ADMIN_ROLE),
             };
 
-            var studentRole = new IdentityRole
+            foreach (var role in roles)
             {
-                Name = STUDENT_ROLE
-            };
-
-            var adminRole = new IdentityRole
-            {
-                Name = ADMIN_ROLE
-            };
-
-            await roleManager.CreateAsync(userRole);
-            await roleManager.CreateAsync(studentRole);
-            await roleManager.CreateAsync(adminRole);
+                await roleManager.CreateAsync(role);
+            }
         }
     }
 }

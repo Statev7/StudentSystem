@@ -13,6 +13,7 @@
         // Roles
 
         public const string ADMIN_ROLE = "Admin";
+        public const string MODERATOR_ROLE = "Moderator";
         public const string STUDENT_ROLE = "Student";
         public const string USER_ROLE = "User";
     }

@@ -2,9 +2,9 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using static StudentSystem.Web.Areas.Common.AreaConstants;
+    using static StudentSystem.Web.Areas.Common.Constants;
 
-    [Area(TRAININGS_NAME)]
+    [Area(TRAININGS_AREA_NAME)]
     public abstract class TrainingController : Controller
 	{
 

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Web\StudentSystem.Web.Common\StudentSystem.Web.Common.csproj" />
     <ProjectReference Include="..\StudentSystem.Data.Models\StudentSystem.Data.Models.csproj" />
+    <ProjectReference Include="..\StudentSystem.Data\StudentSystem.Data.csproj" />
   </ItemGroup>
 
 </Project>

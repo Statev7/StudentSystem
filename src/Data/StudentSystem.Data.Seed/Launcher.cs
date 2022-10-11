@@ -17,6 +17,7 @@
             {
                 new RoleSeeder(),
                 new UserSeeder(),
+                new CourseSeeder(),
             };
 
             using (var serviceScope = application.ApplicationServices.CreateScope())

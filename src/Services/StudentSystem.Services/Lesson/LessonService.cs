@@ -10,6 +10,7 @@
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
+    using System.Collections.Generic;
 
     public class LessonService : BaseService<Lesson>, ILessonService
     {
@@ -26,23 +27,39 @@
 
         public PageLessonViewModel GetAllLessonsPaged(int courseId, int currentPage, int lessonsPerPage)
         {
-            var query = this.PageingAsQueryable<LessonPagingViewModel>(currentPage, lessonsPerPage);
+            //Get all lessons as queryable
+            var queryForPageing = this
+                .GetAllAsQueryable<LessonForPageViewModel>()
+                .OrderBy(x => x.Title)
+                .AsQueryable();
 
+            //Filtered them if needed
             if (courseId != 0)
             {
-                query = query
+                queryForPageing = queryForPageing
                     .Where(x => x.CourseId == courseId);
             }
 
-            var lessons = query.ToList();
+            var lessons = new List<LessonForPageViewModel>();
+            var totalEntities = 0;
+
+            if (queryForPageing.Any())
+            {
+                totalEntities = queryForPageing.Count();
+
+                lessons = this
+                    .PageingAsQueryable(queryForPageing, currentPage, lessonsPerPage)
+                    .ToList();
+            }
+
             var model = new PageLessonViewModel
             {
                 Lessons = lessons,
                 Courses = this.courseService.GetAllAsQueryable<CourseIdNameViewModel>().ToList(),
                 CourseId = courseId,
                 CurrentPage = currentPage,
-                LessonsPerPage = lessonsPerPage,
-                TotalLessons = this.GetCountAsync().GetAwaiter().GetResult(),
+                EntitiesPerPage = lessonsPerPage,
+                TotalEntities = totalEntities,
             };
 
             return model;

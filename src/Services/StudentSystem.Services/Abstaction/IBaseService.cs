@@ -7,7 +7,7 @@
     {
         IQueryable<T> GetAllAsQueryable<T>(bool withDeleted = false);
 
-        IQueryable<T> PageingAsQueryable<T>(int currentPage, int lessonsPerPage);
+        IQueryable<T> PageingAsQueryable<T>(IQueryable<T> query, int currentPage, int lessonsPerPage);
 
         Task<T> GetByIdAsync<T>(int id);
 

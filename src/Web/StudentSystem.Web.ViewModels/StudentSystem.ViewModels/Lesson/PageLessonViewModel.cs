@@ -3,19 +3,14 @@
     using System.Collections.Generic;
 
 	using StudentSystem.ViewModels.Course;
+	using StudentSystem.ViewModels.Page;
 
-	public class PageLessonViewModel
-	{
-		public IEnumerable<LessonPagingViewModel> Lessons { get; set; }
+	public class PageLessonViewModel : PageViewModel
+    {
+		public IEnumerable<LessonForPageViewModel> Lessons { get; set; }
 
 		public IEnumerable<CourseIdNameViewModel> Courses { get; set; }
 
 		public int CourseId { get; set; }
-
-		public int CurrentPage { get; set; } = 1;
-
-		public int LessonsPerPage { get; set; }
-
-		public int TotalLessons { get; set; }
 	}
 }

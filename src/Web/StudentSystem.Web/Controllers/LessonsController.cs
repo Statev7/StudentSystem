@@ -20,7 +20,7 @@
 	[Authorize(Roles = ADMIN_ROLE)]
     public class LessonsController : Controller
 	{
-		private const int LESSON_PER_PAGE = 3;
+		private const int LESSON_PER_PAGE = 6;
 
 		private readonly ILessonService lessonService;
 		private readonly ICourseService courseService;
@@ -34,7 +34,7 @@
 		}
 
 		[HttpGet]
-		public IActionResult Index(int courseId, int currentPage)
+		public IActionResult Index(int courseId, int currentPage = 1)
 		{
 			var lessons = this.lessonService.GetAllLessonsPaged(courseId, currentPage, LESSON_PER_PAGE);
 

@@ -1,4 +1,4 @@
-﻿namespace StudentSystem.Web.Controllers
+﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
     using System;
     using System.Linq;
@@ -9,14 +9,16 @@
 
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
-    using StudentSystem.Web.Infrastructure.Helpers;
     using StudentSystem.Services.Course.Models;
+    using StudentSystem.Web.Infrastructure.Helpers;
+    using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
 
+
     [AutoValidateAntiforgeryToken]
-    public class CoursesController : Controller
+    public class CoursesController : TrainingController
     {
         private readonly ICourseService courseService;
 
@@ -29,7 +31,7 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var courses = this.courseService
+            var courses = courseService
                 .GetAllAsQueryable<CourseViewModel>()
                 .Where(c => c.StartDate > DateTime.UtcNow)
                 .ToList();
@@ -40,15 +42,15 @@
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
         public IActionResult Create()
-            => this.View();
+            => View();
 
         [HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Create(CourseFormServiceModel course)
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.View(course);
+                return View(course);
             }
 
             var result = MyValidator
@@ -56,113 +58,113 @@
 
             if (!result.isValid)
             {
-                this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
+                TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
-                return this.View(course);
+                return View(course);
             }
 
-            await this.courseService.CreateAsync(course);
+            await courseService.CreateAsync(course);
 
-            this.TempData[SUCCESS_NOTIFICATION] = 
+            TempData[SUCCESS_NOTIFICATION] =
                 string.Format(SUCCESSFULLY_CREATED_COURSE_MESSAGE, course.Name);
 
-            return this.RedirectToAction(nameof(this.Index));
+            return RedirectToAction(nameof(this.Index));
         }
 
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Update(int id)
         {
-            var courseToUpdate = await this.courseService.GetByIdAsync<CourseFormServiceModel>(id);
+            var courseToUpdate = await courseService.GetByIdAsync<CourseFormServiceModel>(id);
             if (courseToUpdate == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
-                return this.RedirectToAction(nameof(this.Index));
+                return RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(courseToUpdate);
+            return View(courseToUpdate);
         }
 
         [HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Update(int id, CourseFormServiceModel courseToUpdate)
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.View(courseToUpdate);
+                return View(courseToUpdate);
             }
 
             var isUpdated = await courseService.UpdateAsync(id, courseToUpdate);
             if (!isUpdated)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
-                return this.RedirectToAction(nameof(this.Index));
+                return RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION]
+            TempData[SUCCESS_NOTIFICATION]
                 = string.Format(SUCCESSFULLY_UPDATE_COURSE_MESSAGE, courseToUpdate.Name);
 
-            return this.RedirectToAction(nameof(this.Index));
+            return RedirectToAction(nameof(this.Index));
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var course = this.courseService.GetDetails(id);
+            var course = courseService.GetDetails(id);
             if (course == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
-                return this.RedirectToAction(nameof(this.Index));
+                return RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(course);
+            return View(course);
         }
 
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Delete(int id)
         {
-            var isDeleted = await this.courseService.DeleteAsync(id);
+            var isDeleted = await courseService.DeleteAsync(id);
             if (!isDeleted)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
-                return this.RedirectToAction(nameof(this.Index));
+                return RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_COURSE_MESSAGE;
+            TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_COURSE_MESSAGE;
 
-            return this.RedirectToAction(nameof(this.Index));
+            return RedirectToAction(nameof(this.Index));
         }
 
         [Authorize]
         public async Task<IActionResult> Apply(int id)
         {
-            var course = await this.courseService.GetByIdAsync<CourseIdNameViewModel>(id);
+            var course = await courseService.GetByIdAsync<CourseIdNameViewModel>(id);
             if (course == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
 
-                return this.RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(this.Index));
             }
 
-            var user = this.User;
+            var user = User;
 
-            var isValid = await this.courseService.RegisterForCourseAsync(id, user);
+            var isValid = await courseService.RegisterForCourseAsync(id, user);
             if (!isValid)
             {
-                this.TempData[ERROR_NOTIFICATION] = ALREADY_IN_COURSE_MESSAGE;
+                TempData[ERROR_NOTIFICATION] = ALREADY_IN_COURSE_MESSAGE;
 
-                return this.RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION]
+            TempData[SUCCESS_NOTIFICATION]
                 = string.Format(SUCCESSFULLY_REGISTERED_FOR_COURSE_MESSAGE, course.Name);
 
-            return this.RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(this.Index));
         }
     }
 }

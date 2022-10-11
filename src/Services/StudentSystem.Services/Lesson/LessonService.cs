@@ -52,10 +52,15 @@
                     .ToList();
             }
 
+            var courses = this.courseService
+                .GetAllAsQueryable<CourseIdNameViewModel>()
+                .OrderBy(x => x.Name)
+                .ToList();
+
             var model = new PageLessonViewModel
             {
                 Lessons = lessons,
-                Courses = this.courseService.GetAllAsQueryable<CourseIdNameViewModel>().ToList(),
+                Courses = courses,
                 CourseId = courseId,
                 CurrentPage = currentPage,
                 EntitiesPerPage = lessonsPerPage,

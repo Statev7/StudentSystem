@@ -9,13 +9,14 @@
 		<form id="form_id" method="get">
 			<div class="d-flex justify-content-between align-items-center">
 				<div>
-					<select asp-for="CourseId" class="form-control" onkeypress="document.getElementById('form_id').submit()">
+					<select asp-for="CourseId" class="selectpicker" data-live-search="true">
 						<option value="0">All</option>
 						@foreach (var course in Model.Courses)
 						{
-							<option value="@course.Id">@course.Name</option>
+							<option value="@course.Id" data-tokens=@course.Name>@course.Name</option>
 						}
 					</select>
+					<button class="btn btn-primary">Submit</button>
 				</div>
 				<div>
 					<a class="btn btn-primary" asp-controller="Lessons" asp-action="Create">Create new lesson</a>
@@ -107,5 +108,3 @@
 		</div>
 	}
 </div>
-
-

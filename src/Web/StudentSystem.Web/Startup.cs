@@ -83,6 +83,10 @@ namespace StudentSystem.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
@@ -95,6 +99,6 @@ namespace StudentSystem.Web
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IReviewService, ReviewService>();
-        } 
+        }
     }
 }

@@ -1,0 +1,75 @@
+﻿@using StudentSystem.ViewModels.User
+@using StudentSystem.Web.Infrastructure.Extensions
+@model IEnumerable<UserViewModel>
+
+@{
+    this.ViewData["Title"] = "Admin";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+}
+
+<div class="container mt-3 mb-4">
+    <div class="offset-2 col-lg-8 mt-4 mt-lg-0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                    <table class="table manage-candidates-top mb-0">
+                        <thead>
+                           <tr>
+                                <th>Users</th>
+                                <th class="text-center">Added</th>
+                                <th class="action text-center">Action</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr class="candidates-list">
+                                    <td class="title">
+                                        <div class="thumb">
+                                            <img class="img-fluid" src="https://media.istockphoto.com/photos/side-view-of-maine-coon-sitting-and-looking-away-picture-id102716889?k=20&m=102716889&s=612x612&w=0&h=A4CvsPKg1CrrSp6b5Rnf8oc2RkIjaaQinUCJuBXYEL8=" alt="">
+                                        </div>
+                                        <div class="candidate-list-details">
+                                            <div class="candidate-list-info">
+                                                <div class="candidate-list-title">
+                                                    <h5 class="mb-0">@user.Email</h5>
+                                                </div>
+                                                <div class="candidate-list-option">
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-filter pr-1"></i>@user.RoleName</li>
+                                                        <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL 60008</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                     <td class="candidate-list-favourite-time text-center">
+                                        <span class="candidate-list-time order-1">Added on</span>
+                                     </td>
+                                    <td class="text-center">
+                                        @if (this.User.GetId() != @user.Id)
+                                        {
+                                            <div class="mb-2">
+                                                <form asp-action="Promotion" asp-route-id="@user.Id" method="post">
+                                                    <button class="btn btn-primary w-100">Promote</button>
+                                                </form>
+                                            </div>
+                                            <div>
+                                                <form asp-action="Demotion" asp-route-id="@user.Id" method="post">
+                                                    <button class="btn btn-primary w-100">Demote</button>
+                                                </form>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

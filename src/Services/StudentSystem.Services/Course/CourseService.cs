@@ -53,9 +53,10 @@
 
             var userFromDb = this.DbContext.Users.Find(userId);
 
-            if (!user.IsInRole(STUDENT_ROLE))
+            if (!user.IsInRole(STUDENT_ROLE) && !user.IsInRole(ADMIN_ROLE))
             {
-                await userManager.AddToRoleAsync(userFromDb, STUDENT_ROLE);
+                await this.userManager.RemoveFromRoleAsync(userFromDb, USER_ROLE);
+                await this.userManager.AddToRoleAsync(userFromDb, STUDENT_ROLE);
             }
 
             await this.DbContext.AddAsync(userCourse);

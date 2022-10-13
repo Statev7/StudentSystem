@@ -31,5 +31,13 @@
         public const string INVALID_REVIEW_MESSAGE = "No such review exists";
         public const string NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE
             = "To leave a review, you must be registered in the course";
+
+        //Admin panel 
+        public const string USER_NOT_EXIST_MESSAGE = "Such a user not exist";
+        public const string SUCCESSFULLY_PROMOTED_MESSAGE = "Successfully promoted a user";
+        public const string SUCCESSFULLY_DEMOTE_MESSSAGE = "Successfully demote a user";
+        public const string UNSUCCESSFULLY_PROMOTED_MESSAGE = "This user is already admin";
+        public const string UNSUCCESSFULYY_DEMOTE_MESSAGE = "There is no lower rank than 'user'";
+        public const string CANNOT_CHANGE_OWN_ROLES_MESSAGE = "You cannot change your roles";
     }
 }

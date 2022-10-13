@@ -11,6 +11,7 @@ namespace StudentSystem.Web
     using Microsoft.Extensions.Hosting;
 
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.Administrator;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Home;
     using StudentSystem.Services.Lesson;
@@ -44,7 +45,7 @@ namespace StudentSystem.Web
                     options.Password.RequireUppercase = false;
                     options.Password.RequireDigit = false;
                 })
-                .AddRoles<IdentityRole>()
+                .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();
@@ -99,6 +100,7 @@ namespace StudentSystem.Web
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IAdministratorService, AdministratorService>();
         }
     }
 }

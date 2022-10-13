@@ -1,11 +1,14 @@
 ﻿namespace StudentSystem.Web.Data
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Data.Models.StudentSystem;
 
-    public class StudentSystemDbContext : IdentityDbContext<ApplicationUser>
+    public class StudentSystemDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+        IdentityUserClaim<string>, ApplicationUserRole, IdentityUserLogin<string>,
+        IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public StudentSystemDbContext(DbContextOptions<StudentSystemDbContext> options)
             : base(options)
@@ -24,8 +27,10 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            
             base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }

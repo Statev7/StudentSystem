@@ -42,9 +42,9 @@
             return query.ProjectTo<T>(this.Mapper.ConfigurationProvider);
         }
 
-        public IQueryable<T> PageingAsQueryable<T>(IQueryable<T> query, int currentPage, int lessonsPerPage)
+        public IQueryable<T> PageingAsQueryable<T>(IQueryable<T> query, int currentPage, int entitiesPerPage)
         {
-            var totalPages = Math.Ceiling(query.Count() / (double)lessonsPerPage);
+            var totalPages = Math.Ceiling(query.Count() / (double)entitiesPerPage);
 
             if (currentPage < MIN_PAGE_VALUE)
             {
@@ -56,8 +56,8 @@
             }
 
              query = query
-                .Skip((currentPage - 1) * lessonsPerPage)
-                .Take(lessonsPerPage);
+                .Skip((currentPage - 1) * entitiesPerPage)
+                .Take(entitiesPerPage);
 
             return query;
         }

@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
 
+    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Data.Seed.Contracts;
 
     using static StudentSystem.Web.Common.GlobalConstants;
@@ -15,19 +16,19 @@
     {
         public async Task SeedAsync(IServiceScope serviceScope)
         {
-            var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
             if (roleManager.Roles.Any())
             {
                 return;
             }
 
-            var roles = new List<IdentityRole>()
+            var roles = new List<ApplicationRole>()
             {
-                new IdentityRole(USER_ROLE),
-                new IdentityRole(STUDENT_ROLE),
-                new IdentityRole(MODERATOR_ROLE),
-                new IdentityRole(ADMIN_ROLE),
+                new ApplicationRole(USER_ROLE),
+                new ApplicationRole(STUDENT_ROLE),
+                new ApplicationRole(MODERATOR_ROLE),
+                new ApplicationRole(ADMIN_ROLE),
             };
 
             foreach (var role in roles)

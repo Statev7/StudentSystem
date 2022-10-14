@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentSystem.Web.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Web.Infrastructure", "Web\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure\StudentSystem.Web.Infrastructure.csproj", "{6F55B6EC-915D-42C5-8DCA-320545A2592F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentSystem.Data.Seed", "Data\StudentSystem.Data.Seed\StudentSystem.Data.Seed.csproj", "{D6F89066-E203-4F6B-9B91-DA7AC6B70B4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentSystem.Data.Seed", "Data\StudentSystem.Data.Seed\StudentSystem.Data.Seed.csproj", "{D6F89066-E203-4F6B-9B91-DA7AC6B70B4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

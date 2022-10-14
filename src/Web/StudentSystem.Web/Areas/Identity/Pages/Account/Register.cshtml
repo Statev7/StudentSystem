@@ -1,7 +1,15 @@
 ﻿@page
+@using StudentSystem.Services.City
+@using StudentSystem.ViewModels.City
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    @inject ICityService cityService
+
+    var cities = this.cityService
+                .GetAllAsQueryable<CityIdNameViewModel>()
+                .OrderBy(x => x.Name)
+                .ToList();
 }
 
 <div class="container">
@@ -12,6 +20,16 @@
                 <h4>Create a new account.</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.FirstName"></label>
+                    <input asp-for="Input.FirstName" class="form-control" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.LastName"></label>
+                    <input asp-for="Input.LastName" class="form-control" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="Input.Email"></label>
                     <input asp-for="Input.Email" class="form-control" />
@@ -26,6 +44,15 @@
                     <label asp-for="Input.ConfirmPassword"></label>
                     <input asp-for="Input.ConfirmPassword" class="form-control" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <select asp-for="Input.CityId" class="selectpicker" data-live-search="true">
+                        <option value="0">All</option>
+                        @foreach (var city in cities)
+                        {
+                            <option value="@city.Id">@city.Name</option>
+                        }
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>

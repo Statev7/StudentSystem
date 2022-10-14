@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
     using StudentSystem.Data.Models.StudentSystem;
@@ -17,7 +18,7 @@
         {
             var dbContext = serviceScope.ServiceProvider.GetRequiredService<StudentSystemDbContext>();
 
-            if (dbContext.Courses.Any())
+            if (await dbContext.Courses.AnyAsync())
             {
                 return;
             }

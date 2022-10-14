@@ -1,9 +1,10 @@
 ﻿namespace StudentSystem.Data.Seed.Implementation
 {
-    using System.Linq;
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
     using StudentSystem.Data.Models.StudentSystem;
@@ -17,15 +18,19 @@
         {
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            if (userManager.Users.Any())
+            if (await userManager.Users.AnyAsync())
             {
                 return;
             }
 
             var admin = new ApplicationUser
             {
+                FirstName = ADMIN_FIRST_NAME,
+                LastName = ADMIN_LAST_NAME,
                 Email = ADMIN_EMAIL,
-                UserName = ADMIN_EMAIL
+                UserName = ADMIN_EMAIL,
+                ImageURL = "https://i.pinimg.com/736x/33/32/6d/33326dcddbf15c56d631e374b62338dc.jpg",
+                CreatedOn = DateTime.UtcNow,
             };
 
             await userManager.CreateAsync(admin, ADMIN_PASSWORD);

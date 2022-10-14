@@ -1,5 +1,6 @@
 ﻿@using StudentSystem.ViewModels.User
 @using StudentSystem.Web.Infrastructure.Extensions
+@using System.Globalization
 @model IEnumerable<UserViewModel>
 
 @{
@@ -30,24 +31,39 @@
                                 <tr class="candidates-list">
                                     <td class="title">
                                         <div class="thumb">
-                                            <img class="img-fluid" src="https://media.istockphoto.com/photos/side-view-of-maine-coon-sitting-and-looking-away-picture-id102716889?k=20&m=102716889&s=612x612&w=0&h=A4CvsPKg1CrrSp6b5Rnf8oc2RkIjaaQinUCJuBXYEL8=" alt="">
+                                            <img class="img-fluid" src="@user.ImageUrl" alt="Profile picture">
                                         </div>
                                         <div class="candidate-list-details">
                                             <div class="candidate-list-info">
                                                 <div class="candidate-list-title">
-                                                    <h5 class="mb-0">@user.Email</h5>
+                                                    <h5 class="mb-0">@user.FirstName @user.LastName</h5>
                                                 </div>
                                                 <div class="candidate-list-option">
                                                     <ul class="list-unstyled">
-                                                        <li><i class="fas fa-filter pr-1"></i>@user.RoleName</li>
-                                                        <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL 60008</li>
+                                                        <li>
+                                                            <i class="fas fa-filter pr-1"></i>@user.RoleName
+                                                        </li>
+                                                        <li>
+                                                            <i class="fas fa-map-marker-alt pr-1"></i>
+                                                            @{
+                                                                var cityName = "No information";
+
+                                                                if (!string.IsNullOrEmpty(@user.CityName))
+                                                                {
+                                                                    cityName = @user.CityName;
+                                                                }
+                                                                <span>@cityName</span>
+                                                            }
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                      <td class="candidate-list-favourite-time text-center">
-                                        <span class="candidate-list-time order-1">Added on</span>
+                                        <span class="candidate-list-time order-1">
+                                            @user.CreatedOn.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                                        </span>
                                      </td>
                                     <td class="text-center">
                                         @if (this.User.GetId() != @user.Id)

@@ -1,10 +1,10 @@
 ﻿namespace StudentSystem.Data.Seed.Implementation
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
     using StudentSystem.Data.Models.StudentSystem;
@@ -18,7 +18,7 @@
         {
             var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
-            if (roleManager.Roles.Any())
+            if (await roleManager.Roles.AnyAsync())
             {
                 return;
             }

@@ -23,6 +23,8 @@
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<UserCourse> UserCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

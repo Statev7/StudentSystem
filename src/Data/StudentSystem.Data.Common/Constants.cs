@@ -31,5 +31,15 @@
         // Review
 
         public const int ReviewContentMaxLength = 10000;
+
+        // City
+        public const int CityNameMaxLength = 128;
+
+        // Users
+        public const int FirstNameMaxLength = 64;
+        public const int FirstNameMinLength = 2;
+
+        public const int LastNameMaxLength = 64;
+        public const int LastNameMinLength = 2;
     }
 }

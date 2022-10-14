@@ -7,7 +7,7 @@
 <div class="row">
 	@foreach (var course in @Model)
 	{
-		<a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">
+		<a asp-area="Trainings" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">
 			<div class="card mt-2 ml-2" style="width: 18rem;">
 				<div>
 					<img class="card-img-top" style="height: 175px" src="@course.ImageURL"

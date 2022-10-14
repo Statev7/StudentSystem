@@ -12,6 +12,7 @@ namespace StudentSystem.Web
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Administrator;
+    using StudentSystem.Services.City;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Home;
     using StudentSystem.Services.Lesson;
@@ -100,6 +101,7 @@ namespace StudentSystem.Web
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<ICityService, CityService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
         }
     }

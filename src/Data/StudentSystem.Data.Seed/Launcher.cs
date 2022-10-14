@@ -18,6 +18,7 @@
                 new RoleSeeder(),
                 new UserSeeder(),
                 new CourseSeeder(),
+                new CitySeeder(),
             };
 
             using (var serviceScope = application.ApplicationServices.CreateScope())

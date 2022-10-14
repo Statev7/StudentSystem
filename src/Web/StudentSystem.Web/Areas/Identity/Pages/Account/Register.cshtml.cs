@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Web.Areas.Identity.Pages.Account
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -12,7 +13,11 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.City;
+    using StudentSystem.ViewModels.City;
     using StudentSystem.Web.Common;
+
+    using static StudentSystem.Data.Common.Constants;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
@@ -22,7 +27,8 @@
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ICityService cityService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -40,6 +46,18 @@
         public class InputModel
         {
             [Required]
+            [MaxLength(FirstNameMaxLength)]
+            [MinLength(FirstNameMinLength)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [MaxLength(LastNameMaxLength)]
+            [MinLength(LastNameMinLength)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -54,6 +72,8 @@
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public int? CityId { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -69,9 +89,22 @@
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
-                var result = await this.userManager.CreateAsync(user, Input.Password);
+                if (Input.CityId.Value == 0)
+                {
+                    Input.CityId = null;
+                }
 
+                var user = new ApplicationUser 
+                { 
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName, 
+                    UserName = Input.Email, 
+                    Email = Input.Email,
+                    CreatedOn = DateTime.UtcNow,
+                    CityId = Input.CityId
+                };
+
+                var result = await this.userManager.CreateAsync(user, Input.Password);
                 await this.userManager.AddToRoleAsync(user, GlobalConstants.USER_ROLE);
 
                 if (result.Succeeded)

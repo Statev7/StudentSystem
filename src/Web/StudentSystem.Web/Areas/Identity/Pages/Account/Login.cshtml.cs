@@ -1,16 +1,13 @@
 ﻿namespace StudentSystem.Web.Areas.Identity.Pages.Account
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
@@ -56,8 +53,13 @@
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Redirect("/");
+            }
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -71,10 +73,17 @@
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Redirect("/");
+            }
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -106,7 +115,7 @@
             }
 
             // If we got this far, something failed, redisplay form
-            return Page();
+            return this.Page();
         }
     }
 }

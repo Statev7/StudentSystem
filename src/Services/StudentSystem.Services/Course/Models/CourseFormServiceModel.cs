@@ -8,13 +8,13 @@
     public class CourseFormServiceModel
     {
         [Required]
-        [MaxLength(CourseNameMaxLength)]
-        [MinLength(CourseNameMinLength)]
+        [MaxLength(COURSE_NAME_MAX_LENGTH)]
+        [MinLength(COURSE_NAME_MIN_LENGTH)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(CourseDescriptionMaxLength)]
-        [MinLength(CourseDescriptionMinLength)]
+        [MaxLength(COURSE_DESCRIPTION_MAX_LENGTH)]
+        [MinLength(COURSE_DESCRIPTION_MIN_LENGTH)]
         public string Description { get; set; }
 
         [Required]

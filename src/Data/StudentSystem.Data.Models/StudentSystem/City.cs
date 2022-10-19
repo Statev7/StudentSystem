@@ -15,7 +15,7 @@
         }
 
         [Required]
-        [MaxLength(CityNameMaxLength)]
+        [MaxLength(CITY_NAME_MAX_LENGTH)]
         public string Name { get; set; }
 
         public ICollection<ApplicationUser> Users { get; set; }

@@ -7,8 +7,8 @@
     public class CreateResourceBindingModel
     {
         [Required]
-        [MaxLength(ResourceNameMaxLength)]
-        [MinLength(ResourceNameMinLength)]
+        [MaxLength(RESOURCE_NAME_MAX_LENGTH)]
+        [MinLength(RESOURCE_NAME_MIN_LENGTH)]
         public string Name { get; set; }
 
         [Required]

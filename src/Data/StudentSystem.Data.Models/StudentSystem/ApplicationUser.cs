@@ -18,11 +18,11 @@
         }
 
         [Required]
-        [MaxLength(FirstNameMaxLength)]
+        [MaxLength(FIRST_NAME_MAX_LENGTH)]
         public string FirstName { get; set; }
 
         [Required]
-        [MaxLength(LastNameMaxLength)]
+        [MaxLength(LAST_NAME_MAX_LENGTH)]
         public string LastName { get; set; }
 
         public string ImageURL { get; set; }

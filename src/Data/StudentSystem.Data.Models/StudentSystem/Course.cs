@@ -17,11 +17,11 @@
         }
 
         [Required]
-        [MaxLength(CourseNameMaxLength)]
+        [MaxLength(COURSE_NAME_MAX_LENGTH)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(CourseDescriptionMaxLength)]
+        [MaxLength(COURSE_DESCRIPTION_MAX_LENGTH)]
         public string Description { get; set; }
 
         [Required]

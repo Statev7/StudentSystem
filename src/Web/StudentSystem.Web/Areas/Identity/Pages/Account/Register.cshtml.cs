@@ -14,7 +14,6 @@
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.City;
-    using StudentSystem.ViewModels.City;
     using StudentSystem.Web.Common;
 
     using static StudentSystem.Data.Common.Constants;
@@ -46,14 +45,14 @@
         public class InputModel
         {
             [Required]
-            [MaxLength(FirstNameMaxLength)]
-            [MinLength(FirstNameMinLength)]
+            [MaxLength(FIRST_NAME_MAX_LENGTH)]
+            [MinLength(FIRST_NAME_MIN_LENGTH)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [MaxLength(LastNameMaxLength)]
-            [MinLength(LastNameMinLength)]
+            [MaxLength(LAST_NAME_MAX_LENGTH)]
+            [MinLength(LAST_NAME_MIN_LENGTH)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
@@ -63,7 +62,7 @@
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(PASSWORD_MAX_LENGTH, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = PASSWORD_MIN_LENGTH)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -76,14 +75,26 @@
             public int? CityId { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Redirect("/");
+            }
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Redirect("/");
+            }
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -120,7 +131,7 @@
             }
 
             // If we got this far, something failed, redisplay form
-            return Page();
+            return this.Page();
         }
     }
 }

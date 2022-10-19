@@ -16,11 +16,11 @@
         }
 
         [Required]
-        [MaxLength(LessonTitleMaxLength)]
+        [MaxLength(LESSON_TITLE_MAX_LENGTH)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(LessonContentMaxLength)]
+        [MaxLength(LESSON_CONTENT_MAX_LENGTH)]
         public string Content { get; set; }
 
         public DateTime Begining { get; set; }

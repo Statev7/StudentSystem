@@ -11,13 +11,13 @@
     public class LessonFormServiceModel
     {
         [Required]
-        [MaxLength(LessonTitleMaxLength)]
-        [MinLength(LessonTitleMinLength)]
+        [MaxLength(LESSON_TITLE_MAX_LENGTH)]
+        [MinLength(LESSON_TITLE_MIN_LENGTH)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(LessonContentMaxLength)]
-        [MinLength(LessonContentMinLength)]
+        [MaxLength(LESSON_CONTENT_MAX_LENGTH)]
+        [MinLength(LESSON_CONTENT_MIN_LENGTH)]
         public string Content { get; set; }
 
         [Required]

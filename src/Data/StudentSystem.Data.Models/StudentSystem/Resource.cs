@@ -10,11 +10,11 @@
     public class Resource : BaseModel
     {
         [Required]
-        [MaxLength(ResourceNameMaxLength)]
+        [MaxLength(RESOURCE_NAME_MAX_LENGTH)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(ResourceURLMaxLength)]
+        [MaxLength(RESOURCE_URL_MAX_LENGTH)]
         public string URL { get; set; }
 
         public int? LessonId { get; set; }

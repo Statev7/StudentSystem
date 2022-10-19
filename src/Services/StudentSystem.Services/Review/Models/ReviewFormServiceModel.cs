@@ -7,7 +7,7 @@
     public class ReviewFormServiceModel
 	{
         [Required]
-        [MaxLength(ReviewContentMaxLength)]
+        [MaxLength(REVIEW_CONTENT_MAX_LENGTH)]
         public string Content { get; set; }
     }
 }

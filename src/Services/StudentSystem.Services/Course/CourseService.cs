@@ -94,7 +94,8 @@
                             Id = r.Id,
                             Content = r.Content,
                             UserId = r.UserId,
-                            Username = r.User.UserName
+                            Username = r.User.UserName,
+                            UserImageIRL = r.User.ImageURL
                         })
                 })
                 .FirstOrDefault();

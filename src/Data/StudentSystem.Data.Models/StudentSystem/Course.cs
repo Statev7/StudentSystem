@@ -14,6 +14,7 @@
         {
             this.Lessons = new HashSet<Lesson>();
             this.UserCourses = new HashSet<UserCourse>();
+            this.CourseCategories = new HashSet<CourseCategory>();
         }
 
         [Required]
@@ -36,5 +37,7 @@
         public ICollection<Review> Reviews { get; set; }
 
         public ICollection<UserCourse> UserCourses { get; set; }
+
+        public ICollection<CourseCategory> CourseCategories { get; set; }
     }
 }

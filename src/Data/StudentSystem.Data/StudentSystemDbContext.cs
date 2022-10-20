@@ -25,11 +25,14 @@
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         public DbSet<UserCourse> UserCourses { get; set; }
+
+        public DbSet<CourseCategory> CourseCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);

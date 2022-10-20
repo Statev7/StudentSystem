@@ -10,9 +10,11 @@
     using StudentSystem.Services.Course.Models;
     using StudentSystem.Services.Home.Models;
     using StudentSystem.Services.Lesson.Models;
+    using StudentSystem.Services.Review;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Home;
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Review;
     using StudentSystem.Web.Data;
 
     public class HomeService : IHomeService
@@ -20,24 +22,49 @@
         private readonly StudentSystemDbContext dbContext;
         private readonly IMapper mapper;
         private readonly ICourseService courseService;
+        private readonly IReviewService reviewService;
 
         public HomeService(
-            StudentSystemDbContext dbContext, 
+            StudentSystemDbContext dbContext,
             IMapper mapper,
-            ICourseService courseService) 
+            ICourseService courseService,
+            IReviewService reviewService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.courseService = courseService;
+            this.reviewService = reviewService;
         }
 
         public HomeViewModel GetInformation(string userId)
         {
-            if (userId == null)
+            var model = new HomeViewModel()
             {
-                return new HomeViewModel();
+                CoursesReviews = new HomeCoursesAndReviewsViewModel(),
+            };
+
+            if (userId != null)
+            {
+                model.StudentResources = this.GetUserInformation(userId);
             }
 
+            model.CoursesReviews.OpenCourses = this.courseService
+                .GetAllAsQueryable<OpenCourseViewModel>()
+                .Where(x => x.StartDate >= DateTime.UtcNow)
+                .Take(4)
+                .ToList();
+
+            model.CoursesReviews.Reviews = this.reviewService
+                .GetAllAsQueryable<ReviewForHomeViewModel>()
+                .OrderByDescending(r => r.CreatedOn)
+                .Take(3)
+                .ToList();
+
+            return model;
+        }
+
+        private StudentAllResourcesViewModel GetUserInformation(string userId)
+        {
             var studentResources = this.dbContext
                     .Users
                     .Where(u => u.Id == userId)
@@ -64,18 +91,12 @@
                     })
                     .FirstOrDefault();
 
-            var model = this.ConvertToViewModels(studentResources);
-            model.OpenCourses = this.courseService
-                .GetAllAsQueryable<CourseViewModel>()
-                .Where(x => x.StartDate > DateTime.UtcNow)
-                .OrderBy(x => x.StartDate)
-                .Take(3)
-                .ToList();
+            var studentInformation = this.ConvertToViewModels(studentResources);
 
-            return model;
+            return studentInformation;
         }
 
-        private HomeViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
+        private StudentAllResourcesViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
         {
             var coursesAsViewModels = new List<CourseIdNameViewModel>();
             var lessonsAsViewModels = new List<LessonScheduleViewModel>();
@@ -97,7 +118,7 @@
                 }
             }
 
-            var studentInformation = new HomeViewModel
+            var studentInformation = new StudentAllResourcesViewModel
             {
                 Courses = coursesAsViewModels,
                 Lessons = lessonsAsViewModels.OrderBy(x => x.Begining),

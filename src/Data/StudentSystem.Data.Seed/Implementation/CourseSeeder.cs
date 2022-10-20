@@ -103,6 +103,28 @@
                 }
             };
 
+            courses[0].CourseCategories.Add(new CourseCategory
+            {
+                Course = courses[0],
+                Category = new Category
+                {
+                    Name = "C#",
+                    CreatedOn = DateTime.UtcNow,
+                },
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            courses[1].CourseCategories.Add(new CourseCategory
+            {
+                Course = courses[0],
+                Category = new Category
+                {
+                    Name = "Data Structure",
+                    CreatedOn = DateTime.UtcNow,
+                },
+                CreatedOn = DateTime.UtcNow,
+            });
+
             foreach (var course in courses)
             {
                 await dbContext.Courses.AddAsync(course);

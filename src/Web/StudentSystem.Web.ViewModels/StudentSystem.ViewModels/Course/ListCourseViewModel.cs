@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class CourseViewModel
+    public class ListCourseViewModel
     {
         public int Id { get; set; }
 

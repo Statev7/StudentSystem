@@ -9,7 +9,6 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/dashboard.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 }
 
 <div class="container mt-3 mb-4">
@@ -52,7 +51,7 @@
                                                                 {
                                                                     cityName = @user.CityName;
                                                                 }
-                                                                <span>@cityName</span>
+                                                                    <span>@cityName</span>
                                                             }
                                                         </li>
                                                     </ul>
@@ -89,3 +88,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script src="https://kit.fontawesome.com/ddc00cf9b8.js" crossorigin="anonymous"></script>
+}

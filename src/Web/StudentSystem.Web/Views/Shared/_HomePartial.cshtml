@@ -1,0 +1,141 @@
+﻿@using StudentSystem.ViewModels.Home
+@model HomeCoursesAndReviewsViewModel
+@{
+    var dateFormat = "dd/MM/yyyy";
+}
+
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="heading mb-4">
+                    <span class="caption">Categories</span>
+                    <h2>Choose Course</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-stretch">
+            <div class="col-lg-3">
+                <a href="#" class="course">
+                    <span class="wrap-icon fa-brands fa-windows"></span>
+                    <h3>CSharp</h3>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#" class="course">
+                    <span class="wrap-icon fa-brands fa-java"></span>
+                    <h3>Java</h3>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#" class="course">
+                    <span class="wrap-icon fa-brands fa-square-js"></span>
+                    <h3>JavaScript</h3>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#" class="course">
+                    <span class="wrap-icon fa-brands fa-python"></span>
+                    <h3>Python</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="heading mb-4">
+                    <h2>Open Courses</h2>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                @foreach (var course in Model.OpenCourses)
+                {
+                    <div class="d-flex tutorial-item mb-4">
+                        <div class="img-wrap">
+                            <img src="@course.ImageURL" alt="Image" style="width: 100%; height: 175px">
+                        </div>
+                        <div>
+                            <h3>@course.Name</h3>
+                            <p>
+                                @course.Description
+                            </p>
+                            <p class="meta">
+                                <span class="mr-2 mb-2">
+                                    Duration: @course.Duration @(course.Duration > 1 ? "weeks" : "week")
+                                </span>
+                                <span class="mr-2 mb-2">
+                                    Start date: @course.StartDate.ToString(dateFormat, CultureInfo.InvariantCulture)
+                                </span>
+                            </p>
+                            <p>
+                                <a asp-area="Trainings"
+                               asp-controller="Courses"
+                               asp-action="Details"
+                               asp-route-Id=@course.Id
+                               class="btn btn-primary">
+                                    View
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                }
+                <div class="text-center">
+                    <a asp-area="Trainings"
+                       asp-controller="Courses"
+                       asp-action="Index"
+                       class="btn btn-primary p-2 w-25">
+                        Show More
+                    </a>
+                </div>
+            </div>
+            @*<div class="col-lg-4">
+                <div class="box-side mb-3">
+                    <a href="#"><img src="" alt="Image" class="img-fluid"></a>
+                    <h3><a href="#">Learning React Native</a></h3>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 text-center mb-5">
+                <div class="heading">
+                    <span class="caption">Testimonials</span>
+                    <h2>Student Reviews</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="testimonial-2">
+                        <h3 class="h5">Review for: @review.CourseName course</h3>
+                        <div>
+                            <span class="icon-star text-warning"></span>
+                            <span class="icon-star text-warning"></span>
+                            <span class="icon-star text-warning"></span>
+                            <span class="icon-star text-warning"></span>
+                            <span class="icon-star-o text-warning"></span>
+                        </div>
+                        <blockquote class="mb-4">
+                            <p>@review.Content</p>
+                        </blockquote>
+                        <div class="d-flex v-card align-items-center">
+                            <img src="@review.UserImageUrl" alt="Image" class="img-fluid mr-3">
+                            <div class="author-name">
+                                <span class="d-block">@review.UserFirstName @review.UserLastName</span>
+                                <span>@review.UserRoleName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

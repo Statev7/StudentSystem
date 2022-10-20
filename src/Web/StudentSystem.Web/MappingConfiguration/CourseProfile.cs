@@ -13,7 +13,7 @@
     {
         public CourseProfile()
         {
-            this.CreateMap<Course, CourseViewModel>()
+            this.CreateMap<Course, ListCourseViewModel>()
                 .ForMember(d => d.Duration, conf => conf
                     .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1 
                             ? 1 
@@ -24,6 +24,11 @@
             this.CreateMap<Course, CourseIdNameViewModel>();
             this.CreateMap<CourseLessonScheduleServiceModel, CourseIdNameViewModel>();
             this.CreateMap<Course, CourseUsersServiceModel>();
+            this.CreateMap<Course, OpenCourseViewModel>()
+                .ForMember(d => d.Duration, conf => conf
+                    .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1
+                            ? 1
+                            : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7))); ;
         }
     }
 }

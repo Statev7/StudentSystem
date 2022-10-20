@@ -32,6 +32,10 @@
 
         public const int CITY_NAME_MAX_LENGTH = 128;
 
+        // Category
+
+        public const int CATEGORY_NAME_MAX_LENGTH = 32;
+
         // Users
 
         public const int FIRST_NAME_MAX_LENGTH = 64;

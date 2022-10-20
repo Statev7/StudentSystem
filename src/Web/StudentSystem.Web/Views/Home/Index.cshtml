@@ -2,78 +2,172 @@
 
 @model HomeViewModel
 @{
-	ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home";
 
-	var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
+    var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
+    var newestCourse = Model.CoursesReviews.OpenCourses.FirstOrDefault();
+    var dateFormat = "dd/MM/yyyy";
 }
 
-<div class="container mt-5">
-	@if (isValid)
-	{
-		<div class="row mb-5">
-			<div class="col-md-4 mt-2">
-				<div class="border rounded" style="height: 350px">
-					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
-						<h5>My Courses</h5>
-					</div>
-					<div class="h-75 p-3" style="overflow-y: auto">
-						@foreach (var course in Model.Courses)
-						{
-							<div>
-								<a style="color: #565656; font-size: 18px" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">
-									@course.Name
-								</a>
-								<hr>
-							</div>
-						}
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 mt-2">
-				<div class="border rounded" style="height: 350px">
-					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
-						<h5>My schedule</h5>
-					</div>
-					<div class="h-75 p-3" style="overflow-y: auto">
-						@foreach (var lesson in Model.Lessons)
-						{
-							<div>
-								<a style="color: #565656; font-size: 18px" asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.Id">
-									@lesson.Title
-								</a>
-							</div>
-							<div>
-								@lesson.CourseName
-							</div>
-							<span style="font-size: 15px">
-								@{
-									var beginingDateToString = @lesson.Begining.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-									var startingTimeAsString = @lesson.Begining.ToString("HH:mm");
-									var endTimeAsString = @lesson.End.ToString("HH:mm");
-								}
-								@beginingDateToString from @startingTimeAsString - @endTimeAsString
-							</span>
-							<hr />
-						}
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 mt-2">
-				<div class="border rounded" style="height: 350px">
-					<div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
-						<h5>My Resources</h5>
-					</div>
-					<div class="h-75 p-3" style="overflow-y: auto"></div>
-				</div>
-			</div>
-		</div>
-		<div>
-			<h3>Open courses</h3>
-			<partial name="_OpenCoursesPartial" model="@Model.OpenCourses">
-		</div>
-	}
-	else
-	{
-		<span>Hi</span>
-	}
-</div>
+@section Styles{
+    <link href="/css/home.css" rel="stylesheet" />
+}
+
+@if (isValid)
+{
+    <div style="background-color: #F8F9FA">
+        <div class="container pt-5 pb-5">
+            <div class="row">
+                <div class="col-md-4 mt-2">
+                    <div class="border rounded" style="height: 350px; background-color: white;">
+                        <div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+                            <h5>My Courses</h5>
+                        </div>
+                        <div class="h-75 p-3" style="overflow-y: auto;">
+                            @foreach (var course in Model.StudentResources.Courses)
+                            {
+                                <div>
+                                    <a style="color: #565656; font-size: 18px" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">
+                                        @course.Name
+                                    </a>
+                                    <hr>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <div class="border rounded" style="height: 350px; background-color: white;">
+                        <div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+                            <h5>My schedule</h5>
+                        </div>
+                        <div class="h-75 p-3" style="overflow-y: auto">
+                            @foreach (var lesson in Model.StudentResources.Lessons)
+                            {
+                                <div>
+                                    <a asp-controller="Lessons"
+                                    asp-action="Details"
+                                    asp-route-id="@lesson.Id"
+                                    style="color: #565656; font-size: 18px">
+                                        @lesson.Title
+                                    </a>
+                                </div>
+                                <div>
+                                    @lesson.CourseName
+                                </div>
+                                <span style="font-size: 15px">
+                                    @{
+                                        var beginingDateToString = @lesson.Begining.ToString(dateFormat, CultureInfo.InvariantCulture);
+                                        var startingTimeAsString = @lesson.Begining.ToString("HH:mm");
+                                        var endTimeAsString = @lesson.End.ToString("HH:mm");
+                                    }
+                                    @beginingDateToString from @startingTimeAsString - @endTimeAsString
+                                </span>
+                                <hr />
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <div class="border rounded" style="height: 350px; background-color: white;">
+                        <div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
+                            <h5>My Resources</h5>
+                        </div>
+                        <div class="h-75 p-3" style="overflow-y: auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <partial name="_HomePartial" model="@Model.CoursesReviews">
+    </div>
+}
+else
+{
+    <div class="site-section-cover overlay" style="background-image:url(https://preview.colorlib.com/theme/tutor/images/xhero_bg.jpg.pagespeed.ic.Q-loDQSB2M.webp)">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1>The <strong>Hub</strong> Of <strong>Tutorials</strong></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="site-section bg-light pb-0">
+        <div class="container">
+            <div class="row align-items-stretch overlap">
+                <div class="col-lg-8">
+                    <div class="box h-100">
+                        @if (newestCourse != null)
+                        {
+                            <div class="d-flex align-items-center">
+                                <div class="img">
+                                    <img src="@newestCourse.ImageURL" style="width: 260px; height: 230px" class="img-fluid" alt="Image">
+                                </div>
+                                <div class="text">
+                                    <span class="category text-primary">Newest course</span>
+                                    <h3>
+                                        <a asp-area="Trainings"
+                                        asp-controller="Courses"
+                                        asp-action="Details"
+                                        asp-route-id="@newestCourse.Id">@newestCourse.Name</a>
+                                    </h3>
+                                    <p>
+                                        @newestCourse.Description
+                                    </p>
+                                    <p class="meta">
+                                        <span class="mr-2 mb-2">
+                                            Duration: @newestCourse.Duration @(newestCourse.Duration > 1 ? "weeks" : "week")
+                                        </span>
+                                        <span class="mr-2 mb-2">
+                                            Start date: @newestCourse.StartDate.ToString(dateFormat, CultureInfo.InvariantCulture)
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h3 class="text-danger text-center">No information to display!</h3>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box small h-100">
+                        @foreach (var course in Model.CoursesReviews.OpenCourses.Skip(1).Take(3))
+                        {
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="img">
+                                    <img src="@course.ImageURL" style="height: 70px" class="img-fluid" alt="Image">
+                                </div>
+                                <div class="text">
+                                    <span class="category text-primary">Course</span>
+                                    <h3>
+                                        <a 
+                                            asp-area="Trainings" 
+                                            asp-controller="Courses" 
+                                            asp-action="Details" 
+                                            asp-route-id="@course.Id">@course.Name</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        }
+
+                        @if (!Model.CoursesReviews.OpenCourses.Any())
+                        {
+                            <h3 class="text-danger text-center">No information to display!</h3>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <partial name="_HomePartial" model="@Model.CoursesReviews">
+    </div>
+}
+
+@section Scripts{
+    <script src="https://kit.fontawesome.com/ddc00cf9b8.js" crossorigin="anonymous"></script>
+}

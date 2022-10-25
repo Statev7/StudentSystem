@@ -2,6 +2,7 @@
 {
     using System;
     using System.Globalization;
+    using System.Linq;
 
     using AutoMapper;
 
@@ -13,7 +14,9 @@
     {
         public CourseProfile()
         {
-            this.CreateMap<Course, ListCourseViewModel>()
+            this.CreateMap<Course, CourseViewModel>()
+                .ForMember(d => d.CategoriesIds, conf => conf
+                    .MapFrom(s => s.CourseCategories.Select(cc => cc.CategoryId)))
                 .ForMember(d => d.Duration, conf => conf
                     .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1 
                             ? 1 

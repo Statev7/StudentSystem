@@ -9,8 +9,7 @@
 		<form id="form_id" method="get">
 			<div class="d-flex justify-content-between align-items-center">
 				<div>
-					<select asp-for="CourseId" class="selectpicker" data-live-search="true">
-						<option value="0">All</option>
+					<select asp-for="Filters" class="selectpicker" data-live-search="true">
 						@foreach (var course in Model.Courses)
 						{
 							<option value="@course.Id" data-tokens=@course.Name>@course.Name</option>
@@ -59,46 +58,7 @@
 			</tbody>
 		</table>
 		<div>
-			<nav aria-label="Page navigation example">
-				<ul class="pagination justify-content-center">
-					<li class="page-item @(Model.HasPrevious == false ? "disabled" : string.Empty)">
-						<a class="page-link" asp-route-currentPage=@Model.PreviousPage asp-route-courseId="@Model.CourseId">Previous</a>
-					</li>
-
-					@for (int index = Model.CurrentPage - 3; index < Model.CurrentPage; index++)
-					{
-						if (index >= 1)
-						{
-							<li class="page-item">
-								<a class="page-link" asp-route-currentPage=@index asp-route-courseId="@Model.CourseId">
-									@index
-								</a>
-							</li>
-						}
-					}
-
-					<li class="page-item active">
-						<a class="page-link" asp-route-currentPage=@Model.CurrentPage asp-route-courseId="@Model.CourseId">
-							@Model.CurrentPage
-						</a>
-					</li>
-
-					@for (int index = 1; index < Model.CurrentPage + 3; index++)
-					{
-						if (Model.TotalPages >= Model.CurrentPage + index)
-						{
-							<li class="page-item">
-								<a class="page-link" asp-route-currentPage=@(Model.CurrentPage + index) asp-route-courseId="@Model.CourseId">
-									@(Model.CurrentPage + index)
-								</a>
-							</li>
-						}
-					}
-					<li class="page-item @(Model.HasNext == false ? "disabled" : string.Empty)">
-						<a class="page-link" asp-route-currentPage=@Model.NextPage asp-route-courseId="@Model.CourseId">Next</a>
-					</li>
-				</ul>
-			</nav>
+			<partial name="_PagingPartial" model="@Model">
 		</div>
 	}
 	else

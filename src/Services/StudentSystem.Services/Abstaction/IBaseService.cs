@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Services.Abstaction
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@
     {
         IQueryable<T> GetAllAsQueryable<T>(bool withDeleted = false);
 
-        IQueryable<T> PageingAsQueryable<T>(IQueryable<T> query, int currentPage, int entitiesPerPage);
+        IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage);
 
         Task<T> GetByIdAsync<T>(int id);
 

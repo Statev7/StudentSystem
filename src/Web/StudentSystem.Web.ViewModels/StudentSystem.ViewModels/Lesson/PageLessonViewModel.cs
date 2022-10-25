@@ -10,7 +10,5 @@
 		public IEnumerable<LessonForPageViewModel> Lessons { get; set; }
 
 		public IEnumerable<CourseIdNameViewModel> Courses { get; set; }
-
-		public int CourseId { get; set; }
 	}
 }

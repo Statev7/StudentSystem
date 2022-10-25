@@ -1,6 +1,7 @@
 ﻿namespace StudentSystem.Services.Abstaction
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -42,9 +43,9 @@
             return query.ProjectTo<T>(this.Mapper.ConfigurationProvider);
         }
 
-        public IQueryable<T> PageingAsQueryable<T>(IQueryable<T> query, int currentPage, int entitiesPerPage)
+        public IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage)
         {
-            var totalPages = Math.Ceiling(query.Count() / (double)entitiesPerPage);
+            var totalPages = Math.Ceiling(data.Count / (double)entitiesPerPage);
 
             if (currentPage < MIN_PAGE_VALUE)
             {
@@ -55,11 +56,9 @@
                 currentPage = (int)totalPages;
             }
 
-             query = query
+             return data
                 .Skip((currentPage - 1) * entitiesPerPage)
                 .Take(entitiesPerPage);
-
-            return query;
         }
 
         public async Task<T> GetByIdAsync<T>(int id) 

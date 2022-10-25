@@ -27,7 +27,11 @@
                             @foreach (var course in Model.StudentResources.Courses)
                             {
                                 <div>
-                                    <a style="color: #565656; font-size: 18px" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">
+                                    <a asp-area="Trainings"
+                                        asp-controller="Courses" 
+                                        asp-action="Details" 
+                                        asp-route-id="@course.Id" 
+                                        style="color: #565656; font-size: 18px">
                                         @course.Name
                                     </a>
                                     <hr>
@@ -45,10 +49,11 @@
                             @foreach (var lesson in Model.StudentResources.Lessons)
                             {
                                 <div>
-                                    <a asp-controller="Lessons"
-                                    asp-action="Details"
-                                    asp-route-id="@lesson.Id"
-                                    style="color: #565656; font-size: 18px">
+                                    <a asp-area="Trainings"
+                                       asp-controller="Lessons"
+                                       asp-action="Details"
+                                       asp-route-id="@lesson.Id"
+                                       style="color: #565656; font-size: 18px">
                                         @lesson.Title
                                     </a>
                                 </div>

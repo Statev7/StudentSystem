@@ -19,6 +19,9 @@
 
     public class HomeService : IHomeService
     {
+        private const int COURSES_TO_DISPLAY = 4;
+        private const int REVIEWS_TO_DISPLAY = 3;
+
         private readonly StudentSystemDbContext dbContext;
         private readonly IMapper mapper;
         private readonly ICourseService courseService;
@@ -51,13 +54,13 @@
             model.CoursesReviews.OpenCourses = this.courseService
                 .GetAllAsQueryable<OpenCourseViewModel>()
                 .Where(x => x.StartDate >= DateTime.UtcNow)
-                .Take(4)
+                .Take(COURSES_TO_DISPLAY)
                 .ToList();
 
             model.CoursesReviews.Reviews = this.reviewService
                 .GetAllAsQueryable<ReviewForHomeViewModel>()
                 .OrderByDescending(r => r.CreatedOn)
-                .Take(3)
+                .Take(REVIEWS_TO_DISPLAY)
                 .ToList();
 
             return model;

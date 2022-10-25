@@ -11,5 +11,7 @@
         Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user);
 
         DetailCourseViewModel GetDetails(int id);
+
+        AllCoursesViewModel GetAllCoursesPaged(int[] categoriesIds, int currentPage, int coursesPerPage);
     }
 }

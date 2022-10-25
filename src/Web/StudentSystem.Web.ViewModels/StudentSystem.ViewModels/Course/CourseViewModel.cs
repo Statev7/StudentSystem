@@ -1,8 +1,9 @@
 ﻿namespace StudentSystem.ViewModels.Course
 {
     using System;
+    using System.Collections.Generic;
 
-    public class ListCourseViewModel
+    public class CourseViewModel 
     {
         public int Id { get; set; }
 
@@ -14,5 +15,7 @@
 
         //From automapper.
         public double Duration { get; set; }
+
+        public IEnumerable<int> CategoriesIds { get; set; }
     }
 }

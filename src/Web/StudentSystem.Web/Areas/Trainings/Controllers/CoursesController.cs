@@ -1,7 +1,6 @@
 ﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
-    using System;
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -16,10 +15,11 @@
     using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
 
-
     [AutoValidateAntiforgeryToken]
     public class CoursesController : TrainingController
     {
+        private const int CORSES_PER_PAGE = 6;
+
         private readonly ICourseService courseService;
 
         public CoursesController(
@@ -29,12 +29,9 @@
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int[] filters, int currentPage = 1)
         {
-            var courses = courseService
-                .GetAllAsQueryable<ListCourseViewModel>()
-                .Where(c => c.StartDate > DateTime.UtcNow)
-                .ToList();
+            var courses = this.courseService.GetAllCoursesPaged(filters, currentPage, CORSES_PER_PAGE);
 
             return View(courses);
         }

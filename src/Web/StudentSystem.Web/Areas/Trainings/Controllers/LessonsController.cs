@@ -36,9 +36,9 @@
         }
 
         [HttpGet]
-        public IActionResult Index(int courseId, int currentPage = 1)
+        public IActionResult Index(int[] filters, int currentPage = 1)
         {
-            var lessons = this.lessonService.GetAllLessonsPaged(courseId, currentPage, LESSON_PER_PAGE);
+            var lessons = this.lessonService.GetAllLessonsPaged(filters, currentPage, LESSON_PER_PAGE);
 
             return View(lessons);
         }

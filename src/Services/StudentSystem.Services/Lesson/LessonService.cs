@@ -25,30 +25,28 @@
             this.courseService = courseService;
         }
 
-        public PageLessonViewModel GetAllLessonsPaged(int courseId, int currentPage, int lessonsPerPage)
+        public PageLessonViewModel GetAllLessonsPaged(int[] coursesIds, int currentPage, int lessonsPerPage)
         {
-            //Get all lessons as queryable
-            var queryForPageing = this
+            var lessons = this
                 .GetAllAsQueryable<LessonForPageViewModel>()
                 .OrderBy(x => x.Title)
-                .AsQueryable();
+                .ToList();
 
-            //Filtered them if needed
-            if (courseId != 0)
+            coursesIds = coursesIds.Distinct().ToArray();
+
+            if (coursesIds.Any())
             {
-                queryForPageing = queryForPageing
-                    .Where(x => x.CourseId == courseId);
+                lessons = lessons
+                    .Where(x => coursesIds.Contains(x.CourseId))
+                    .ToList();
             }
 
-            var lessons = new List<LessonForPageViewModel>();
-            var totalEntities = 0;
+            var totalLessons = lessons.Count;
 
-            if (queryForPageing.Any())
+            if (lessons.Any())
             {
-                totalEntities = queryForPageing.Count();
-
                 lessons = this
-                    .PageingAsQueryable(queryForPageing, currentPage, lessonsPerPage)
+                    .Paging(lessons, currentPage, lessonsPerPage)
                     .ToList();
             }
 
@@ -61,10 +59,10 @@
             {
                 Lessons = lessons,
                 Courses = courses,
-                CourseId = courseId,
+                Filters = coursesIds,
                 CurrentPage = currentPage,
                 EntitiesPerPage = lessonsPerPage,
-                TotalEntities = totalEntities,
+                TotalEntities = totalLessons,
             };
 
             return model;

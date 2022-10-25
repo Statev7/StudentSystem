@@ -5,6 +5,6 @@
 
     public interface ILessonService : IBaseService
     {
-        PageLessonViewModel GetAllLessonsPaged(int courseId, int currentPage, int lessonsPerPage);
+        PageLessonViewModel GetAllLessonsPaged(int[] filters, int currentPage, int lessonsPerPage);
     }
 }

@@ -12,7 +12,7 @@
     using StudentSystem.Data.Models.Abstraction;
     using StudentSystem.Web.Data;
 
-    public abstract class BaseService<TEntity> : IBaseService
+    public abstract class BaseService<TEntity> : IBaseService, ICreateUpdateService
         where TEntity : BaseModel
     {
         private const int MIN_PAGE_VALUE = 1; 
@@ -67,7 +67,7 @@
                 .ProjectTo<T>(this.Mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-        public async Task CreateAsync<T>(T model)
+        public virtual async Task CreateEntityAsync<T>(T model)
         {
             var entity = this.Mapper.Map<TEntity>(model);
 
@@ -77,7 +77,7 @@
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> UpdateAsync<T>(int id, T model)
+        public async Task<bool> UpdateEntityAsync<T>(int id, T model)
         {
             var entityToUpdate = await this.DbSet.FindAsync(id);
 

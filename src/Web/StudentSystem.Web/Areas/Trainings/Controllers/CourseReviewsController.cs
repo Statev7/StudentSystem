@@ -64,7 +64,7 @@
                 Content = review.Content
             };
 
-            await reviewService.CreateAsync(reviewToCreate);
+            await reviewService.CreateEntityAsync(reviewToCreate);
 
             return RedirectToAction("Details", "Courses", courseIdAsAnonymousObj);
         }
@@ -100,7 +100,7 @@
                 return RedirectToAction("Index", "Home");
             }
 
-            await reviewService.UpdateAsync(id, review);
+            await reviewService.UpdateEntityAsync(id, review);
 
             return RedirectToAction("Details", "Courses", new { Id = courseId });
         }

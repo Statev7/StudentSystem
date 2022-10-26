@@ -2,25 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Globalization;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
     using AutoMapper;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
+    using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Abstaction;
     using StudentSystem.Services.Category;
+    using StudentSystem.Services.Course.Models;
+    using StudentSystem.ViewModels.Category;
     using StudentSystem.ViewModels.Course;
-    using StudentSystem.Data.Models.StudentSystem;
-    using StudentSystem.Web.Data;
     using StudentSystem.ViewModels.Lesson;
-    using StudentSystem.Web.Infrastructure.Extensions;
     using StudentSystem.ViewModels.Review;
+    using StudentSystem.Web.Data;
+    using StudentSystem.Web.Infrastructure.Extensions;
 
     using static StudentSystem.Web.Common.GlobalConstants;
-    using StudentSystem.ViewModels.Category;
 
     public class CourseService : BaseService<Course>, ICourseService
     {
@@ -46,13 +48,11 @@
             int currentPage, 
             int coursesPerPage)
         {
-            //TODO: Performance problem!
-
             categoriesIds = categoriesIds.Distinct().ToArray();
 
             var corses = this
                 .GetAllAsQueryable<CourseViewModel>()
-                .Where(c => c.StartDate > DateTime.UtcNow)
+                .Where(c => !c.IsDeleted)
                 .OrderBy(c => c.Name)
                 .ToList();
 
@@ -81,6 +81,66 @@
             };
 
             return model;
+        }
+
+        public async Task CreateAsync(CourseFormServiceModel course)
+        {
+            var courseToCreate = this.Mapper.Map<Course>(course);
+            courseToCreate.CreatedOn = DateTime.UtcNow;
+
+            var categories = new List<CourseCategory>();
+
+            foreach (var categoryId in course.CategoriesIds.Distinct())
+            {
+                var courseCategory = new CourseCategory()
+                {
+                    CategoryId = categoryId,
+                    CourseId = courseToCreate.Id,
+                    CreatedOn = DateTime.UtcNow,
+                };
+
+                categories.Add(courseCategory);
+            }
+
+            courseToCreate.CourseCategories = categories;
+
+            await this.DbContext.Courses.AddAsync(courseToCreate);
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> UpdateAsync(int id, CourseFormServiceModel course)
+        {
+            var courseToUpdate = await this.DbSet
+                .Include(x => x.CourseCategories)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (courseToUpdate == null)
+            {
+                return false;
+            }
+
+            var categories = new List<CourseCategory>();
+            foreach (var categoryId in course.CategoriesIds.Distinct())
+            {
+                var courseCategory = new CourseCategory()
+                {
+                    CategoryId = categoryId,
+                    CourseId = courseToUpdate.Id,
+                    CreatedOn = DateTime.UtcNow,
+                };
+
+                categories.Add(courseCategory);
+            }
+
+            this.Mapper.Map(course, courseToUpdate);
+
+            courseToUpdate.CourseCategories = categories;
+            courseToUpdate.ModifiedOn = DateTime.UtcNow;
+
+            this.DbSet.Update(courseToUpdate);
+            await this.DbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user)

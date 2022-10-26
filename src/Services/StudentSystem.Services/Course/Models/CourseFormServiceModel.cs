@@ -1,7 +1,10 @@
 ﻿namespace StudentSystem.Services.Course.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
+    using StudentSystem.ViewModels.Category;
 
     using static StudentSystem.Data.Common.Constants;
 
@@ -22,10 +25,18 @@
         [Display(Name = "Image Url")]
         public string ImageURL { get; set; }
 
-        [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; }
+        [Required]
+        [Display(Name = "Categories")]
+        public int[] CategoriesIds { get; set; }
 
+        [Required]
+        [Display(Name = "Start Date")]
+        public DateTime? StartDate { get; set; }
+
+        [Required]
         [Display(Name = "End Date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        public ICollection<CategoryIdNameViewModel> Categories { get; set; }
     }
 }

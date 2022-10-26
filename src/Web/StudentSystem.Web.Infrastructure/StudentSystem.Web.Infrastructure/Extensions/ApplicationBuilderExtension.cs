@@ -1,12 +1,12 @@
 ﻿namespace StudentSystem.Web.Infrastructure.Extensions
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
     using StudentSystem.Web.Data;
-
-    using System.Threading.Tasks;
 
     public static class ApplicationBuilderExtension
     {

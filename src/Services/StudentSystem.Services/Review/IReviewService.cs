@@ -2,7 +2,7 @@
 {
     using StudentSystem.Services.Abstaction;
 
-    public interface IReviewService : IBaseService
+    public interface IReviewService : IBaseService, ICreateUpdateService
 	{
         
 	}

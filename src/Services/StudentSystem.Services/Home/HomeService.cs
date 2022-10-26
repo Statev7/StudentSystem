@@ -53,7 +53,6 @@
 
             model.CoursesReviews.OpenCourses = this.courseService
                 .GetAllAsQueryable<OpenCourseViewModel>()
-                .Where(x => x.StartDate >= DateTime.UtcNow)
                 .Take(COURSES_TO_DISPLAY)
                 .ToList();
 

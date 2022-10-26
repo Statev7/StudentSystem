@@ -1,19 +1,21 @@
 ﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using StudentSystem.Services.Category;
     using StudentSystem.Services.Course;
-    using StudentSystem.ViewModels.Course;
     using StudentSystem.Services.Course.Models;
-    using StudentSystem.Web.Infrastructure.Helpers;
+    using StudentSystem.ViewModels.Category;
+    using StudentSystem.ViewModels.Course;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
+    using StudentSystem.Web.Infrastructure.Helpers;
 
-    using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
+    using static StudentSystem.Web.Common.NotificationsConstants;
 
     [AutoValidateAntiforgeryToken]
     public class CoursesController : TrainingController
@@ -21,11 +23,14 @@
         private const int CORSES_PER_PAGE = 6;
 
         private readonly ICourseService courseService;
+        private readonly ICategoryService categoryService;
 
         public CoursesController(
-            ICourseService courseService)
+            ICourseService courseService,
+            ICategoryService categoryService) 
         {
             this.courseService = courseService;
+            this.categoryService = categoryService;
         }
 
         [HttpGet]
@@ -39,7 +44,18 @@
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
         public IActionResult Create()
-            => View();
+        {
+            var courseModel = new CourseFormServiceModel()
+            {
+                StartDate = null,
+                EndDate = null,
+                Categories = this.categoryService
+                        .GetAllAsQueryable<CategoryIdNameViewModel>()
+                        .ToList(),
+            };
+
+            return this.View(courseModel);
+        }
 
         [HttpPost]
         [Authorize(Roles = ADMIN_ROLE)]
@@ -51,7 +67,7 @@
             }
 
             var result = MyValidator
-                .ValidateDates(course.StartDate, course.EndDate, "Start date", "End date");
+                .ValidateDates(course.StartDate.Value, course.EndDate.Value, "Start date", "End date");
 
             if (!result.isValid)
             {
@@ -79,6 +95,10 @@
 
                 return RedirectToAction(nameof(this.Index));
             }
+
+            courseToUpdate.Categories = this.categoryService
+                .GetAllAsQueryable<CategoryIdNameViewModel>()
+                .ToList();
 
             return View(courseToUpdate);
         }

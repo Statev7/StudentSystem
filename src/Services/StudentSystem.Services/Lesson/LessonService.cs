@@ -1,16 +1,16 @@
 ﻿namespace StudentSystem.Services.Lesson
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using AutoMapper;
 
-    using StudentSystem.Services.Abstaction;
-    using StudentSystem.ViewModels.Lesson;
-    using StudentSystem.Web.Data;
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.Abstaction;
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
-    using System.Collections.Generic;
+    using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.Web.Data;
 
     public class LessonService : BaseService<Lesson>, ILessonService
     {

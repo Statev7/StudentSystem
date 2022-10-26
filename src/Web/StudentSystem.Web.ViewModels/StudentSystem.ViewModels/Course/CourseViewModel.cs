@@ -16,6 +16,8 @@
         //From automapper.
         public double Duration { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public IEnumerable<int> CategoriesIds { get; set; }
     }
 }

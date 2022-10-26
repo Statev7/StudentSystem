@@ -92,7 +92,7 @@
                 return this.View(lesson);
             }
 
-            await this.lessonService.CreateAsync(lesson);
+            await this.lessonService.CreateEntityAsync(lesson);
 
             this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_CREATED_LESSON_MESSAGE;
 
@@ -126,7 +126,7 @@
                 return this.View(lesson);
             }
 
-            var isUpdated = await this.lessonService.UpdateAsync(id, lesson);
+            var isUpdated = await this.lessonService.UpdateEntityAsync(id, lesson);
             if (!isUpdated)
             {
                 this.TempData[WARNING_NOTIFICATION] = INVALID_LESSON_MESSAGE;

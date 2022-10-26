@@ -1,6 +1,5 @@
 ﻿namespace StudentSystem.Services.Administrator
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -9,7 +8,6 @@
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.ViewModels.User;

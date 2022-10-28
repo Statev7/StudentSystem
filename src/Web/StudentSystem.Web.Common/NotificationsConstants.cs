@@ -9,22 +9,12 @@
 
         // Courses messages
 
-        public const string SUCCESSFULLY_CREATED_COURSE_MESSAGE = "Successfully created a {0} course";
-        public const string SUCCESSFULLY_DELETE_COURSE_MESSAGE = "Successfully delete a course";
-        public const string SUCCESSFULLY_UPDATE_COURSE_MESSAGE = "Successfully update a {0} course";
         public const string SUCCESSFULLY_REGISTERED_FOR_COURSE_MESSAGE = "You have successfully registered for the {0} course";
-        public const string INVALID_COURSE_MESSAGE = "No such course exists";
         public const string ALREADY_IN_COURSE_MESSAGE = "You are already enrolled in this course";
 
         //Date message
         public const string SECOND_DATE_CANNOT_BE_EARLIER_MESSAGE = "{0} cannot be earlier than {1}";
         public const string START_DATE_MESSAGE = "The start date cannot be earlier {0}";
-
-        //Lessons
-        public const string SUCCESSFULLY_CREATED_LESSON_MESSAGE = "Successfully created a new lesson";
-        public const string SUCCESSFULLY_UPDATE_LESSON_MESSAGE = "Successfully update a {0} lesson";
-        public const string SUCCESSFULLY_DELETE_LESSON_MESSAGE = "Successfully delete a lesson";
-        public const string INVALID_LESSON_MESSAGE = "No such lesson exists";
 
         //Review
         public const string NOT_HAVE_PERMISSION_MESSAGE = "You do not have permission to {0} this review";
@@ -41,6 +31,18 @@
         public const string CANNOT_CHANGE_OWN_ROLES_MESSAGE = "You cannot change your roles";
 
         //CRUD
-        public const string SUCCESSFULLY_CREATED_ENTITY_MESSAGE = "Successfully created a {0} {1}";
+
+        //{0} is name of entity, {1} is keyword (like course, lesson, ect)
+        public const string SUCCESSFULLY_CREATED_ENTITY_MESSAGE = "Successfully created a {0} {1}!";
+        public const string SUCCESSFULLY_UPDATED_ENTITY_MESSAGE = "Successfully update a {0} {1}!";
+        public const string SUCCESSFULLY_DELETED_ENTITY_MESSAGE = "Successfully deleted!";
+
+        //{0} is Keyword
+        public const string SUCH_A_ENTITY_DOES_NOT_EXIST = "No such {0} exists";
+
+        //Keywords
+        public const string COURSE_KEYWORD = "course";
+        public const string LESSON_KEYWORD = "lesson";
+        public const string RESOURCE_KEYWORD = "resource";
     }
 }

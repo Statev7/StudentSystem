@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Abstaction;
@@ -25,14 +27,16 @@
             this.courseService = courseService;
         }
 
-        public PageLessonViewModel GetAllLessonsPaged(int[] coursesIds, int currentPage, int lessonsPerPage)
+        public async Task<PageLessonViewModel> GetAllLessonsPagedAsync(int[] coursesIds, int currentPage, int lessonsPerPage)
         {
-            var lessons = this
+            var lessons = await this
                 .GetAllAsQueryable<LessonForPageViewModel>()
                 .OrderBy(x => x.Title)
-                .ToList();
+                .ToListAsync();
 
-            coursesIds = coursesIds.Distinct().ToArray();
+            coursesIds = coursesIds
+                .Distinct()
+                .ToArray();
 
             if (coursesIds.Any())
             {

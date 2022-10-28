@@ -8,7 +8,7 @@
 
     public interface IAdministratorService
     {
-        IEnumerable<UserViewModel> GetAll();
+        Task<IEnumerable<UserViewModel>> GetAllUsersAsync();
 
         Task<bool> PromoteAsync(ApplicationUser user);
 

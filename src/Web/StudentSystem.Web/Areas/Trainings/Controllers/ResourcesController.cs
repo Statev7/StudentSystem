@@ -53,14 +53,16 @@
             var isLessonExist = await this.lessonService.IsExistAsync(resource.LessonId);
             if (!isLessonExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
+
                 return this.RedirectToAction("Index", "Home", new { area = string.Empty });
             }
 
             await this.resourceService.CreateEntityAsync(resource);
 
             this.TempData[SUCCESS_NOTIFICATION] =
-                string.Format(SUCCESSFULLY_CREATED_ENTITY_MESSAGE, resource.Name, "resource");
+                string.Format(SUCCESSFULLY_CREATED_ENTITY_MESSAGE, resource.Name, RESOURCE_KEYWORD);
 
             return this.RedirectToAction("Index", "Home", new { area = string.Empty });
         }

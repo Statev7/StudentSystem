@@ -91,7 +91,9 @@
 	<div class="text-center">
 		@if (!this.User.IsUserInCourse(userManager, Model.Id, userId))
 		{
-			<a asp-controller="Courses"
+			<a 
+				asp-area="Trainings"
+				asp-controller="RegisterForCourse"
 				asp-action="Apply"
 				asp-route-id="@Model.Id"
 				class="btn btn-primary rounded-pill w-25 p-2">
@@ -104,37 +106,54 @@
 				<button id="show-review-form-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Leave a review</button>
 			</div>
 			<div id="review-form" class="d-none offset-md-1 col-sm col-md-10">
-				@{
-					var model = new ReviewFormServiceModel();
-				}
-				<partial name="_ReviewFormPartial" model="model">
+				<div>
+					<form 
+						asp-area="Trainings"
+						asp-controller="CourseReviews" 
+						asp-action="Create" 
+						asp-route-courseId="@Model.Id" method="post">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="form-group">
+							<textarea asp-for="@Model.Content" class="form-control" style="height: 200px"></textarea>
+							<span asp-validation-for="@Model.Content" class="text-danger"></span>
+						</div>
+						<div class="form-group text-center">
+							<input type="submit" value="Submit" class="btn btn-primary w-25 rounded-pill" />
+						</div>
+					</form>
+				</div>
 			</div>
 		}
 	</div>
 </div>
 
-<script>
-	let informationBtn = document.getElementById('show-information-btn');
-	let reviewBtn = document.getElementById('show-review-form-btn');
+@section Scripts{
 
-	informationBtn.addEventListener('click', () => someFunc('information-box'));
-	reviewBtn.addEventListener('click', () => someFunc('review-form'));
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-	function someFunc(elementId) {
+	<script>
+		let informationBtn = document.getElementById('show-information-btn');
+		let reviewBtn = document.getElementById('show-review-form-btn');
 
-		let box = document.getElementById(elementId);
+		informationBtn.addEventListener('click', () => someFunc('information-box'));
+		reviewBtn.addEventListener('click', () => someFunc('review-form'));
 
-		if (box.classList.contains('d-none')) {
-			box.classList.remove('d-none');
-			switch (elementId) {
-				case 'information-box': informationBtn.innerHTML = 'Show Less'; break;
+		function someFunc(elementId) {
+
+			let box = document.getElementById(elementId);
+
+			if (box.classList.contains('d-none')) {
+				box.classList.remove('d-none');
+				switch (elementId) {
+					case 'information-box': informationBtn.innerHTML = 'Show Less'; break;
+				}
+			}
+			else {
+				box.classList.add('d-none');
+				switch (elementId) {
+					case 'information-box': informationBtn.innerHTML = 'Show More'; break;
+				}
 			}
 		}
-		else {
-			box.classList.add('d-none');
-			switch (elementId) {
-				case 'information-box': informationBtn.innerHTML = 'Show More'; break;
-			}
-		}
-	}
-</script>
+	</script>
+}

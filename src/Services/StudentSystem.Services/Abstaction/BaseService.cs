@@ -43,6 +43,11 @@
             return query.ProjectTo<T>(this.Mapper.ConfigurationProvider);
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync<T>(bool withDeleted = false)
+            => await this
+                .GetAllAsQueryable<T>(withDeleted)
+                .ToListAsync();
+
         public IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage)
         {
             var totalPages = Math.Ceiling(data.Count / (double)entitiesPerPage);

@@ -1,5 +1,11 @@
 ﻿@using StudentSystem.ViewModels.Page
 @model PageViewModel
+@{
+    if (Model.CurrentPage > Model.TotalPages)
+    {
+        Model.CurrentPage = Model.TotalPages;
+    }
+}
 
 <nav class="mt-3">
     <ul class="pagination justify-content-center">
@@ -50,4 +56,3 @@
         </li>
     </ul>
 </nav>
-

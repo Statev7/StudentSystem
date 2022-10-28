@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Lesson;
@@ -15,8 +16,8 @@
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
     using StudentSystem.Web.Infrastructure.Helpers;
 
-    using static StudentSystem.Web.Common.NotificationsConstants;
     using static StudentSystem.Web.Common.GlobalConstants;
+    using static StudentSystem.Web.Common.NotificationsConstants;
 
     [AutoValidateAntiforgeryToken]
     [Authorize(Roles = ADMIN_ROLE)]
@@ -36,22 +37,24 @@
         }
 
         [HttpGet]
-        public IActionResult Index(int[] filters, int currentPage = 1)
+        public async Task<IActionResult> Index(int[] filters, int currentPage = 1)
         {
-            var lessons = this.lessonService.GetAllLessonsPaged(filters, currentPage, LESSON_PER_PAGE);
+            var lessons = await this
+                .lessonService
+                .GetAllLessonsPagedAsync(filters, currentPage, LESSON_PER_PAGE);
 
             return View(lessons);
         }
 
         [HttpGet]
         [Authorize(Roles = ADMIN_ROLE)]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var lesson = new LessonFormServiceModel()
             {
                 Begining = null,
                 End = null,
-                Courses = this.GetAllCoursesSorted()
+                Courses = await this.GetAllCoursesSorted()
             };
 
             return this.View(lesson);
@@ -63,15 +66,16 @@
         {
             if (!this.ModelState.IsValid)
             {
-                lesson.Courses = this.GetAllCoursesSorted();
+                lesson.Courses = await this.GetAllCoursesSorted();
 
                 return this.View(lesson);
             }
 
-            var isCourseExist = await this.courseService.GetByIdAsync<CourseIdNameViewModel>(lesson.CourseId) != null;
+            var isCourseExist = await this.courseService.IsExistAsync(lesson.CourseId);
             if (!isCourseExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
             }
@@ -87,14 +91,15 @@
             {
                 this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
-                lesson.Courses = this.GetAllCoursesSorted();
+                lesson.Courses = await this.GetAllCoursesSorted();
 
                 return this.View(lesson);
             }
 
             await this.lessonService.CreateEntityAsync(lesson);
 
-            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_CREATED_LESSON_MESSAGE;
+            this.TempData[SUCCESS_NOTIFICATION] = 
+                string.Format(SUCCESSFULLY_CREATED_ENTITY_MESSAGE, lesson.Title, LESSON_KEYWORD);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -106,12 +111,13 @@
 
             if (lesson == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            lesson.Courses = this.courseService.GetAllAsQueryable<CourseIdNameViewModel>().ToList();
+            lesson.Courses = await this.courseService.GetAllAsync<CourseIdNameViewModel>();
 
             return this.View(lesson);
         }
@@ -121,7 +127,7 @@
         {
             if (!ModelState.IsValid)
             {
-                lesson.Courses = this.GetAllCoursesSorted();
+                lesson.Courses = await this.GetAllCoursesSorted();
 
                 return this.View(lesson);
             }
@@ -129,12 +135,14 @@
             var isUpdated = await this.lessonService.UpdateEntityAsync(id, lesson);
             if (!isUpdated)
             {
-                this.TempData[WARNING_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+                this.TempData[WARNING_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION] = string.Format(SUCCESSFULLY_UPDATE_LESSON_MESSAGE, lesson.Title);
+            this.TempData[SUCCESS_NOTIFICATION] = 
+                string.Format(SUCCESSFULLY_UPDATED_ENTITY_MESSAGE, lesson.Title, LESSON_KEYWORD);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -154,20 +162,21 @@
 
             if (!isDeleted)
             {
-                this.TempData[WARNING_NOTIFICATION] = INVALID_LESSON_MESSAGE;
+                this.TempData[WARNING_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETE_LESSON_MESSAGE;
+            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETED_ENTITY_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private IEnumerable<CourseIdNameViewModel> GetAllCoursesSorted()
-            => this.courseService
+        private async Task<IEnumerable<CourseIdNameViewModel>> GetAllCoursesSorted()
+            => await this.courseService
             .GetAllAsQueryable<CourseIdNameViewModel>()
             .OrderBy(x => x.Name)
-            .ToList();
+            .ToListAsync();
     }
 }

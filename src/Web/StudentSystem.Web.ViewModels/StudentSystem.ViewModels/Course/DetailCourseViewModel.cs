@@ -1,9 +1,12 @@
 ﻿namespace StudentSystem.ViewModels.Course
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using StudentSystem.ViewModels.Lesson;
     using StudentSystem.ViewModels.Review;
+
+    using static StudentSystem.Data.Common.Constants;
 
     public class DetailCourseViewModel
 	{
@@ -20,5 +23,9 @@
         public IEnumerable<LessonIdNameViewModel> Lessons { get; set; }
 
         public IEnumerable<ReviewViewModel> Reviews { get; set; }
+
+        [Required]
+        [MaxLength(REVIEW_CONTENT_MAX_LENGTH)]
+        public string Content { get; set; }
     }
 }

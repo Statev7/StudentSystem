@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Review;
     using StudentSystem.Services.Review.Models;
+    using StudentSystem.ViewModels.Review;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
     using StudentSystem.Web.Infrastructure.Extensions;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
 
+    [Authorize]
     public class CourseReviewsController : TrainingController
     {
         private const string DELETE = "delete";
@@ -35,108 +38,107 @@
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(int courseId, ReviewFormServiceModel review)
+        public async Task<IActionResult> Create(int courseId, string content)
         {
-            var courseIdAsAnonymousObj = new { Id = courseId };
-            var isCourseExist = await courseService.IsExistAsync(courseId);
+            //if (!this.ModelState.IsValid)
+            //{
+            //   return this.View(review);
+            //}
 
+            var courseIdAsObject = new { Id = courseId };
+
+            var isCourseExist = await this.courseService.IsExistAsync(courseId);
             if (!isCourseExist)
             {
-                TempData[ERROR_NOTIFICATION] = INVALID_COURSE_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
-                return RedirectToAction("Index", "Courses");
+                return this.RedirectToAction("Index", "Courses");
             }
 
-            var userId = User.GetId();
-            var isUserInCouse = User.IsUserInCourse(userManager, courseId, userId);
+            var userId = this.User.GetId();
+            var isUserInCouse = this.User.IsUserInCourse(this.userManager, courseId, userId);
 
             if (!isUserInCouse)
             {
-                TempData[ERROR_NOTIFICATION] = NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE;
 
-                return RedirectToAction("Details", "Courses", courseIdAsAnonymousObj);
+                return this.RedirectToAction("Details", "Courses", courseIdAsObject);
             }
 
             var reviewToCreate = new CreateReviewServiceModel
             {
                 CourseId = courseId,
                 UserId = userId,
-                Content = review.Content
+                Content = content
             };
 
-            await reviewService.CreateEntityAsync(reviewToCreate);
+            await this.reviewService.CreateEntityAsync(reviewToCreate);
 
-            return RedirectToAction("Details", "Courses", courseIdAsAnonymousObj);
+            return this.RedirectToAction("Details", "Courses", courseIdAsObject);
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var review = await reviewService.GetByIdAsync<ReviewFormServiceModel>(id);
+            var review = await this.reviewService.GetByIdAsync<ReviewContentServiceModel>(id);
 
             if (review == null)
             {
-                TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
 
-                return RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home");
             }
 
-            return View(review);
+            return this.View(review);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, int courseId, ReviewFormServiceModel review)
+        public async Task<IActionResult> Update(int id, int courseId, ReviewContentServiceModel review)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View(review);
+                return this.View(review);
             }
 
-            var isValid = await IsAuthorOrAdminAsync(id);
+            var isValid = await this.reviewService.IsAuthorOrAdminAsync(id, this.User);
             if (!isValid)
             {
-                TempData[ERROR_NOTIFICATION] = string.Format(NOT_HAVE_PERMISSION_MESSAGE, UPDATE);
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(NOT_HAVE_PERMISSION_MESSAGE, UPDATE);
 
-                return RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home");
             }
 
-            await reviewService.UpdateEntityAsync(id, review);
+            await this.reviewService.UpdateEntityAsync(id, review);
 
-            return RedirectToAction("Details", "Courses", new { Id = courseId });
+            return this.RedirectToAction("Details", "Courses", new { Id = courseId });
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int reviewId, int courseId)
         {
-            var review = await reviewService.GetByIdAsync<ReviewUserIdServiceModel>(reviewId);
+            var review = await this.reviewService.GetByIdAsync<ReviewUserIdServiceModel>(reviewId);
 
             if (review == null)
             {
-                TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
 
-                return RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home");
             }
 
-            var isValid = await IsAuthorOrAdminAsync(reviewId);
-
+            var isValid = await this.reviewService.IsAuthorOrAdminAsync(reviewId, this.User);
             if (!isValid)
             {
-                TempData[ERROR_NOTIFICATION] = string.Format(NOT_HAVE_PERMISSION_MESSAGE, DELETE);
+                this.TempData[ERROR_NOTIFICATION] =
+                    string.Format(NOT_HAVE_PERMISSION_MESSAGE, DELETE);
 
-                return RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home");
             }
 
-            await reviewService.DeleteAsync(reviewId);
+            await this.reviewService.DeleteAsync(reviewId);
 
-            return RedirectToAction("Details", "Courses", new { Id = courseId });
-        }
-
-        private async Task<bool> IsAuthorOrAdminAsync(int reviewId)
-        {
-            var review = await reviewService.GetByIdAsync<ReviewUserIdServiceModel>(reviewId);
-            var isAuthorOrAdmin = review.UserId == User.GetId() || User.IsAdministrator();
-
-            return isAuthorOrAdmin;
+            return this.RedirectToAction("Details", "Courses", new { Id = courseId });
         }
     }
 }

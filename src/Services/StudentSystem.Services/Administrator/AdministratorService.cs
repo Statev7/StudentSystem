@@ -1,13 +1,13 @@
 ﻿namespace StudentSystem.Services.Administrator
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.ViewModels.User;
@@ -31,11 +31,11 @@
             this.userManager = userManager;
         }
 
-        public IEnumerable<UserViewModel> GetAll() 
-            => this.dbContext
+        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync() 
+            => await this.dbContext
                 .Users
                 .ProjectTo<UserViewModel>(this.mapper.ConfigurationProvider)
-                .ToList();
+                .ToListAsync();
 
         public async Task<bool> PromoteAsync(ApplicationUser user)
         {

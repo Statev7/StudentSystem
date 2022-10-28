@@ -14,7 +14,7 @@
 		{
 			this.CreateMap<CreateReviewServiceModel, Review>();
 			this.CreateMap<Review, ReviewUserIdServiceModel>();
-			this.CreateMap<Review, ReviewFormServiceModel>().ReverseMap();
+			this.CreateMap<Review, ReviewContentServiceModel>().ReverseMap();
 			this.CreateMap<Review, ReviewForHomeViewModel>()
 				.ForMember(d => d.UserFirstName, conf => conf.MapFrom(s => s.User.FirstName))
 				.ForMember(d => d.UserLastName, conf => conf.MapFrom(s => s.User.LastName))

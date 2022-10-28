@@ -8,6 +8,8 @@
     {
         IQueryable<T> GetAllAsQueryable<T>(bool withDeleted = false);
 
+        Task<IEnumerable<T>> GetAllAsync<T>(bool withDeleted = false);
+
         Task<T> GetByIdAsync<T>(int id);
 
         Task<bool> DeleteAsync(int id);

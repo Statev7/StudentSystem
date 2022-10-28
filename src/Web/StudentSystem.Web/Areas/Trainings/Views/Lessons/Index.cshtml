@@ -2,6 +2,7 @@
 
 @{
 	ViewData["Title"] = "Lessons";
+	var dataForPartial = ViewData["Title"].ToString().ToLower();
 }
 
 <div class="container">
@@ -63,8 +64,8 @@
 	}
 	else
 	{
-		<div class="mt-5 text-center text-danger">
-			<h1>No lessons to display</h1>
-		</div>
+		<div>
+			<partial name="_NoAvailableEntitiesPartial" model="@dataForPartial">
+        </div>
 	}
 </div>

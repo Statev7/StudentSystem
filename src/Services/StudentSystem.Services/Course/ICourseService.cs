@@ -9,13 +9,16 @@
 
     public interface ICourseService : IBaseService
     {
-        AllCoursesViewModel GetAllCoursesPaged(int[] categoriesIds, int currentPage, int coursesPerPage);
+        Task<AllCoursesViewModel> GetAllCoursesPagedAsync(
+            int[] categoriesIds, 
+            int currentPage, 
+            int coursesPerPage);
 
         Task CreateAsync(CourseFormServiceModel course);
 
         Task<bool> UpdateAsync(int id, CourseFormServiceModel course);
 
-        DetailCourseViewModel GetDetails(int id);
+        Task<DetailCourseViewModel> GetDetailsAsync(int id);
 
         Task<bool> RegisterForCourseAsync(int courseId, ClaimsPrincipal user);
     }

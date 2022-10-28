@@ -29,9 +29,10 @@
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = this.administratorService.GetAll();
+            var users = await this.administratorService
+                .GetAllUsersAsync();
 
             return this.View(users);
         }

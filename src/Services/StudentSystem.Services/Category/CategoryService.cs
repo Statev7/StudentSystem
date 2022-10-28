@@ -17,14 +17,10 @@
 		{
 		}
 
-		public async Task<int> GetIdByNameAsync(string name)
-		{
-			var categoryId = await this.DbSet
+		public async Task<int> GetIdByNameAsync(string name) 
+			=> await this.DbSet
 				.Where(c => c.Name.ToLower() == name.ToLower())
 				.Select(c => c.Id)
 				.SingleOrDefaultAsync();
-
-			return categoryId;
-		}
 	}
 }

@@ -43,41 +43,49 @@
             this.categoryService = categoryService;
         }
 
-        public AllCoursesViewModel GetAllCoursesPaged(
+        public async Task<AllCoursesViewModel> GetAllCoursesPagedAsync(
             int[] categoriesIds, 
             int currentPage, 
             int coursesPerPage)
         {
-            categoriesIds = categoriesIds.Distinct().ToArray();
+            categoriesIds = categoriesIds
+                .Distinct()
+                .ToArray();
 
-            var corses = this
+            var courses = await this
                 .GetAllAsQueryable<CourseViewModel>()
                 .Where(c => !c.IsDeleted)
                 .OrderBy(c => c.Name)
-                .ToList();
+                .ToListAsync();
 
             if (categoriesIds.Any())
             {
-                corses = corses
+                courses = courses
                     .Where(c => c.CategoriesIds.Intersect(categoriesIds).Any())
                     .ToList();
             }
 
-            var totalCorses = corses.Count;
+            var totalCourses = courses.Count;
 
-            if (corses.Any())
+            if (courses.Any())
             {
-                corses = this.Paging(corses, currentPage, coursesPerPage).ToList();
+                courses = this
+                    .Paging(courses, currentPage, coursesPerPage)
+                    .ToList();
             }
+
+            var categories = await this
+                .categoryService
+                .GetAllAsync<CategoryIdNameViewModel>();
 
             var model = new AllCoursesViewModel()
             {
-                Courses = corses,
-                Categories = this.categoryService.GetAllAsQueryable<CategoryIdNameViewModel>().ToList(),
+                Courses = courses,
+                Categories = categories,
                 Filters = categoriesIds,
                 CurrentPage = currentPage,
                 EntitiesPerPage = coursesPerPage,
-                TotalEntities = totalCorses,
+                TotalEntities = totalCourses,
             };
 
             return model;
@@ -175,9 +183,9 @@
             return true;
         }
 
-        public DetailCourseViewModel GetDetails(int id)
+        public async Task<DetailCourseViewModel> GetDetailsAsync(int id)
         {
-            var course = this.DbSet
+            var course = await this.DbSet
                 .Where(x => x.Id == id && !x.IsDeleted)
                 .Select(c => new DetailCourseViewModel
                 {
@@ -206,7 +214,7 @@
                             UserImageIRL = r.User.ImageURL
                         })
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return course;
         }

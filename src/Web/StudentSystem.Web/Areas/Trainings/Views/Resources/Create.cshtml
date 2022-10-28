@@ -1,15 +1,16 @@
-﻿@model LessonFormServiceModel
+﻿@using StudentSystem.Services.Resource.Models
+@model ResourceFormServiceModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
 <div class="container mt-4">
-    <partial name="_LessonFormPartial" model="@Model">
+    <partial name="_ResourceFormPartial" model="@Model">
 </div>
 
-@section Scripts {
+@section Scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
- }
+}

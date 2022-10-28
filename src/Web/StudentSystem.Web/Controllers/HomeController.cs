@@ -1,7 +1,7 @@
 ﻿namespace StudentSystem.Web.Controllers
 {
     using System.Diagnostics;
-    using System.Security.Claims;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +18,10 @@
             this.homeService = homeService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = this.User.GetId();
-            var information = this.homeService.GetInformation(userId);
+            var information = await this.homeService.GetInformationAsync(userId);
 
             return View(information);
         }

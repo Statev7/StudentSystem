@@ -16,25 +16,37 @@
         </div>
         <div class="row align-items-stretch">
             <div class="col-lg-3">
-                <a asp-area="Trainings" asp-controller="Courses" asp-route-filters="1" class="course">
+                <a 
+                    asp-area="Trainings" 
+                    asp-controller="Courses" 
+                    asp-route-filters="@Model.CategoriesIds[0]" 
+                    class="course">
                     <span class="wrap-icon fa-brands fa-windows"></span>
                     <h3>CSharp</h3>
                 </a>
             </div>
             <div class="col-lg-3">
-                <a href="#" class="course">
+                <a asp-area="Trainings"
+                    asp-controller="Courses"
+                    asp-route-filters="@Model.CategoriesIds[1]"
+                    class="course">
                     <span class="wrap-icon fa-brands fa-java"></span>
                     <h3>Java</h3>
                 </a>
             </div>
             <div class="col-lg-3">
-                <a href="#" class="course">
+                <a asp-area="Trainings"
+                    asp-controller="Courses"
+                    asp-route-filters="@Model.CategoriesIds[2]" 
+                    class="course">
                     <span class="wrap-icon fa-brands fa-square-js"></span>
                     <h3>JavaScript</h3>
                 </a>
             </div>
             <div class="col-lg-3">
-                <a href="#" class="course">
+                <a asp-area="Trainings"
+                    asp-controller="Courses"
+                    asp-route-filters="@Model.CategoriesIds[3]" class="course">
                     <span class="wrap-icon fa-brands fa-python"></span>
                     <h3>Python</h3>
                 </a>

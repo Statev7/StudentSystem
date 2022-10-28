@@ -1,6 +1,7 @@
 ﻿namespace StudentSystem.Web.MappingConfiguration
 {
     using System.Globalization;
+    using System.Linq;
 
     using AutoMapper;
 
@@ -22,7 +23,8 @@
 
             this.CreateMap<Lesson, DetailsLessonViewModel>();
             this.CreateMap<Lesson, LessonIdNameViewModel>();
-            this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>();
+            this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>()
+                .ForMember(d => d.Resources, conf => conf.MapFrom(s => s.Resources.Select(r => r)));
             this.CreateMap<Lesson, LessonForPageViewModel>();
         }
     }

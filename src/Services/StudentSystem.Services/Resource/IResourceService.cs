@@ -2,7 +2,7 @@
 {
     using StudentSystem.Services.Abstaction;
 
-    public interface IResourceService : IBaseService
+    public interface IResourceService : IBaseService, ICreateUpdateService
     {
         
     }

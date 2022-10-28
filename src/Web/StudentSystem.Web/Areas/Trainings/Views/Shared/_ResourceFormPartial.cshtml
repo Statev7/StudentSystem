@@ -1,0 +1,29 @@
+﻿@using StudentSystem.Services.Resource.Models
+@model ResourceFormServiceModel
+
+<div class="offset-3 col-6 mt-4">
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="@Model.Name" class="control-label"></label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.URL" class="control-label"></label>
+            <input asp-for="@Model.URL" class="form-control" />
+            <span asp-validation-for="@Model.URL" class="text-danger"></span>
+        </div>
+        <div class="form-group control-label">
+            <select asp-for="@Model.LessonId" class="form-control">
+                @foreach (var lesson in Model.Lessons)
+                {
+                    <option value="@lesson.Id">@lesson.Title</option>
+                }
+            </select>
+            <span asp-validation-for="@Model.LessonId" class="text-danger"></span>
+        </div>
+        <div class="form-group text-center">
+            <input type="submit" value="Submit" class="btn btn-primary w-50" />
+        </div>
+    </form>
+</div>

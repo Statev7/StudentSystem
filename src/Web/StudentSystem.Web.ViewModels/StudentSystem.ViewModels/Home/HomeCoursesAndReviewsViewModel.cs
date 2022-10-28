@@ -10,5 +10,7 @@
         public IEnumerable<OpenCourseViewModel> OpenCourses { get; set; }
 
         public IEnumerable<ReviewForHomeViewModel> Reviews { get; set; }
+
+        public IList<int> CategoriesIds { get; set; }
     }
 }

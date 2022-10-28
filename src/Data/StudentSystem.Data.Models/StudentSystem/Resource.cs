@@ -1,6 +1,5 @@
 ﻿namespace StudentSystem.Data.Models.StudentSystem
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
     using Data.Models.Abstraction;

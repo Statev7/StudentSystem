@@ -4,16 +4,19 @@
 @{
     ViewData["Title"] = "Home";
 
-    var isValid = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) || this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
+    var isUserStudentOrAdmin = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) ||
+                               this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
+
     var newestCourse = Model.CoursesReviews.OpenCourses.FirstOrDefault();
     var dateFormat = "dd/MM/yyyy";
+
 }
 
 @section Styles{
     <link href="/css/home.css" rel="stylesheet" />
 }
 
-@if (isValid)
+@if (isUserStudentOrAdmin)
 {
     <div style="background-color: #F8F9FA">
         <div class="container pt-5 pb-5">
@@ -27,11 +30,12 @@
                             @foreach (var course in Model.StudentResources.Courses)
                             {
                                 <div>
-                                    <a asp-area="Trainings"
-                                        asp-controller="Courses" 
-                                        asp-action="Details" 
-                                        asp-route-id="@course.Id" 
-                                        style="color: #565656; font-size: 18px">
+                                    <a 
+                                        asp-area="Trainings"
+                                        asp-controller="Courses"
+                                        asp-action="Details"
+                                        asp-route-id="@course.Id"
+                                        style="color: #565656; font-size: 18px;">
                                         @course.Name
                                     </a>
                                     <hr>
@@ -49,11 +53,12 @@
                             @foreach (var lesson in Model.StudentResources.Lessons)
                             {
                                 <div>
-                                    <a asp-area="Trainings"
-                                       asp-controller="Lessons"
-                                       asp-action="Details"
-                                       asp-route-id="@lesson.Id"
-                                       style="color: #565656; font-size: 18px">
+                                    <a 
+                                        asp-area="Trainings"
+                                        asp-controller="Lessons"
+                                        asp-action="Details"
+                                        asp-route-id="@lesson.Id"
+                               style="color: #565656; font-size: 18px;">
                                         @lesson.Title
                                     </a>
                                 </div>
@@ -78,7 +83,25 @@
                         <div class="p-3 text-center text-uppercase" style="background-color: #ECEAF0">
                             <h5>My Resources</h5>
                         </div>
-                        <div class="h-75 p-3" style="overflow-y: auto"></div>
+                        <div class="h-75 p-3" style="overflow-y: auto">
+                            @foreach (var lesson in Model.StudentResources.Lessons)
+                            {
+                                @foreach (var resource in lesson.Resources)
+                                {
+                                    <div>
+                                        <a 
+                                            asp-area="Trainings" 
+                                            asp-controller="Resources" 
+                                            asp-action="Details" 
+                                            asp-route-id="@resource.Id"
+                                            style="color: #565656; font-size: 18px;">
+                                            @resource.Name - @lesson.Title
+                                        </a>
+                                    </div>
+                                    <hr />
+                                }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,10 +136,13 @@ else
                                 <div class="text">
                                     <span class="category text-primary">Newest course</span>
                                     <h3>
-                                        <a asp-area="Trainings"
-                                        asp-controller="Courses"
-                                        asp-action="Details"
-                                        asp-route-id="@newestCourse.Id">@newestCourse.Name</a>
+                                        <a 
+                                            asp-area="Trainings"
+                                            asp-controller="Courses"
+                                            asp-action="Details"
+                                            asp-route-id="@newestCourse.Id">
+                                            @newestCourse.Name
+                                        </a>
                                     </h3>
                                     <p>
                                         @newestCourse.Description
@@ -149,11 +175,10 @@ else
                                 <div class="text">
                                     <span class="category text-primary">Course</span>
                                     <h3>
-                                        <a 
-                                            asp-area="Trainings" 
-                                            asp-controller="Courses" 
-                                            asp-action="Details" 
-                                            asp-route-id="@course.Id">@course.Name</a>
+                                        <a asp-area="Trainings"
+                                        asp-controller="Courses"
+                                        asp-action="Details"
+                                        asp-route-id="@course.Id">@course.Name</a>
                                     </h3>
                                 </div>
                             </div>

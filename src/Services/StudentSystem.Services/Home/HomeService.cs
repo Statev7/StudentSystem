@@ -3,9 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
 
+    using StudentSystem.Services.Category;
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Course.Models;
     using StudentSystem.Services.Home.Models;
@@ -14,6 +17,7 @@
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Home;
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Resource;
     using StudentSystem.ViewModels.Review;
     using StudentSystem.Web.Data;
 
@@ -26,21 +30,25 @@
         private readonly IMapper mapper;
         private readonly ICourseService courseService;
         private readonly IReviewService reviewService;
+        private readonly ICategoryService categoryService;
 
         public HomeService(
             StudentSystemDbContext dbContext,
             IMapper mapper,
             ICourseService courseService,
-            IReviewService reviewService)
+            IReviewService reviewService,
+            ICategoryService categoryService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.courseService = courseService;
             this.reviewService = reviewService;
+            this.categoryService = categoryService;
         }
 
-        public HomeViewModel GetInformation(string userId)
+        public async Task<HomeViewModel> GetInformationAsync(string userId)
         {
+            //In CoursesReviews we store open courses, reviews and categoriesIds.
             var model = new HomeViewModel()
             {
                 CoursesReviews = new HomeCoursesAndReviewsViewModel(),
@@ -48,37 +56,54 @@
 
             if (userId != null)
             {
-                model.StudentResources = this.GetUserInformation(userId);
+                model.StudentResources = await this.GetUserInformation(userId);
             }
 
-            model.CoursesReviews.OpenCourses = this.courseService
+            //TODO: Caching
+            var csharpCategoryId = await this.categoryService.GetIdByNameAsync("C#");
+            var javaCategoryId = await this.categoryService.GetIdByNameAsync("Java");
+            var javaScriptCategoryId = await this.categoryService.GetIdByNameAsync("JavaScript");
+            var pythonCategoryId = await this.categoryService.GetIdByNameAsync("Python");
+
+            //Using this for filtring.
+            model.CoursesReviews.CategoriesIds = new List<int>()
+            {
+                csharpCategoryId,
+                javaCategoryId,
+                javaScriptCategoryId,
+                pythonCategoryId
+            };
+
+            model.CoursesReviews.OpenCourses = await this.courseService
                 .GetAllAsQueryable<OpenCourseViewModel>()
                 .Take(COURSES_TO_DISPLAY)
-                .ToList();
+                .ToListAsync();
 
-            model.CoursesReviews.Reviews = this.reviewService
+            model.CoursesReviews.Reviews = await this.reviewService
                 .GetAllAsQueryable<ReviewForHomeViewModel>()
                 .OrderByDescending(r => r.CreatedOn)
                 .Take(REVIEWS_TO_DISPLAY)
-                .ToList();
+                .ToListAsync();
 
             return model;
         }
 
-        private StudentAllResourcesViewModel GetUserInformation(string userId)
+        private async Task<StudentAllResourcesViewModel> GetUserInformation(string userId)
         {
-            var studentResources = this.dbContext
+            //Takes only the resources that have not expired 
+
+            var studentResources = await this.dbContext
                     .Users
                     .Where(u => u.Id == userId)
                     .Select(u => new StudentInformationServiceModel
                     {
                         Courses = u.UserCourses
-                        .Where(u => !u.Course.IsDeleted && u.Course.EndDate >= DateTime.UtcNow)
-                        .Select(us => new CourseLessonScheduleServiceModel
-                        {
-                            Id = us.CourseId,
-                            Name = us.Course.Name,
-                            Lessons = us.Course.Lessons
+                            .Where(u => !u.Course.IsDeleted && u.Course.EndDate >= DateTime.UtcNow)
+                            .Select(us => new CourseLessonScheduleServiceModel
+                            {
+                                Id = us.CourseId,
+                                Name = us.Course.Name,
+                                Lessons = us.Course.Lessons
                                       .Where(l => l.End >= DateTime.UtcNow)
                                       .Select(l => new LessonScheduleServiceModel
                                       {
@@ -86,12 +111,22 @@
                                           CourseName = us.Course.Name,
                                           Title = l.Title,
                                           Begining = l.Begining,
-                                          End = l.End
+                                          End = l.End,
+                                          Resources = l.Resources
+                                            .Where(r => r.Lesson.End >= DateTime.UtcNow)
+                                            .Select(r => new ResourceViewModel
+                                            {
+                                                Id = r.Id,
+                                                Name = r.Name,
+                                                URL = r.URL,
+                                            })
+                                            .ToList()
                                       })
                                       .ToList()
-                        })
+                            })
+                            .ToList()
                     })
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
             var studentInformation = this.ConvertToViewModels(studentResources);
 
@@ -105,18 +140,18 @@
 
             foreach (var course in studentResources.Courses)
             {
-                var mapped = this.mapper.Map<CourseIdNameViewModel>(course);
+                var mappedCourse = this.mapper.Map<CourseIdNameViewModel>(course);
 
-                coursesAsViewModels.Add(mapped);
+                coursesAsViewModels.Add(mappedCourse);
             }
 
             foreach (var course in studentResources.Courses)
             {
                 foreach (var lesson in course.Lessons)
                 {
-                    var mapped = this.mapper.Map<LessonScheduleViewModel>(lesson);
+                    var mappedLesson = this.mapper.Map<LessonScheduleViewModel>(lesson);
 
-                    lessonsAsViewModels.Add(mapped);
+                    lessonsAsViewModels.Add(mappedLesson);
                 }
             }
 

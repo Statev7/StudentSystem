@@ -1,9 +1,11 @@
 ﻿namespace StudentSystem.Services.Home
 {
+    using System.Threading.Tasks;
+
     using StudentSystem.ViewModels.Home;
 
     public interface IHomeService
     {
-        HomeViewModel GetInformation(string userId);
+        Task<HomeViewModel> GetInformationAsync(string userId);
     }
 }

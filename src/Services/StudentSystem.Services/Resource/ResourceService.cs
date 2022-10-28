@@ -13,6 +13,5 @@
             : base(dbContext, mapper)
         {
         }
-
     }
 }

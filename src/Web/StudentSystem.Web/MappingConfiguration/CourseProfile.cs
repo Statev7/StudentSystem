@@ -34,7 +34,7 @@
                 .ForMember(d => d.Duration, conf => conf
                     .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1
                             ? 1
-                            : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7))); ;
+                            : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7)));
         }
     }
 }

@@ -26,7 +26,7 @@
         public const string SUCCESSFULLY_DELETE_LESSON_MESSAGE = "Successfully delete a lesson";
         public const string INVALID_LESSON_MESSAGE = "No such lesson exists";
 
-        //Reviw
+        //Review
         public const string NOT_HAVE_PERMISSION_MESSAGE = "You do not have permission to {0} this review";
         public const string INVALID_REVIEW_MESSAGE = "No such review exists";
         public const string NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE
@@ -39,5 +39,8 @@
         public const string UNSUCCESSFULLY_PROMOTED_MESSAGE = "This user is already admin";
         public const string UNSUCCESSFULYY_DEMOTE_MESSAGE = "There is no lower rank than 'user'";
         public const string CANNOT_CHANGE_OWN_ROLES_MESSAGE = "You cannot change your roles";
+
+        //CRUD
+        public const string SUCCESSFULLY_CREATED_ENTITY_MESSAGE = "Successfully created a {0} {1}";
     }
 }

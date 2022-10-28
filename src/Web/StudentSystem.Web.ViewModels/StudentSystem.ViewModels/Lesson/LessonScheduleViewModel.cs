@@ -1,6 +1,9 @@
 ﻿namespace StudentSystem.ViewModels.Lesson
 {
     using System;
+    using System.Collections.Generic;
+
+    using StudentSystem.ViewModels.Resource;
 
     public class LessonScheduleViewModel
     {
@@ -13,5 +16,7 @@
         public DateTime Begining { get; set; }
 
         public DateTime End { get; set; }
+
+        public IEnumerable<ResourceViewModel> Resources { get; set; }
     }
 }

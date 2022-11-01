@@ -1,0 +1,35 @@
+﻿@using StudentSystem.ViewModels.Page
+@model IEnumerable<EntityForPageViewModel>
+
+<table class="table mt-3">
+	<tbody class="border-bottom">
+		<tr>
+			<th class="border-0">
+				<div>
+					<h3>Title</h3>
+				</div>
+			</th>
+		</tr>
+		@foreach (var entity in Model)
+		{
+			<tr>
+				<td>
+					<div class="d-flex justify-content-between align-items-center">
+						<div style="font-size: 20px;">
+							<span>@entity.Name</span>
+						</div>
+						<div>
+							<a class="options-bar" asp-action="Update" asp-route-id="@entity.Id">
+								<span>Update</span>
+							</a>
+							<span>|</span>
+							<a class="options-bar" asp-action="Delete" asp-route-id="@entity.Id">
+								<span>Delete</span>
+							</a>
+						</div>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

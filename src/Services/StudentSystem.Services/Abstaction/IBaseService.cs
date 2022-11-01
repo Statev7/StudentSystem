@@ -16,6 +16,8 @@
 
         IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage);
 
+        IQueryable<T> Paging<T>(IQueryable<T> data, int currentPage, int entitiesPerPage);
+
         Task<bool> IsExistAsync(int id);
 
         Task<int> GetCountAsync(bool withDeleted = false);

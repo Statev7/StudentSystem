@@ -50,20 +50,20 @@
 
         public IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage)
         {
-            var totalPages = Math.Ceiling(data.Count / (double)entitiesPerPage);
+            currentPage = ValidateCurrentPage(data.Count, currentPage, entitiesPerPage);
 
-            if (currentPage < MIN_PAGE_VALUE)
-            {
-                currentPage = MIN_PAGE_VALUE;
-            }
-            else if(currentPage > totalPages)
-            {
-                currentPage = (int)totalPages;
-            }
+            return data
+               .Skip((currentPage - 1) * entitiesPerPage)
+               .Take(entitiesPerPage);
+        }
 
-             return data
-                .Skip((currentPage - 1) * entitiesPerPage)
-                .Take(entitiesPerPage);
+        public IQueryable<T> Paging<T>(IQueryable<T> data, int currentPage, int entitiesPerPage)
+        {
+            currentPage = ValidateCurrentPage(data.Count(), currentPage, entitiesPerPage);
+
+            return data
+               .Skip((currentPage - 1) * entitiesPerPage)
+               .Take(entitiesPerPage);
         }
 
         public async Task<T> GetByIdAsync<T>(int id) 
@@ -131,6 +131,22 @@
             return await this.DbSet
                 .Where(x => x.IsDeleted == false)
                 .CountAsync();
+        }
+
+        private static int ValidateCurrentPage(int entitiesCount, int currentPage, int entitiesPerPage)
+        {
+            var totalPages = Math.Ceiling(entitiesCount / (double)entitiesPerPage);
+
+            if (currentPage < MIN_PAGE_VALUE)
+            {
+                currentPage = MIN_PAGE_VALUE;
+            }
+            else if (currentPage > totalPages)
+            {
+                currentPage = (int)totalPages;
+            }
+
+            return currentPage;
         }
     }
 }

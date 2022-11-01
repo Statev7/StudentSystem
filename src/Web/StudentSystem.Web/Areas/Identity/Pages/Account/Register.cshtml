@@ -2,14 +2,10 @@
 @using StudentSystem.Services.City
 @using StudentSystem.ViewModels.City
 @model RegisterModel
+
 @{
     ViewData["Title"] = "Register";
-    @inject ICityService cityService
-
-    var cities = this.cityService
-                .GetAllAsQueryable<CityIdNameViewModel>()
-                .OrderBy(x => x.Name)
-                .ToList();
+    var cities = (IEnumerable<CityIdNameViewModel>)ViewData["Cities"];
 }
 
 <div class="container">

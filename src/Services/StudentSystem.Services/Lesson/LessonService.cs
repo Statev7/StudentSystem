@@ -10,8 +10,10 @@
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Abstaction;
     using StudentSystem.Services.Course;
+    using StudentSystem.Services.Lesson.Models;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Page;
     using StudentSystem.Web.Data;
 
     public class LessonService : BaseService<Lesson>, ILessonService
@@ -27,10 +29,13 @@
             this.courseService = courseService;
         }
 
-        public async Task<PageLessonViewModel> GetAllLessonsPagedAsync(int[] coursesIds, int currentPage, int lessonsPerPage)
+        public async Task<PageLessonViewModel> GetAllLessonsPagedAsync(
+            int[] coursesIds, 
+            int currentPage, 
+            int lessonsPerPage)
         {
             var lessons = await this
-                .GetAllAsQueryable<LessonForPageViewModel>()
+                .GetAllAsQueryable<LessonForPageServiceModel>()
                 .OrderBy(x => x.Title)
                 .ToListAsync();
 
@@ -54,6 +59,14 @@
                     .ToList();
             }
 
+            var lessonsAsViewModel = new List<EntityForPageViewModel>();
+            foreach (var lesson in lessons)
+            {
+                var mapped = this.Mapper.Map<EntityForPageViewModel>(lesson);
+
+                lessonsAsViewModel.Add(mapped);
+            }
+
             var courses = this.courseService
                 .GetAllAsQueryable<CourseIdNameViewModel>()
                 .OrderBy(x => x.Name)
@@ -61,7 +74,7 @@
 
             var model = new PageLessonViewModel
             {
-                Lessons = lessons,
+                Lessons = lessonsAsViewModel,
                 Courses = courses,
                 Filters = coursesIds,
                 CurrentPage = currentPage,

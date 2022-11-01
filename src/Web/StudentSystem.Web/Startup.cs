@@ -54,7 +54,7 @@ namespace StudentSystem.Web
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            this.RegisterServices(services);
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +96,7 @@ namespace StudentSystem.Web
             });
         }
 
-        private void RegisterServices(IServiceCollection services)
+        private static void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<IHomeService, HomeService>();
             services.AddTransient<ICourseService, CourseService>();

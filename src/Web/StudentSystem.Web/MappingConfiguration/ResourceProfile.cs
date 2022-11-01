@@ -4,6 +4,7 @@
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Resource.Models;
+    using StudentSystem.ViewModels.Page;
     using StudentSystem.ViewModels.Resource;
 
     public class ResourceProfile : Profile
@@ -12,6 +13,8 @@
         {
             this.CreateMap<Resource, ResourceFormServiceModel>().ReverseMap();
             this.CreateMap<Resource, ResourceViewModel>();
+            this.CreateMap<Resource, EntityForPageViewModel>()
+                .ForMember(d => d.Name, conf => conf.MapFrom(s => s.Name));
         }
     }
 }

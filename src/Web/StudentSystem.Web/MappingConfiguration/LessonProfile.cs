@@ -8,6 +8,7 @@
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Lesson.Models;
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Page;
 
     public class LessonProfile : Profile
     {
@@ -25,7 +26,9 @@
             this.CreateMap<Lesson, LessonIdNameViewModel>();
             this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>()
                 .ForMember(d => d.Resources, conf => conf.MapFrom(s => s.Resources.Select(r => r)));
-            this.CreateMap<Lesson, LessonForPageViewModel>();
+            this.CreateMap<Lesson, LessonForPageServiceModel>();
+            this.CreateMap<LessonForPageServiceModel, EntityForPageViewModel>()
+                .ForMember(d => d.Name, conf => conf.MapFrom(s => s.Title));
         }
     }
 }

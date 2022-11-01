@@ -7,7 +7,7 @@
 
 	public class PageLessonViewModel : PageViewModel
     {
-		public IEnumerable<LessonForPageViewModel> Lessons { get; set; }
+		public IEnumerable<EntityForPageViewModel> Lessons { get; set; }
 
 		public IEnumerable<CourseIdNameViewModel> Courses { get; set; }
 	}

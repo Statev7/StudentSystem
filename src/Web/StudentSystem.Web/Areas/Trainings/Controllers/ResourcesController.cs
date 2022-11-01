@@ -16,9 +16,11 @@
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
 
-    [Authorize(Roles = ADMIN_ROLE)]
+    [Authorize]
     public class ResourcesController : TrainingController
     {
+        private const int RESOURCES_PER_PAGE = 6;
+
         private readonly IResourceService resourceService;
         private readonly ILessonService lessonService;
 
@@ -28,6 +30,18 @@
             this.lessonService = lessonService;
         }
 
+        [Authorize(Roles = ADMIN_ROLE)]
+        [HttpGet]
+        public async Task<IActionResult> Index(int currentPage = 1)
+        {
+            var resources = await this
+                .resourceService
+                .GetAllResourcesPagedAsync(currentPage, RESOURCES_PER_PAGE);
+
+            return this.View(resources);
+        }
+
+        [Authorize(Roles = ADMIN_ROLE)]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -42,6 +56,7 @@
             return View(resourceModel);
         }
 
+        [Authorize(Roles = ADMIN_ROLE)]
         [HttpPost]
         public async Task<IActionResult> Create(ResourceFormServiceModel resource)
         {

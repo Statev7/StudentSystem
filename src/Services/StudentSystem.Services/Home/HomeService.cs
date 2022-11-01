@@ -6,7 +6,9 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
 
     using StudentSystem.Services.Category;
     using StudentSystem.Services.Course;
@@ -23,6 +25,7 @@
 
     public class HomeService : IHomeService
     {
+        private const string CATEGORIES_KEY = "Categories";
         private const int COURSES_TO_DISPLAY = 4;
         private const int REVIEWS_TO_DISPLAY = 3;
 
@@ -31,19 +34,22 @@
         private readonly ICourseService courseService;
         private readonly IReviewService reviewService;
         private readonly ICategoryService categoryService;
+        private readonly IMemoryCache memoryCache;
 
         public HomeService(
             StudentSystemDbContext dbContext,
             IMapper mapper,
             ICourseService courseService,
             IReviewService reviewService,
-            ICategoryService categoryService)
+            ICategoryService categoryService,
+            IMemoryCache memoryCache)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.courseService = courseService;
             this.reviewService = reviewService;
             this.categoryService = categoryService;
+            this.memoryCache = memoryCache;
         }
 
         public async Task<HomeViewModel> GetInformationAsync(string userId)
@@ -59,20 +65,26 @@
                 model.StudentResources = await this.GetUserInformation(userId);
             }
 
-            //TODO: Caching
-            var csharpCategoryId = await this.categoryService.GetIdByNameAsync("C#");
-            var javaCategoryId = await this.categoryService.GetIdByNameAsync("Java");
-            var javaScriptCategoryId = await this.categoryService.GetIdByNameAsync("JavaScript");
-            var pythonCategoryId = await this.categoryService.GetIdByNameAsync("Python");
-
-            //Using this for filtring.
-            model.CoursesReviews.CategoriesIds = new List<int>()
+            var categories = (List<int>)this.memoryCache.Get(CATEGORIES_KEY);
+            if (categories == null)
             {
-                csharpCategoryId,
-                javaCategoryId,
-                javaScriptCategoryId,
-                pythonCategoryId
-            };
+                categories = new List<int>();
+
+                var csharpCategoryId = await this.categoryService.GetIdByNameAsync("C#");
+                var javaCategoryId = await this.categoryService.GetIdByNameAsync("Java");
+                var javaScriptCategoryId = await this.categoryService.GetIdByNameAsync("JavaScript");
+                var pythonCategoryId = await this.categoryService.GetIdByNameAsync("Python");
+
+                //Using this for filtring.
+                categories.Add(csharpCategoryId);
+                categories.Add(javaCategoryId);
+                categories.Add(javaScriptCategoryId);
+                categories.Add(pythonCategoryId);
+
+                this.memoryCache.Set(CATEGORIES_KEY, categories, TimeSpan.FromDays(1));
+            }
+
+            model.CoursesReviews.CategoriesIds = categories;
 
             model.CoursesReviews.OpenCourses = await this.courseService
                 .GetAllAsQueryable<OpenCourseViewModel>()

@@ -26,38 +26,9 @@
 	</div>
 	@if (Model.Lessons.Any())
 	{
-		<table class="table mt-3">
-			<tbody class="border-bottom">
-				<tr>
-					<th class="border-0">
-						<div>
-							<h3>Title</h3>
-						</div>
-					</th>
-				</tr>
-				@foreach (var lesson in Model.Lessons)
-				{
-					<tr>
-						<td>
-							<div class="d-flex justify-content-between align-items-center">
-								<div style="font-size: 20px;">
-									<span>@lesson.Title</span>
-								</div>
-								<div>
-									<a class="options-bar" asp-action="Update" asp-route-id="@lesson.Id">
-										<span>Update</span>
-									</a>
-									<span>|</span>
-									<a class="options-bar" asp-action="Delete" asp-route-id="@lesson.Id">
-										<span>Delete</span>
-									</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
+		<div>
+			<partial name="_ListEntitiesPartial" model="@Model.Lessons">
+		</div>
 		<div>
 			<partial name="_PagingPartial" model="@Model">
 		</div>

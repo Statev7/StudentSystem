@@ -11,9 +11,12 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.City;
+    using StudentSystem.ViewModels.City;
     using StudentSystem.Web.Common;
 
     using static StudentSystem.Data.Common.Constants;
@@ -21,16 +24,23 @@
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string CITIES_KEY = "Cities";
+
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ICityService cityService;
+        private readonly IMemoryCache memoryCache;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ICityService cityService)
+            ICityService cityService,
+            IMemoryCache memoryCache)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.cityService = cityService;
+            this.memoryCache = memoryCache;
         }
 
         [BindProperty]
@@ -73,6 +83,8 @@
             public string ConfirmPassword { get; set; }
 
             public int? CityId { get; set; }
+
+            public ICollection<CityIdNameViewModel> Cities { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
@@ -84,6 +96,20 @@
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            var cities = (List<CityIdNameViewModel>)this.memoryCache.Get(CITIES_KEY);
+
+            if (cities == null)
+            {
+                cities = await this.cityService
+                        .GetAllAsQueryable<CityIdNameViewModel>()
+                        .OrderBy(x => x.Name)
+                        .ToListAsync();
+
+                this.memoryCache.Set(CITIES_KEY, cities, TimeSpan.FromDays(1)); 
+            }
+
+            this.ViewData["Cities"] = cities;
 
             return this.Page();
         }

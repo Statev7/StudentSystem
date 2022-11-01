@@ -1,0 +1,24 @@
+﻿@model PageResourceViewModel
+
+@{
+	ViewData["Title"] = "Resources";
+	var dataForPartial = ViewData["Title"].ToString().ToLower();
+}
+
+<div class="container">
+	@if (Model.Resources.Any())
+	{
+		<div>
+			<partial name="_ListEntitiesPartial" model="@Model.Resources">
+		</div>
+		<div>
+			<partial name="_PagingPartial" model="@Model">
+		</div>
+	}
+	else
+	{
+		<div>
+			<partial name="_NoAvailableEntitiesPartial" model="@dataForPartial">
+		</div>
+	}
+</div>

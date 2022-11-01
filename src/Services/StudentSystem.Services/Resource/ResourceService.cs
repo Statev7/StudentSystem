@@ -26,9 +26,14 @@
                 .GetAllAsQueryable<EntityForPageViewModel>()
                 .OrderBy(r => r.Name);
 
-            var pagedResources = await this
-                .Paging(resources, currentPage, resourcesPerPage)
-                .ToListAsync();
+            var pagedResources = new List<EntityForPageViewModel>();
+
+            if (resources.Any())
+            {
+                 pagedResources = await this
+                    .Paging(resources, currentPage, resourcesPerPage)
+                    .ToListAsync();
+            }
 
             var model = new PageResourceViewModel
             {

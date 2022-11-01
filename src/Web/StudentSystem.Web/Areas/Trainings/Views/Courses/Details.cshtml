@@ -26,11 +26,46 @@
 				@foreach (var lesson in Model.Lessons)
 				{
 					<div class="col-sm-12 col-md-6">
-						<a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.Id" style="text-decoration: none;">
+						<div onclick="displayLessonInformation(@lesson.Id)" style="cursor: pointer">
 							<div class="p-2 mt-1 border" style="background-color: #f1f1f1;">
 								<span class="lesson-title">@(++count). @lesson.Title</span>
 							</div>
-						</a>
+						</div>
+						<div id="@lesson.Id" class="d-none p-2 mt-1 border">
+							<div class="p-2">
+								<p style="font-size: 18px; font-family: Verdana">
+									@lesson.Title
+								</p>
+								<p>
+									@{
+										string[] stringSeparators = new string[] { "\r\n" };
+										var splitedContent = @lesson.Content.Split(stringSeparators, StringSplitOptions.None);
+									}
+									<ul>
+										@foreach (var contentLine in splitedContent)
+										{
+											<li>
+												@contentLine
+											</li>
+										}
+									</ul>
+								</p>
+								<p>
+									Date: @lesson.Begining.ToString("dd MMMM", CultureInfo.InvariantCulture) (@lesson.Begining.DayOfWeek),
+									from @lesson.Begining.ToString("HH:mm", CultureInfo.InvariantCulture) to 
+									@lesson.End.ToString("HH:mm", CultureInfo.InvariantCulture)<span>.</span>
+								</p>
+								<p style="font-size: 18px; font-family: Verdana">
+									Resources:
+								</p>
+								<p>
+									@foreach (var resource in lesson.Resources)
+									{
+										<a href="@resource.ULR">@resource.Name</a>
+									}
+								</p>
+							</div>
+						</div>
 					</div>
 				}
 			</div>
@@ -130,6 +165,21 @@
 @section Scripts{
 
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+	<script>
+
+		function displayLessonInformation(id){
+			let lessonDiv = document.getElementById(id);
+
+			if(lessonDiv.classList.contains('d-none')){
+				lessonDiv.classList.remove('d-none');
+			}
+			else{
+				lessonDiv.classList.add('d-none');
+			}
+		}
+
+	</script>
 
 	<script>
 		let informationBtn = document.getElementById('show-information-btn');

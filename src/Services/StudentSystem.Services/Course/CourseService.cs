@@ -18,6 +18,7 @@
     using StudentSystem.ViewModels.Category;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Lesson;
+    using StudentSystem.ViewModels.Resource;
     using StudentSystem.ViewModels.Review;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
@@ -196,10 +197,22 @@
                     EndDate = c.EndDate.ToString("d MMMM yyyy", CultureInfo.InvariantCulture),
                     Lessons = c.Lessons
                             .Where(l => !l.IsDeleted)
-                            .Select(l => new LessonIdNameViewModel
+                            .Select(l => new LessonDetailsViewModel
                             {
                                 Id = l.Id,
                                 Title = l.Title,
+                                Content = l.Content,
+                                Begining = l.Begining,
+                                End = l.End,
+                                Resources = l.Resources
+                                    .Where(r => !r.IsDeleted)
+                                    .OrderBy(r => r.Name)
+                                    .Select(r => new ResourceIdNameViewModel
+                                    {
+                                        Name = r.Name,
+                                        ULR = r.URL,
+                                    })
+                                    .ToList()
                             })
                             .ToList(),
                     Reviews = c.Reviews
@@ -211,7 +224,7 @@
                             Content = r.Content,
                             UserId = r.UserId,
                             Username = r.User.UserName,
-                            UserImageIRL = r.User.ImageURL
+                            UserImageIRL = r.User.ImageURL,
                         })
                 })
                 .FirstOrDefaultAsync();

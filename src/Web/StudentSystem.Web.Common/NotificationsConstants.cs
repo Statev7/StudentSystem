@@ -7,12 +7,16 @@
         public const string WARNING_NOTIFICATION = "Warning";
         public const string INFO_NNOTIFICATION = "Info";
 
-        // Courses messages
+        // Course
 
         public const string SUCCESSFULLY_REGISTERED_FOR_COURSE_MESSAGE = "You have successfully registered for the {0} course";
         public const string ALREADY_IN_COURSE_MESSAGE = "You are already enrolled in this course";
 
-        //Date message
+        // Lesson
+        public const string DATES_CANNOT_BE_EARLIER_OR_LATER_THAN_COURSE_DATES_MESSAGE 
+            = "Lesson {0}/{1} cannot be earlier/later than the course {2}/{3}";
+
+        //Date 
         public const string SECOND_DATE_CANNOT_BE_EARLIER_MESSAGE = "{0} cannot be earlier than {1}";
         public const string START_DATE_MESSAGE = "The start date cannot be earlier {0}";
 

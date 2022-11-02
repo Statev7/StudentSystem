@@ -16,37 +16,36 @@
         </div>
         <div class="row align-items-stretch">
             <div class="col-lg-3">
-                <a 
-                    asp-area="Trainings" 
-                    asp-controller="Courses" 
-                    asp-route-filters="@Model.CategoriesIds[0]" 
-                    class="course">
+                <a asp-area="Trainings"
+                   asp-controller="Courses"
+                   asp-route-filters="@Model.CategoriesIds[0]"
+                   class="course">
                     <span class="wrap-icon fa-brands fa-windows"></span>
                     <h3>CSharp</h3>
                 </a>
             </div>
             <div class="col-lg-3">
                 <a asp-area="Trainings"
-                    asp-controller="Courses"
-                    asp-route-filters="@Model.CategoriesIds[1]"
-                    class="course">
+                   asp-controller="Courses"
+                   asp-route-filters="@Model.CategoriesIds[1]"
+                   class="course">
                     <span class="wrap-icon fa-brands fa-java"></span>
                     <h3>Java</h3>
                 </a>
             </div>
             <div class="col-lg-3">
                 <a asp-area="Trainings"
-                    asp-controller="Courses"
-                    asp-route-filters="@Model.CategoriesIds[2]" 
-                    class="course">
+                   asp-controller="Courses"
+                   asp-route-filters="@Model.CategoriesIds[2]"
+                   class="course">
                     <span class="wrap-icon fa-brands fa-square-js"></span>
                     <h3>JavaScript</h3>
                 </a>
             </div>
             <div class="col-lg-3">
                 <a asp-area="Trainings"
-                    asp-controller="Courses"
-                    asp-route-filters="@Model.CategoriesIds[3]" class="course">
+                   asp-controller="Courses"
+                   asp-route-filters="@Model.CategoriesIds[3]" class="course">
                     <span class="wrap-icon fa-brands fa-python"></span>
                     <h3>Python</h3>
                 </a>
@@ -55,19 +54,19 @@
     </div>
 </div>
 <div class="site-section bg-light">
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="offset-md-1">
             <div class="col-12">
-                <div class="heading mb-4">
+                <div class="heading mb-4 ml-md-3">
                     <h2>Open Courses</h2>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="row mb-3">
                 @foreach (var course in Model.OpenCourses)
                 {
-                    <div class="d-flex tutorial-item mb-4">
+                    <div class="d-flex col-sm-10 col-md-5 tutorial-item mb-4 ml-3 ml-md-4">
                         <div class="img-wrap">
-                            <img src="@course.ImageURL" alt="Image" style="width: 100%; height: 175px">
+                            <img src="@course.ImageURL" alt="@course.Name" style="width: 100%; height: 175px">
                         </div>
                         <div>
                             <h3>@course.Name</h3>
@@ -94,21 +93,15 @@
                         </div>
                     </div>
                 }
-                <div class="text-center">
-                    <a asp-area="Trainings"
-                       asp-controller="Courses"
-                       asp-action="Index"
-                       class="btn btn-primary p-2 w-25">
-                        Show More
-                    </a>
-                </div>
             </div>
-            @*<div class="col-lg-4">
-                <div class="box-side mb-3">
-                    <a href="#"><img src="" alt="Image" class="img-fluid"></a>
-                    <h3><a href="#">Learning React Native</a></h3>
-                </div>
-            </div>*@
+            <div>
+                <a asp-area="Trainings"
+                        asp-controller="Courses"
+                        asp-action="Index"
+                        class="btn btn-primary p-2 ml-3">
+                    Show More
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -143,6 +136,7 @@
                             <div class="author-name">
                                 <span class="d-block">@review.UserFirstName @review.UserLastName</span>
                                 <span>@review.UserRoleName</span>
+                                <div class="mt-2">@review.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture)</div>
                             </div>
                         </div>
                     </div>

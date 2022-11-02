@@ -86,6 +86,10 @@ namespace StudentSystem.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areasWithEntityName",
+                    pattern: "{area:exists}/{controller}/{action=Index}/{id?}/{name?}");
+
+                endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller}/{action=Index}/{id?}");
 

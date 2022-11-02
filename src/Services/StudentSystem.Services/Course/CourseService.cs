@@ -56,7 +56,7 @@
             var courses = await this
                 .GetAllAsQueryable<CourseViewModel>()
                 .Where(c => !c.IsDeleted)
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.StartDate)
                 .ToListAsync();
 
             if (categoriesIds.Any())

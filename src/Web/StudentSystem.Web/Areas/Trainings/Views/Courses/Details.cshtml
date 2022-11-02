@@ -2,11 +2,11 @@
 @model DetailCourseViewModel
 
 @{
-	ViewData["Title"] = "Details";
+	this.ViewData["Title"] = $"Details: {Model.Name}";
 	var count = 0;
 
 	var userId = this.User.GetId();
-	ViewBag.CourseId = Model.Id;
+	this.ViewBag.CourseId = Model.Id;
 }
 
 @inject UserManager<ApplicationUser> userManager
@@ -71,6 +71,18 @@
 			</div>
 		</div>
 	</div>
+	@if (this.User.IsAdministrator())
+	{
+		<div class="text-center mb-3">
+			<a asp-area="Trainings"
+		   asp-controller="Courses"
+		   asp-action="Update"
+		   asp-route-id="@Model.Id"
+		   class="btn btn-primary rounded-pill w-25 p-2">
+				Update
+			</a>
+		</div>
+	}
 	<div class="text-center">
 		<button id="show-information-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Show More</button>
 	</div>

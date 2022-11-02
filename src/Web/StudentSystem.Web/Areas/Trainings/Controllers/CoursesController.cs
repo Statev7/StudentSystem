@@ -151,8 +151,8 @@
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Delete(int id)
         {
-            var isDeleted = await this.courseService.DeleteAsync(id);
-            if (!isDeleted)
+            var isCourseExist = await this.courseService.IsExistAsync(id);
+            if (!isCourseExist)
             {
                 this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
@@ -160,6 +160,7 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
+            await this.courseService.DeleteAsync(id);
             this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETED_ENTITY_MESSAGE;
 
             return this.RedirectToAction(nameof(this.Index));

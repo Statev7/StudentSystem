@@ -12,7 +12,7 @@
 
         Task<T> GetByIdAsync<T>(int id);
 
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(int id);
 
         IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage);
 

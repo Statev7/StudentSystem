@@ -100,22 +100,15 @@
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var entityToDelete = await this.DbSet.FindAsync(id);
-
-            if (entityToDelete == null)
-            {
-                return false;
-            }
 
             entityToDelete.IsDeleted = true;
             entityToDelete.DeletedOn = DateTime.UtcNow;
 
             this.DbSet.Update(entityToDelete);
             await this.DbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> IsExistAsync(int id)

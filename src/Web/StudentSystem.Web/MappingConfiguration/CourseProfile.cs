@@ -36,6 +36,7 @@
                             ? 1
                             : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7)));
             this.CreateMap<Course, CourseNameViewModel>();
+            this.CreateMap<Course, CourseDatesServiceModel>();
         }
     }
 }

@@ -1,5 +1,9 @@
 ﻿@model LessonFormServiceModel
 
+@{
+    this.ViewData["Title"] = $"Details: {Model.Title}";
+}
+
 <div class="container mt-4">
     <partial name="_LessonFormPartial" model="@Model">
 </div>

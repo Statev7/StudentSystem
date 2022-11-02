@@ -1,9 +1,9 @@
 ﻿@model AllCoursesViewModel
 
 @{
-    ViewData["Title"] = "Courses";
+    this.ViewData["Title"] = "All Courses";
     var stringFormat = "d-MMMM yyyy";
-    var dataForPartial = ViewData["Title"].ToString().ToLower();
+    var dataForPartial = this.ViewData["Title"].ToString().ToLower();
 }
 
 <div class="container">
@@ -19,6 +19,14 @@
                     </select>
                     <button class="btn btn-primary">Submit</button>
                 </div>
+                @if(this.User.IsAdministrator()){
+                    <div>
+                        <a class="btn btn-primary"
+                       asp-area="Trainings"
+                       asp-controller="Courses"
+                       asp-action="Create">Create course</a>
+                    </div>
+                }
             </div>
         </form>
     </div>
@@ -28,7 +36,13 @@
             <div class="row">
                 @foreach (var course in @Model.Courses)
                 {
-                    <a asp-area="Trainings" asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" style="text-decoration: none">
+                    <a 
+                        asp-area="Trainings" 
+                        asp-controller="Courses" 
+                        asp-action="Details" 
+                        asp-route-id="@course.Id"
+                        asp-route-name="@course.Name"
+                        style="text-decoration: none">
                         <div class="card mt-2 ml-2" style="width: 18rem;">
                             <div>
                                 <img class="card-img-top" style="height: 175px" src="@course.ImageURL"

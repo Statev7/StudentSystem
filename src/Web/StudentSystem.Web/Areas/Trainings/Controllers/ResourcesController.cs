@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
 
-    [Authorize]
+    [Authorize(Roles = ADMIN_ROLE)]
     public class ResourcesController : TrainingController
     {
         private const int RESOURCES_PER_PAGE = 6;
@@ -30,7 +31,6 @@
             this.lessonService = lessonService;
         }
 
-        [Authorize(Roles = ADMIN_ROLE)]
         [HttpGet]
         public async Task<IActionResult> Index(int currentPage = 1)
         {
@@ -41,27 +41,24 @@
             return this.View(resources);
         }
 
-        [Authorize(Roles = ADMIN_ROLE)]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var resourceModel = new ResourceFormServiceModel()
             {
-                Lessons = await this.lessonService
-                .GetAllAsQueryable<LessonIdNameViewModel>()
-                .OrderBy(l => l.Title)
-                .ToListAsync(),
+                Lessons = await this.GetAllLessons(),
             };
 
             return View(resourceModel);
         }
 
-        [Authorize(Roles = ADMIN_ROLE)]
         [HttpPost]
         public async Task<IActionResult> Create(ResourceFormServiceModel resource)
         {
             if (!this.ModelState.IsValid)
             {
+                resource.Lessons = await this.GetAllLessons();
+
                 return this.View(resource);
             }
 
@@ -81,5 +78,72 @@
 
             return this.RedirectToAction("Index", "Home", new { area = string.Empty });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var resource = await this.resourceService.GetByIdAsync<ResourceFormServiceModel>(id);
+
+            if (resource == null)
+            {
+                this.TempData[ERROR_NOTIFICATION] =
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, RESOURCE_KEYWORD);
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            resource.Lessons = await this.GetAllLessons();
+
+            return this.View(resource);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, ResourceFormServiceModel resource)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                resource.Lessons = await this.GetAllLessons();
+
+                return this.View(resource);
+            }
+
+            var isUpdated = await this.resourceService.UpdateEntityAsync(id, resource);
+            if (!isUpdated)
+            {
+                this.TempData[ERROR_NOTIFICATION] =
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, RESOURCE_KEYWORD);
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            this.TempData[SUCCESS_NOTIFICATION] =
+                string.Format(SUCCESSFULLY_UPDATED_ENTITY_MESSAGE, resource.Name, RESOURCE_KEYWORD);
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isResourceExist = await this.resourceService.IsExistAsync(id);
+            if (!isResourceExist)
+            {
+                this.TempData[ERROR_NOTIFICATION] =
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, RESOURCE_KEYWORD);
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            await this.resourceService.DeleteAsync(id);
+            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_DELETED_ENTITY_MESSAGE;
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        private async Task<IEnumerable<LessonIdNameViewModel>> GetAllLessons()
+            => await this.lessonService
+            .GetAllAsQueryable<LessonIdNameViewModel>()
+            .OrderBy(l => l.Title)
+            .ToListAsync();
     }
 }

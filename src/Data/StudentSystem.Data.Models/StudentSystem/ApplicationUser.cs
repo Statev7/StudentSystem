@@ -29,6 +29,10 @@
 
         public DateTime CreatedOn { get; set; }
 
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
+
         public int? CityId { get; set; }
 
         public City City { get; set; }

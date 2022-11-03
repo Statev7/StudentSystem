@@ -19,5 +19,7 @@
         public string CityName { get; set; }
 
         public string RoleName { get; set; }
+
+        public bool IsUserBanned { get; set; }
     }
 }

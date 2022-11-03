@@ -1,5 +1,6 @@
 ﻿namespace StudentSystem.Services.Administrator
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -61,6 +62,42 @@
             return isDemoted;
         }
 
+        public async Task<bool> BanAsync(string userId)
+        {
+            if (await this.IsUserBannedAsync(userId))
+            {
+                return false;
+            }
+
+            var user = await this.dbContext.Users.FindAsync(userId);
+
+            user.IsDeleted = true;
+            user.DeletedOn = DateTime.UtcNow;
+
+            this.dbContext.Update(user);
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UnbanAsync(string userId)
+        {
+            if (!await this.IsUserBannedAsync(userId))
+            {
+                return false;
+            }
+
+            var user = await this.dbContext.Users.FindAsync(userId);
+
+            user.IsDeleted = false;
+            user.DeletedOn = null;
+
+            this.dbContext.Update(user);
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
         private async Task<bool> SetNewRoleAsync(ApplicationUser user, string oldRole, string newRole)
         {
             var isEmpty = string.IsNullOrEmpty(oldRole) && string.IsNullOrEmpty(newRole);
@@ -74,6 +111,12 @@
 
             return true;
         }
+
+        public async Task<bool> IsUserExistAsync(string id)
+            => await this
+                .dbContext
+                .Users
+                .AnyAsync(u => u.Id == id);
 
         private async Task<(string oldRole, string newRole)> DeterminateNewRole(ApplicationUser user)
         {
@@ -91,11 +134,6 @@
             {
                 oldRole = STUDENT_ROLE;
                 newRole = MODERATOR_ROLE;
-            }
-            else if (usersRoles.Contains(MODERATOR_ROLE))
-            {
-                oldRole = MODERATOR_ROLE;
-                newRole = ADMIN_ROLE;
             }
 
             return (oldRole, newRole);
@@ -118,13 +156,14 @@
                 oldRole = MODERATOR_ROLE;
                 newRole = STUDENT_ROLE;
             }
-            else if (usersRoles.Contains(ADMIN_ROLE))
-            {
-                oldRole = ADMIN_ROLE;
-                newRole = MODERATOR_ROLE;
-            }
 
             return (oldRole, newRole);
         }
+
+        public async Task<bool> IsUserBannedAsync(string userId)
+            => await this
+                .dbContext
+                .Users
+                .AnyAsync(u => u.Id == userId && u.IsDeleted);
     }
 }

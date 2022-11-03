@@ -13,5 +13,13 @@
         Task<bool> PromoteAsync(ApplicationUser user);
 
         Task<bool> DemoteAsync(ApplicationUser user);
+
+        Task<bool> BanAsync(string userId);
+
+        Task<bool> UnbanAsync(string userId);
+
+        Task<bool> IsUserBannedAsync(string userId);
+
+        Task<bool> IsUserExistAsync(string id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using StudentSystem.ViewModels.User
+@using StudentSystem.Web.Common
 @using StudentSystem.Web.Infrastructure.Extensions
 @using System.Globalization
 @model IEnumerable<UserViewModel>
@@ -11,20 +12,21 @@
     <link rel="stylesheet" href="~/css/dashboard.css" />
 }
 
-<div class="container mt-3 mb-4">
-    <div class="offset-2 col-lg-8 mt-4 mt-lg-0">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
-                    <table class="table manage-candidates-top mb-0">
-                        <thead>
-                           <tr>
-                                <th>Users</th>
-                                <th class="text-center">Added</th>
-                                <th class="action text-center">Action</th>
-                           </tr>
-                        </thead>
-                        <tbody>
+    <div class="container mt-3 mb-4">
+        <div class="offset-2 col-lg-8 mt-4 mt-lg-0">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                        <table class="table manage-candidates-top mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Users</th>
+                                    <th class="text-center">Added</th>
+                                    <th class="action text-center">Action Rank</th>
+                                    <th class="action text-center">Action Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             @foreach (var user in Model)
                             {
                                 <tr class="candidates-list">
@@ -51,7 +53,7 @@
                                                                 {
                                                                     cityName = @user.CityName;
                                                                 }
-                                                                    <span>@cityName</span>
+                                                                <span>@cityName</span>
                                                             }
                                                         </li>
                                                     </ul>
@@ -59,22 +61,53 @@
                                             </div>
                                         </div>
                                     </td>
-                                     <td class="candidate-list-favourite-time text-center">
+                                    <td class="candidate-list-favourite-time text-center">
                                         <span class="candidate-list-time order-1">
                                             @user.CreatedOn.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
                                         </span>
-                                     </td>
+                                    </td>
                                     <td class="text-center">
-                                        @if (this.User.GetId() != @user.Id)
+                                        @if (this.User.GetId() != user.Id && user.RoleName != GlobalConstants.ADMIN_ROLE)
                                         {
                                             <div class="mb-2">
                                                 <form asp-action="Promotion" asp-route-id="@user.Id" method="post">
-                                                    <button class="btn btn-primary w-100">Promote</button>
+                                                    <button class="btn btn-primary w-100"
+                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.MODERATOR_ROLE 
+                                                        ? "disabled" 
+                                                        : string.Empty)>
+                                                        Promote
+                                                    </button>
                                                 </form>
                                             </div>
-                                            <div>
+                                            <div class="mb-2">
                                                 <form asp-action="Demotion" asp-route-id="@user.Id" method="post">
-                                                    <button class="btn btn-primary w-100">Demote</button>
+                                                    <button class="btn btn-secondary w-100" 
+                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.USER_ROLE 
+                                                        ? "disabled" 
+                                                        : string.Empty)>
+                                                        Demote
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (this.User.GetId() != user.Id && user.RoleName != GlobalConstants.ADMIN_ROLE)
+                                        {
+                                            <div class="mb-2">
+                                                <form asp-action="BanUser" asp-route-id="@user.Id" method="post">
+                                                    <button class="btn btn-danger w-100" 
+                                                    @(user.IsUserBanned ? "disabled" : string.Empty)>
+                                                        Ban
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="mb-2">
+                                                <form asp-action="Unban" asp-route-id="@user.Id" method="post">
+                                                    <button class="btn btn-warning w-100"
+                                                    @(user.IsUserBanned ? string.Empty : "disabled")>
+                                                        Unban
+                                                    </button>
                                                 </form>
                                             </div>
                                         }

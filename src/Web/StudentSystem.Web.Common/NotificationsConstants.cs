@@ -30,9 +30,16 @@
         public const string USER_NOT_EXIST_MESSAGE = "Such a user not exist";
         public const string SUCCESSFULLY_PROMOTED_MESSAGE = "Successfully promoted a user";
         public const string SUCCESSFULLY_DEMOTE_MESSSAGE = "Successfully demote a user";
-        public const string UNSUCCESSFULLY_PROMOTED_MESSAGE = "This user is already admin";
+        public const string SUCCESSFULLY_BAN_A_USER = "Successfully ban a user";
+        public const string SUCCESSSFULLY_UNBAN_A_USER = "Successfully unban a user";
+        public const string UNSUCCESSFULLY_PROMOTED_MESSAGE = "This user is already moderator!";
         public const string UNSUCCESSFULYY_DEMOTE_MESSAGE = "There is no lower rank than 'user'";
+        public const string USER_IS_ALREADY_BANED_MESSAGE = "This user is already banned!";
+        public const string USER_IS_NOT_BANNED_MESSAGE = "This user is not banned!";
         public const string CANNOT_CHANGE_OWN_ROLES_MESSAGE = "You cannot change your roles";
+        public const string CANNOT_BAN_ADMIN_MESSAGE = "Cannot ban user with admin role!";
+        public const string CANNOT_PROMOTE_A_BANNED_USER = "Cannot promote a banned user!";
+        public const string CANNOT_DEMOTE_A_BANNED_USER = "Cannot demote a banned user!";
 
         //CRUD
 

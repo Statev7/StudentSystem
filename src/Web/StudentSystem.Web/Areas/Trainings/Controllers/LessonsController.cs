@@ -20,7 +20,6 @@
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
 
-    [AutoValidateAntiforgeryToken]
     [Authorize(Roles = ADMIN_ROLE)]
     public class LessonsController : TrainingController
     {
@@ -75,7 +74,7 @@
             var isCourseExist = await this.courseService.IsExistAsync(lesson.CourseId);
             if (!isCourseExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -113,7 +112,7 @@
 
             await this.lessonService.CreateEntityAsync(lesson);
 
-            this.TempData[SUCCESS_NOTIFICATION] = 
+            this.TempData[SUCCESS_NOTIFICATION] =
                 string.Format(SUCCESSFULLY_CREATED_ENTITY_MESSAGE, lesson.Title, LESSON_KEYWORD);
 
             return this.RedirectToAction(nameof(this.Index));
@@ -126,7 +125,7 @@
 
             if (lesson == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -150,13 +149,13 @@
             var isUpdated = await this.lessonService.UpdateEntityAsync(id, lesson);
             if (!isUpdated)
             {
-                this.TempData[WARNING_NOTIFICATION] = 
+                this.TempData[WARNING_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.TempData[SUCCESS_NOTIFICATION] = 
+            this.TempData[SUCCESS_NOTIFICATION] =
                 string.Format(SUCCESSFULLY_UPDATED_ENTITY_MESSAGE, lesson.Title, LESSON_KEYWORD);
 
             return this.RedirectToAction(nameof(this.Index));
@@ -176,7 +175,7 @@
             var isLessonExist = await this.lessonService.IsExistAsync(id);
             if (!isLessonExist)
             {
-                this.TempData[WARNING_NOTIFICATION] = 
+                this.TempData[WARNING_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));

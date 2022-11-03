@@ -6,7 +6,7 @@
 
     [Area(TRAININGS_AREA_NAME)]
     public abstract class TrainingController : Controller
-	{
+    {
 
-	}
+    }
 }

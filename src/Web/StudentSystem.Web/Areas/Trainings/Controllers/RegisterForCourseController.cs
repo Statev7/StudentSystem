@@ -21,6 +21,7 @@
             this.courseService = courseService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Apply(int id)
         {
             var course = await this.courseService
@@ -28,7 +29,7 @@
 
             if (course == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction("Index", "Courses");

@@ -4,6 +4,7 @@ namespace StudentSystem.Web
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +52,11 @@ namespace StudentSystem.Web
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

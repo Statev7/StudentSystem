@@ -1,8 +1,6 @@
 ﻿namespace StudentSystem.Web.MappingConfiguration
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     using AutoMapper;
@@ -19,8 +17,8 @@
                 .ForMember(d => d.CategoriesIds, conf => conf
                     .MapFrom(s => s.CourseCategories.Select(cc => cc.CategoryId)))
                 .ForMember(d => d.Duration, conf => conf
-                    .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1 
-                            ? 1 
+                    .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1
+                            ? 1
                             : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7)));
 
             this.CreateMap<Course, DetailCourseViewModel>();

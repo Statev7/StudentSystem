@@ -106,7 +106,7 @@
                         .OrderBy(x => x.Name)
                         .ToListAsync();
 
-                this.memoryCache.Set(CITIES_KEY, cities, TimeSpan.FromDays(1)); 
+                this.memoryCache.Set(CITIES_KEY, cities, TimeSpan.FromDays(1));
             }
 
             this.ViewData["Cities"] = cities;
@@ -131,11 +131,11 @@
                     Input.CityId = null;
                 }
 
-                var user = new ApplicationUser 
-                { 
+                var user = new ApplicationUser
+                {
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName, 
-                    UserName = Input.Email, 
+                    LastName = Input.LastName,
+                    UserName = Input.Email,
                     Email = Input.Email,
                     CreatedOn = DateTime.UtcNow,
                     CityId = Input.CityId

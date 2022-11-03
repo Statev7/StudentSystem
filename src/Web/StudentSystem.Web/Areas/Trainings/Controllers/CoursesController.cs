@@ -16,7 +16,6 @@
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
 
-    [AutoValidateAntiforgeryToken]
     public class CoursesController : TrainingController
     {
         private const int CORSES_PER_PAGE = 6;
@@ -26,7 +25,7 @@
 
         public CoursesController(
             ICourseService courseService,
-            ICategoryService categoryService) 
+            ICategoryService categoryService)
         {
             this.courseService = courseService;
             this.categoryService = categoryService;
@@ -95,7 +94,7 @@
 
             if (courseToUpdate == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -138,7 +137,7 @@
             var course = await this.courseService.GetDetailsAsync(id);
             if (course == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));

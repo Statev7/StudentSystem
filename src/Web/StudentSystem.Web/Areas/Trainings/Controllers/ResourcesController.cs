@@ -65,7 +65,7 @@
             var isLessonExist = await this.lessonService.IsExistAsync(resource.LessonId);
             if (!isLessonExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction("Index", "Home", new { area = string.Empty });

@@ -10,7 +10,6 @@
     using StudentSystem.Services.Course;
     using StudentSystem.Services.Review;
     using StudentSystem.Services.Review.Models;
-    using StudentSystem.ViewModels.Review;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
     using StudentSystem.Web.Infrastructure.Extensions;
 
@@ -50,7 +49,7 @@
             var isCourseExist = await this.courseService.IsExistAsync(courseId);
             if (!isCourseExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
 
                 return this.RedirectToAction("Index", "Courses");
@@ -104,7 +103,7 @@
             var isValid = await this.reviewService.IsAuthorOrAdminAsync(id, this.User);
             if (!isValid)
             {
-                this.TempData[ERROR_NOTIFICATION] = 
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(NOT_HAVE_PERMISSION_MESSAGE, UPDATE);
 
                 return this.RedirectToAction("Index", "Home");

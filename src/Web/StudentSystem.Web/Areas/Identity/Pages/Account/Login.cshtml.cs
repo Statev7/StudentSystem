@@ -91,6 +91,13 @@
 
             if (ModelState.IsValid)
             {
+                var user = await this.userManager.FindByEmailAsync(Input.Email);
+                if (user.IsDeleted)
+                {
+                    ModelState.AddModelError(string.Empty, "You are banned!");
+                    return this.Page();
+                }   
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);

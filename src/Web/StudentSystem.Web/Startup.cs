@@ -53,12 +53,12 @@ namespace StudentSystem.Web
 
             services.AddControllersWithViews();
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
-
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
             RegisterServices(services);
         }

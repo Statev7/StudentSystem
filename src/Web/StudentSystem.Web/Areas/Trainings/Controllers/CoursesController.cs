@@ -1,5 +1,7 @@
 ﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -11,11 +13,13 @@
     using StudentSystem.Services.Course.Models;
     using StudentSystem.ViewModels.Category;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
+    using StudentSystem.Web.Infrastructure.Filters;
     using StudentSystem.Web.Infrastructure.Helpers;
 
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
 
+    [TypeFilter(typeof(UserStatusFilter))]
     public class CoursesController : TrainingController
     {
         private const int CORSES_PER_PAGE = 6;
@@ -32,6 +36,7 @@
         }
 
         [HttpGet]
+
         public async Task<IActionResult> Index(int[] filters, int currentPage = 1)
         {
             var courses = await this.courseService
@@ -44,9 +49,7 @@
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Create()
         {
-            var categories = await this.categoryService
-                        .GetAllAsQueryable<CategoryIdNameViewModel>()
-                        .ToListAsync();
+            var categories = await this.GetCategoriesAsync();
 
             var courseModel = new CourseFormServiceModel()
             {
@@ -64,6 +67,7 @@
         {
             if (!ModelState.IsValid)
             {
+                course.Categories = await this.GetCategoriesAsync();
                 return this.View(course);
             }
 
@@ -74,6 +78,7 @@
             {
                 this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
 
+                course.Categories = await this.GetCategoriesAsync();
                 return this.View(course);
             }
 
@@ -164,5 +169,10 @@
 
             return this.RedirectToAction(nameof(this.Index));
         }
+
+        private async Task<IList<CategoryIdNameViewModel>> GetCategoriesAsync()
+            => await this.categoryService
+                        .GetAllAsQueryable<CategoryIdNameViewModel>()
+                        .ToListAsync();
     }
 }

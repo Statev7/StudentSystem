@@ -37,6 +37,7 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Index(int[] filters, int currentPage = 1)
         {
             var lessons = await this
@@ -71,42 +72,12 @@
                 return this.View(lesson);
             }
 
-            var isCourseExist = await this.courseService.IsExistAsync(lesson.CourseId);
-            if (!isCourseExist)
+            var errorMessage = await this.ValidateModelAsync(lesson);
+            if (errorMessage != string.Empty)
             {
-                this.TempData[ERROR_NOTIFICATION] =
-                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
-
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var course = await this.courseService.GetByIdAsync<CourseDatesServiceModel>(lesson.CourseId);
-
-            //Check if lesson start/end date is earlier/later than the course start/end date
-            var isDatesInvalid = lesson.Begining < course.StartDate || lesson.End > course.EndDate;
-            if (isDatesInvalid)
-            {
-                this.TempData[ERROR_NOTIFICATION] = string.Format(DATES_CANNOT_BE_EARLIER_OR_LATER_THAN_COURSE_DATES_MESSAGE,
-                    nameof(lesson.Begining), nameof(lesson.End), nameof(course.StartDate), nameof(course.EndDate));
+                this.TempData[ERROR_NOTIFICATION] = errorMessage;
 
                 lesson.Courses = await this.GetAllCoursesSorted();
-
-                return this.View(lesson);
-            }
-
-            var result = MyValidator.ValidateDates(
-                lesson.Begining.Value,
-                lesson.End.Value,
-                nameof(lesson.Begining),
-                nameof(lesson.End),
-                true);
-
-            if (!result.isValid)
-            {
-                this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
-
-                lesson.Courses = await this.GetAllCoursesSorted();
-
                 return this.View(lesson);
             }
 
@@ -139,17 +110,26 @@
         [HttpPost]
         public async Task<IActionResult> Update(int id, LessonFormServiceModel lesson)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 lesson.Courses = await this.GetAllCoursesSorted();
 
                 return this.View(lesson);
             }
 
+            var errorMessage = await this.ValidateModelAsync(lesson);
+            if (errorMessage != string.Empty)
+            {
+                this.TempData[ERROR_NOTIFICATION] = errorMessage;
+
+                lesson.Courses = await this.GetAllCoursesSorted();
+                return this.View(lesson);
+            }
+
             var isUpdated = await this.lessonService.UpdateEntityAsync(id, lesson);
             if (!isUpdated)
             {
-                this.TempData[WARNING_NOTIFICATION] =
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -162,20 +142,12 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            var lesson = await this.lessonService.GetByIdAsync<DetailsLessonViewModel>(id);
-
-            return this.View(lesson);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var isLessonExist = await this.lessonService.IsExistAsync(id);
             if (!isLessonExist)
             {
-                this.TempData[WARNING_NOTIFICATION] =
+                this.TempData[ERROR_NOTIFICATION] =
                     string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, LESSON_KEYWORD);
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -192,5 +164,45 @@
             .GetAllAsQueryable<CourseIdNameViewModel>()
             .OrderBy(x => x.Name)
             .ToListAsync();
+
+        private async Task<string> ValidateModelAsync(LessonFormServiceModel lesson)
+        {
+            var isCourseExist = await this.courseService.IsExistAsync(lesson.CourseId);
+            if (!isCourseExist)
+            {
+                var errorMessage =
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
+
+                return errorMessage;
+            }
+
+            var course = await this.courseService.GetByIdAsync<CourseDatesServiceModel>(lesson.CourseId);
+
+            //Check if lesson start/end date is earlier/later than the course start/end date
+            var isDatesInvalid = lesson.Begining.Value.Date < course.StartDate.Date ||
+                                 lesson.End.Value.Date > course.EndDate.Date;
+            if (isDatesInvalid)
+            {
+                var errorMessage = 
+                    string.Format(DATES_CANNOT_BE_EARLIER_OR_LATER_THAN_COURSE_DATES_MESSAGE,
+                    nameof(lesson.Begining), nameof(lesson.End), nameof(course.StartDate), nameof(course.EndDate));
+
+                return errorMessage;
+            }
+
+            var result = MyValidator.ValidateDates(
+                lesson.Begining.Value,
+                lesson.End.Value,
+                nameof(lesson.Begining),
+                nameof(lesson.End),
+                true);
+
+            if (!result.isValid)
+            {
+                return result.errorMessage;
+            }
+
+            return string.Empty;
+        }
     }
 }

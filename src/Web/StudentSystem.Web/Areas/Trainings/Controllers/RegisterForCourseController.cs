@@ -8,10 +8,12 @@
     using StudentSystem.Services.Course;
     using StudentSystem.ViewModels.Course;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
+    using StudentSystem.Web.Infrastructure.Filters;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
 
     [Authorize]
+    [TypeFilter(typeof(UserStatusFilter))]
     public class RegisterForCourseController : TrainingController
     {
         private readonly ICourseService courseService;

@@ -12,10 +12,12 @@
     using StudentSystem.Services.Review.Models;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
     using StudentSystem.Web.Infrastructure.Extensions;
+    using StudentSystem.Web.Infrastructure.Filters;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
 
     [Authorize]
+    [TypeFilter(typeof(UserStatusFilter))]
     public class CourseReviewsController : TrainingController
     {
         private const string DELETE = "delete";

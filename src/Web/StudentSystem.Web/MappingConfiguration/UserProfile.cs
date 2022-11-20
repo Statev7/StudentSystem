@@ -5,6 +5,7 @@
     using AutoMapper;
 
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.ExcelExport.Models;
     using StudentSystem.ViewModels.User;
 
     public class UserProfile : Profile
@@ -16,6 +17,11 @@
                 .ForMember(d => d.RoleName, conf => conf.MapFrom(s => s.UserRoles
                     .Select(ur => ur.Role.Name)
                     .FirstOrDefault()));
+
+            this.CreateMap<ApplicationUser, StudentsFromCourseExportServiceModel>()
+                .ForMember(d => d.IsBanned, conf => conf.MapFrom(s => s.IsDeleted))
+                .ForMember(d => d.CityName, conf => conf
+                    .MapFrom(s => s.City.Name ?? "No information"));
         }
     }
 }

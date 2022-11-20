@@ -23,8 +23,10 @@
 
             this.CreateMap<Course, DetailCourseViewModel>();
             this.CreateMap<Course, CourseFormServiceModel>()
-                .ForMember(d => d.CategoriesIds, conf => conf.MapFrom(s => s.CourseCategories.Select(cc => cc.CategoryId)))
+                .ForMember(d => d.CategoriesIds, conf => conf
+                    .MapFrom(s => s.CourseCategories.Select(cc => cc.CategoryId)))
                 .ReverseMap();
+
             this.CreateMap<Course, CourseIdNameViewModel>();
             this.CreateMap<CourseLessonScheduleServiceModel, CourseIdNameViewModel>();
             this.CreateMap<Course, CourseUsersServiceModel>();

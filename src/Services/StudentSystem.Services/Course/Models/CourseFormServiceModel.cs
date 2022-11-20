@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using StudentSystem.ViewModels.Category;
+    using StudentSystem.Web.Infrastructure.Filters;
 
     using static StudentSystem.Data.Common.Constants;
 
@@ -30,6 +31,8 @@
         public int[] CategoriesIds { get; set; }
 
         [Required]
+        [DateLessThanToday(canBeToday: false)]
+        [DateLessThan(nameof(EndDate))]
         [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
 

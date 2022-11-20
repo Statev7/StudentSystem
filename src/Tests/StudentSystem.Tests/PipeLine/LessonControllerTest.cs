@@ -22,7 +22,7 @@
         public const string ROUTE = "/Trainings/Lessons";
 
         public readonly static object[][] ValidParametersToUpdate =
-{
+        {
             new object[]
             {
                 1,
@@ -44,7 +44,7 @@
         };
 
         public readonly static object[][] ValidParametersToCreate =
-{
+        {
             new object[]
             {
                 "New title",
@@ -64,7 +64,7 @@
         };
 
         public readonly static object[][] ParametersWithInvalidLessonId =
-{
+        {
             new object[]
             {
                 0,
@@ -91,10 +91,10 @@
             new object[]
             {
                 1,
-                null,
-                null,
-                DateTime.UtcNow.AddDays(-1),
-                DateTime.UtcNow.AddDays(-1),
+                "I",
+                "I",
+                DateTime.UtcNow.AddMinutes(-1),
+                DateTime.UtcNow.AddDays(1),
                 0,
             },
             new object[]
@@ -102,8 +102,8 @@
                 1,
                 "I",
                 "I",
-                DateTime.UtcNow.AddDays(-1),
-                DateTime.UtcNow.AddDays(-1),
+                DateTime.UtcNow.AddDays(2),
+                DateTime.UtcNow.AddDays(1),
                 0,
             }
         };
@@ -112,57 +112,30 @@
         {
             new object[]
             {
-                null,
-                null,
+                "Test Title",
+                "Test Content",
                 DateTime.UtcNow.AddDays(-1),
                 DateTime.UtcNow.AddDays(-1),
-                0,
+                1,
             },
             new object[]
             {
-                "I",
-                "I",
+                "Test Title",
+                "Test Content",
                 DateTime.UtcNow.AddDays(-1),
                 DateTime.UtcNow.AddDays(-1),
-                0,
+                1,
+            },
+            new object[]
+            {
+                null,
+                null,
+                DateTime.UtcNow.AddDays(1),
+                DateTime.UtcNow.AddDays(1).AddHours(1),
+                1,
             }
         };
 
-        public readonly static object[][] InvalidCourseAndDatesParameters =
-        {
-            new object[]
-            {
-                "Some lesson",
-                "Some very very short content",
-                DateTime.UtcNow.ToString(),
-                DateTime.UtcNow.AddDays(1).ToString(),
-                1,
-            },
-            new object[]
-            {
-                "Some lesson",
-                "Some very very short content",
-                DateTime.UtcNow.AddDays(1).ToString(),
-                DateTime.UtcNow.ToString(),
-                1,
-            },
-            new object[]
-            {
-                "Some lesson",
-                "Some very very short content",
-                DateTime.UtcNow.ToString(),
-                DateTime.UtcNow.ToString(),
-                1,
-            },
-            new object[]
-            {
-                "Some lesson",
-                "Some very very short content",
-                DateTime.UtcNow.AddDays(-30).ToString(),
-                DateTime.UtcNow.AddDays(-25).ToString(),
-                1,
-            }
-        };
 
         [Theory]
         [InlineData(new int[] { }, 1)]
@@ -451,49 +424,6 @@
                     .ShouldReturn()
                     .View(result => result.WithModelOfType<LessonFormServiceModel>()
                         .Passing(model => model.Courses.Count() == 10));
-
-        [Theory, MemberData(nameof(InvalidCourseAndDatesParameters))]
-        public void PostCreateShouldRedirectToIndexActionIfModelHasInvalidDatesOrCourse(
-            string title,
-            string content,
-            string begining,
-            string end,
-            int courseId)
-            =>
-                MyMvc
-                    .Pipeline()
-                    .ShouldMap(request => request
-                        .WithLocation($"{ROUTE}/Create")
-                        .WithMethod(HttpMethod.Post)
-                        .WithFormFields(new
-                        {
-                            Title = title,
-                            Content = content,
-                            Begining = begining,
-                            End = end,
-                            CourseId = courseId.ToString()
-
-                        })
-                         .WithUser(TestUser.Username, new[] { ADMIN_ROLE })
-                         .WithAntiForgeryToken())
-                         .To<LessonsController>(c => c.Create(new LessonFormServiceModel
-                         {
-                             Title = title,
-                             Content = content,
-                             Begining = DateTime.Parse(begining),
-                             End = DateTime.Parse(end),
-                             CourseId = courseId
-                         }))
-                        .Which(controller => controller
-                            .WithData(CoursesIds()))
-                        .ShouldHave()
-                .ValidModelState()
-                .TempData(tempData => tempData
-                    .ContainingEntryWithKey(ERROR_NOTIFICATION))
-                .AndAlso()
-                .ShouldReturn()
-                .View(result => result.WithModelOfType<LessonFormServiceModel>()
-                    .Passing(model => model.Courses.Count() == 10));
 
         [Theory]
         [InlineData(1)]

@@ -17,8 +17,8 @@
             = "Lesson {0}/{1} cannot be earlier/later than the course {2}/{3}";
 
         //Date 
-        public const string SECOND_DATE_CANNOT_BE_EARLIER_MESSAGE = "{0} cannot be earlier than {1}";
-        public const string START_DATE_MESSAGE = "The start date cannot be earlier {0}";
+        public const string THE_START_TIME_CANNOT_BE_LATER_THAN_THE_END_TIME = "{0} cannot be later than {1}!";
+        public const string START_DATE_MESSAGE = "The start date cannot be earlier than {0}!";
 
         //Review
         public const string NOT_HAVE_PERMISSION_MESSAGE = "You do not have permission to {0} this review";

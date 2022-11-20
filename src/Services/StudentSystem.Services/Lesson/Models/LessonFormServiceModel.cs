@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using StudentSystem.ViewModels.Course;
+    using StudentSystem.Web.Infrastructure.Filters;
 
     using static StudentSystem.Data.Common.Constants;
 
@@ -21,6 +22,8 @@
         public string Content { get; set; }
 
         [Required]
+        [DateLessThanToday(canBeToday: true)]
+        [DateLessThan(nameof(this.End))]
         public DateTime? Begining { get; set; }
 
         [Required]

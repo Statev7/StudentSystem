@@ -1,8 +1,9 @@
 ﻿namespace StudentSystem.Web.Areas.Trainings.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
+
+    using AutoMapper;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@
     using StudentSystem.ViewModels.Category;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
     using StudentSystem.Web.Infrastructure.Filters;
-    using StudentSystem.Web.Infrastructure.Helpers;
 
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
@@ -26,13 +26,16 @@
 
         private readonly ICourseService courseService;
         private readonly ICategoryService categoryService;
+        private readonly IMapper mapper;
 
         public CoursesController(
             ICourseService courseService,
-            ICategoryService categoryService)
+            ICategoryService categoryService, 
+            IMapper mapper)
         {
             this.courseService = courseService;
             this.categoryService = categoryService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -65,19 +68,8 @@
         [Authorize(Roles = ADMIN_ROLE)]
         public async Task<IActionResult> Create(CourseFormServiceModel course)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                course.Categories = await this.GetCategoriesAsync();
-                return this.View(course);
-            }
-
-            var result = MyValidator
-                .ValidateDates(course.StartDate.Value, course.EndDate.Value, "Start date", "End date");
-
-            if (!result.isValid)
-            {
-                this.TempData[ERROR_NOTIFICATION] = result.errorMessage;
-
                 course.Categories = await this.GetCategoriesAsync();
                 return this.View(course);
             }

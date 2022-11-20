@@ -9,6 +9,10 @@
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.Administrator;
+    using StudentSystem.Services.Course;
+    using StudentSystem.Services.ExcelExport;
+    using StudentSystem.ViewModels.Course;
+    using StudentSystem.ViewModels.User;
     using StudentSystem.Web.Areas.Administrator.Controllers.Abstaction;
     using StudentSystem.Web.Infrastructure.Extensions;
 
@@ -19,13 +23,19 @@
     public class DashboardController : AdministratorController
     {
         private readonly IAdministratorService administratorService;
+        private readonly IExcelExportService excelExportService;
+        private readonly ICourseService courseService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public DashboardController(
             IAdministratorService administratorService,
+            IExcelExportService excelExportService,
+            ICourseService courseService,
             UserManager<ApplicationUser> userManager)
         {
             this.administratorService = administratorService;
+            this.excelExportService = excelExportService;
+            this.courseService = courseService;
             this.userManager = userManager;
         }
 
@@ -35,7 +45,23 @@
             var users = await this.administratorService
                 .GetAllUsersAsync();
 
-            return this.View(users);
+            var model = new UsersCoursesViewModel()
+            {
+                Users = users,
+                Courses = await this.courseService
+                    .GetAllAsync<CourseIdNameViewModel>(),
+            };
+
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Export(int courseId)
+        {
+            var (data, contentType, fileName) = 
+                await this.excelExportService.ExportStudentsByCourseAsync(courseId);
+
+            return File(data, contentType, fileName);
         }
 
         [HttpPost]

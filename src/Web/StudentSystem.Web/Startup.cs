@@ -15,6 +15,7 @@ namespace StudentSystem.Web
     using StudentSystem.Services.Category;
     using StudentSystem.Services.City;
     using StudentSystem.Services.Course;
+    using StudentSystem.Services.ExcelExport;
     using StudentSystem.Services.Home;
     using StudentSystem.Services.Lesson;
     using StudentSystem.Services.Resource;
@@ -116,6 +117,7 @@ namespace StudentSystem.Web
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
+            services.AddTransient<IExcelExportService, ExcelExportService>();
         }
     }
 }

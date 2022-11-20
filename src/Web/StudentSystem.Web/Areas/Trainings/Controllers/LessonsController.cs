@@ -13,9 +13,7 @@
     using StudentSystem.Services.Lesson;
     using StudentSystem.Services.Lesson.Models;
     using StudentSystem.ViewModels.Course;
-    using StudentSystem.ViewModels.Lesson;
     using StudentSystem.Web.Areas.Trainings.Controllers.Abstraction;
-    using StudentSystem.Web.Infrastructure.Helpers;
 
     using static StudentSystem.Web.Common.GlobalConstants;
     using static StudentSystem.Web.Common.NotificationsConstants;
@@ -188,18 +186,6 @@
                     nameof(lesson.Begining), nameof(lesson.End), nameof(course.StartDate), nameof(course.EndDate));
 
                 return errorMessage;
-            }
-
-            var result = MyValidator.ValidateDates(
-                lesson.Begining.Value,
-                lesson.End.Value,
-                nameof(lesson.Begining),
-                nameof(lesson.End),
-                true);
-
-            if (!result.isValid)
-            {
-                return result.errorMessage;
             }
 
             return string.Empty;

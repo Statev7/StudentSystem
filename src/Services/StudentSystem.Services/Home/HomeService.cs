@@ -26,8 +26,6 @@
     public class HomeService : IHomeService
     {
         private const string CATEGORIES_KEY = "Categories";
-        private const int COURSES_TO_DISPLAY = 4;
-        private const int REVIEWS_TO_DISPLAY = 3;
 
         private readonly StudentSystemDbContext dbContext;
         private readonly IMapper mapper;
@@ -88,13 +86,15 @@
 
             model.CoursesReviews.OpenCourses = await this.courseService
                 .GetAllAsQueryable<OpenCourseViewModel>()
-                .Take(COURSES_TO_DISPLAY)
+                .Where(c => !c.IsDeleted && c.StartDate > DateTime.UtcNow)
+                .Take(4)
                 .ToListAsync();
 
             model.CoursesReviews.Reviews = await this.reviewService
                 .GetAllAsQueryable<ReviewForHomeViewModel>()
+                .Where(r => !r.IsDeleted)
                 .OrderByDescending(r => r.CreatedOn)
-                .Take(REVIEWS_TO_DISPLAY)
+                .Take(3)
                 .ToListAsync();
 
             return model;

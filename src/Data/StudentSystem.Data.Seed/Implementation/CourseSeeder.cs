@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -29,52 +28,108 @@
                 {
                     Title = "Inheritance",
                     Content = "What is enheritance?",
-                    Begining = DateTime.UtcNow.AddDays(1),
-                    End = DateTime.UtcNow.AddDays(1).AddHours(2),
+                    Begining = DateTime.UtcNow.AddDays(5),
+                    End = DateTime.UtcNow.AddDays(5).AddHours(4),
                     CreatedOn = DateTime.UtcNow,
                 },
                 new Lesson
                 {
                     Title = "Encapsulation",
                     Content = "What is encapsulation",
-                    Begining = DateTime.UtcNow.AddDays(3),
-                    End = DateTime.UtcNow.AddDays(3).AddHours(2),
+                    Begining = DateTime.UtcNow.AddDays(8),
+                    End = DateTime.UtcNow.AddDays(8).AddHours(4),
                     CreatedOn = DateTime.UtcNow,
                 },
                 new Lesson
                 {
                     Title = "Abstraction",
                     Content = "What is abstraction",
-                    Begining = DateTime.UtcNow.AddDays(7),
-                    End = DateTime.UtcNow.AddDays(7).AddHours(2),
+                    Begining = DateTime.UtcNow.AddDays(12),
+                    End = DateTime.UtcNow.AddDays(12).AddHours(4),
                     CreatedOn = DateTime.UtcNow,
                 },
             };
 
-            var lessonsForCSharpDataStructure = new List<Lesson>()
+            var lessonsForJavaAdvanced = new List<Lesson>()
             {
                 new Lesson
                 {
-                    Title = "Data Structures and Complexity",
-                    Content = "What is data structures?",
-                    Begining = DateTime.UtcNow.AddDays(1),
-                    End = DateTime.UtcNow.AddDays(1).AddHours(2),
+                    Title = "Stack and Queue",
+                    Content = $"What is data stack? {Environment.NewLine}What is queue?",
+                    Begining = DateTime.UtcNow.AddDays(5),
+                    End = DateTime.UtcNow.AddDays(5).AddHours(3),
                     CreatedOn = DateTime.UtcNow,
                 },
                 new Lesson
                 {
-                    Title = "Linear Data Structures",
-                    Content = "Linear Data Structures",
-                    Begining = DateTime.UtcNow.AddDays(3),
-                    End = DateTime.UtcNow.AddDays(3).AddHours(2),
+                    Title = "Multidimensional Arrays",
+                    Content = "What is Multidimensional Array?",
+                    Begining = DateTime.UtcNow.AddDays(8),
+                    End = DateTime.UtcNow.AddDays(8).AddHours(3),
                     CreatedOn = DateTime.UtcNow,
                 },
                 new Lesson
                 {
-                    Title = "Trees",
-                    Content = "What is tree?",
+                    Title = "Sets and Maps",
+                    Content = $"Sets {Environment.NewLine}Maps",
+                    Begining = DateTime.UtcNow.AddDays(12),
+                    End = DateTime.UtcNow.AddDays(12).AddHours(3),
+                    CreatedOn = DateTime.UtcNow,
+                },
+            };
+
+            var lessonsForReactCourse = new List<Lesson>()
+            {
+                new Lesson
+                {
+                    Title = "Intro to React",
+                    Content = $"React Overview {Environment.NewLine}Intallation",
                     Begining = DateTime.UtcNow.AddDays(7),
-                    End = DateTime.UtcNow.AddDays(7).AddHours(2),
+                    End = DateTime.UtcNow.AddDays(7).AddHours(4),
+                    CreatedOn = DateTime.UtcNow,
+                },
+                new Lesson
+                {
+                    Title = "Components",
+                    Content = $"Components Overview {Environment.NewLine}Props{Environment.NewLine}State",
+                    Begining = DateTime.UtcNow.AddDays(10),
+                    End = DateTime.UtcNow.AddDays(10).AddHours(4),
+                    CreatedOn = DateTime.UtcNow,
+                },
+                new Lesson
+                {
+                    Title = "Forms",
+                    Content = $"Controlled Forms {Environment.NewLine}Validation",
+                    Begining = DateTime.UtcNow.AddDays(14),
+                    End = DateTime.UtcNow.AddDays(14).AddHours(4),
+                    CreatedOn = DateTime.UtcNow,
+                },
+            };
+
+            var lessonsForPythonAiCourse = new List<Lesson>()
+            {
+                new Lesson
+                {
+                    Title = "Introduction to Deep Learning",
+                    Content = $"Linear and logistic regression {Environment.NewLine}Simple estimators",
+                    Begining = DateTime.UtcNow.AddDays(7),
+                    End = DateTime.UtcNow.AddDays(7).AddHours(4),
+                    CreatedOn = DateTime.UtcNow,
+                },
+                new Lesson
+                {
+                    Title = "Image-Related Neural Networks",
+                    Content = $"Statistical invariance {Environment.NewLine}Convolution networks",
+                    Begining = DateTime.UtcNow.AddDays(10),
+                    End = DateTime.UtcNow.AddDays(10).AddHours(4),
+                    CreatedOn = DateTime.UtcNow,
+                },
+                new Lesson
+                {
+                    Title = "Neural Network Architectures",
+                    Content = $"Residual networks {Environment.NewLine}Encoder-decoder: ENet",
+                    Begining = DateTime.UtcNow.AddDays(14),
+                    End = DateTime.UtcNow.AddDays(14).AddHours(4),
                     CreatedOn = DateTime.UtcNow,
                 },
             };
@@ -87,19 +142,39 @@
                     Description = "This course takes you, step by step, through the principles and practices of object-oriented programming (OOP). The course provides you with the firm foundation in OOP that you need to progress to intermediate-level C# courses.",
                     ImageURL = "https://techgeekbuzz.com/media/post_images/uploads/2021/09/C-Courses.jpg",
                     CreatedOn = DateTime.UtcNow,
-                    StartDate = DateTime.UtcNow.AddDays(1),
+                    StartDate = DateTime.UtcNow.AddDays(5),
                     EndDate = DateTime.UtcNow.AddMonths(2),
                     Lessons = lessonsForCSharpOOPCourse,
                 },
                 new Course
                 {
-                    Name = "Data Structure",
-                    Description = "This course will help you in better understanding of the basics of Data Structures",
-                    ImageURL = "https://media.geeksforgeeks.org/wp-content/uploads/20220520181109/WhatisDataStructure1.jpg",
+                    Name = "Java Advanced",
+                    Description = $"Discover and learn advanced aspects of Java programming, and some important Java-related concepts and technologies.{Environment.NewLine}This course can help you bridge the gap between the knowledge you have as a self-taught Java developer, junior developer or new IT graduate, and the knowledge that professional developers may have.",
+                    ImageURL = "https://www.classcentral.com/report/wp-content/uploads/2022/05/Java-BCG-Banner.png",
                     CreatedOn = DateTime.UtcNow,
-                    StartDate = DateTime.UtcNow.AddDays(1),
+                    StartDate = DateTime.UtcNow.AddDays(6),
                     EndDate = DateTime.UtcNow.AddMonths(2),
-                    Lessons = lessonsForCSharpDataStructure,
+                    Lessons = lessonsForJavaAdvanced,
+                },
+                new Course
+                {
+                    Name = "React",
+                    Description = $"This course will cover basic and core concepts that you need to know to get up and running with ReactJS.{Environment.NewLine}React JS is a Javascript library for building user interfaces. It's flexible, fast, easy to learn and fun to work with.",
+                    ImageURL = "https://149611589.v2.pressablecdn.com/wp-content/uploads/2016/09/reactjs.png",
+                    CreatedOn = DateTime.UtcNow,
+                    StartDate = DateTime.UtcNow.AddDays(7),
+                    EndDate = DateTime.UtcNow.AddMonths(1).AddDays(7),
+                    Lessons = lessonsForReactCourse,
+                },
+                new Course
+                {
+                    Name = "Python AI Machine Learning",
+                    Description = $"Ready to explore machine learning and artificial intelligence in python? This course talks about fundamental Machine Learning algorithms, neural network and Deep Learning",
+                    ImageURL = "https://i.ytimg.com/vi/7O60HOZRLng/maxresdefault.jpg",
+                    CreatedOn = DateTime.UtcNow,
+                    StartDate = DateTime.UtcNow.AddDays(7),
+                    EndDate = DateTime.UtcNow.AddMonths(4).AddDays(7),
+                    Lessons = lessonsForPythonAiCourse,
                 }
             };
 
@@ -116,10 +191,32 @@
 
             courses[1].CourseCategories.Add(new CourseCategory
             {
-                Course = courses[0],
+                Course = courses[1],
                 Category = new Category
                 {
-                    Name = "Data Structure",
+                    Name = "Java",
+                    CreatedOn = DateTime.UtcNow,
+                },
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            courses[2].CourseCategories.Add(new CourseCategory
+            {
+                Course = courses[2],
+                Category = new Category
+                {
+                    Name = "JavaScript",
+                    CreatedOn = DateTime.UtcNow,
+                },
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            courses[3].CourseCategories.Add(new CourseCategory
+            {
+                Course = courses[3],
+                Category = new Category
+                {
+                    Name = "Python",
                     CreatedOn = DateTime.UtcNow,
                 },
                 CreatedOn = DateTime.UtcNow,

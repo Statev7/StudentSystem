@@ -22,7 +22,6 @@
                 .ForMember(d => d.End, conf => conf.MapFrom(s => s.End.ToString("HH:mm", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.Date, conf => conf.MapFrom(s => s.Begining.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)));
 
-            this.CreateMap<Lesson, DetailsLessonViewModel>();
             this.CreateMap<Lesson, LessonIdNameViewModel>();
             this.CreateMap<LessonScheduleServiceModel, LessonScheduleViewModel>()
                 .ForMember(d => d.Resources, conf => conf.MapFrom(s => s.Resources.Select(r => r)));

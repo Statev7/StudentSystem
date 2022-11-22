@@ -14,6 +14,7 @@
     using StudentSystem.ViewModels.Course;
     using StudentSystem.ViewModels.Lesson;
     using StudentSystem.ViewModels.Page;
+    using StudentSystem.ViewModels.Resource;
     using StudentSystem.Web.Data;
 
     public class LessonService : BaseService<Lesson>, ILessonService
@@ -84,5 +85,25 @@
 
             return model;
         }
+
+        public async Task<LessonDetailsViewModel> GetDetailsAsync(int id) 
+            => await this.DbSet
+                .Where(l => l.Id == id && !l.IsDeleted)
+                .Select(l => new LessonDetailsViewModel
+                {
+                    Id = l.Id,
+                    Title = l.Title,
+                    Content = l.Content,
+                    Begining = l.Begining,
+                    End = l.End,
+                    Resources = l.Resources
+                        .Where(r => !r.IsDeleted)
+                        .Select(r => new ResourceNameURLViewModel
+                        {
+                            Name = r.Name,
+                            Url = r.URL,
+                        })
+                })
+                .FirstOrDefaultAsync();
     }
 }

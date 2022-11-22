@@ -16,6 +16,6 @@
 
         public DateTime End { get; set; }
 
-        public IEnumerable<ResourceIdNameViewModel> Resources { get; set; }
+        public IEnumerable<ResourceNameURLViewModel> Resources { get; set; }
     }
 }

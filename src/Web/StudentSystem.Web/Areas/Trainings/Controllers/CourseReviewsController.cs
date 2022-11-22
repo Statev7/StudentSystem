@@ -41,10 +41,10 @@
         [HttpPost]
         public async Task<IActionResult> Create(int courseId, string content)
         {
-            //if (!this.ModelState.IsValid)
-            //{
-            //   return this.View(review);
-            //}
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Details", content);
+            }
 
             var courseIdAsObject = new { Id = courseId };
 

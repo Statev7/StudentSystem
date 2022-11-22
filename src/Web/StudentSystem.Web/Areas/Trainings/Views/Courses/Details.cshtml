@@ -1,5 +1,4 @@
-﻿@using StudentSystem.Services.Review.Models
-@model DetailCourseViewModel
+﻿@model DetailCourseViewModel
 
 @{
 	this.ViewData["Title"] = $"Details: {Model.Name}";
@@ -26,45 +25,15 @@
 				@foreach (var lesson in Model.Lessons)
 				{
 					<div class="col-sm-12 col-md-6">
-						<div onclick="displayLessonInformation(@lesson.Id)" style="cursor: pointer">
+						<div class="lesson-details" data-lessonId=@lesson.Id style="cursor: pointer">
 							<div class="p-2 mt-1 border" style="background-color: #f1f1f1;">
 								<span class="lesson-title">@(++count). @lesson.Title</span>
 							</div>
 						</div>
-						<div id="@lesson.Id" class="d-none p-2 mt-1 border">
-							<div class="p-2">
-								<p style="font-size: 18px; font-family: Verdana">
-									@lesson.Title
-								</p>
-								<p>
-									@{
-										string[] stringSeparators = new string[] { "\r\n" };
-										var splitedContent = @lesson.Content.Split(stringSeparators, StringSplitOptions.None);
-									}
-									<ul>
-										@foreach (var contentLine in splitedContent)
-										{
-											<li>
-												@contentLine
-											</li>
-										}
-									</ul>
-								</p>
-								<p>
-									Date: @lesson.Begining.ToString("dd MMMM", CultureInfo.InvariantCulture) (@lesson.Begining.DayOfWeek),
-									from @lesson.Begining.ToString("HH:mm", CultureInfo.InvariantCulture) to 
-									@lesson.End.ToString("HH:mm", CultureInfo.InvariantCulture)<span>.</span>
-								</p>
-								<p style="font-size: 18px; font-family: Verdana">
-									Resources:
-								</p>
-								<p>
-									@foreach (var resource in lesson.Resources)
-									{
-										<a href="@resource.ULR">@resource.Name</a>
-									}
-								</p>
-							</div>
+						<div id="@lesson.Id" class="lesson-box d-none p-2 mt-1 border" data-is-content-loaded=@false>
+							@{
+								//Generate with js!
+							}
 						</div>
 					</div>
 				}
@@ -159,7 +128,6 @@
 						asp-controller="CourseReviews" 
 						asp-action="Create" 
 						asp-route-courseId="@Model.Id" method="post">
-						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 						<div class="form-group">
 							<textarea asp-for="@Model.Content" class="form-control" style="height: 200px"></textarea>
 							<span asp-validation-for="@Model.Content" class="text-danger"></span>
@@ -179,16 +147,119 @@
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
 	<script>
+		$('.lesson-details').on('click', function() {
 
-		function displayLessonInformation(id){
-			let lessonDiv = document.getElementById(id);
+			let lessonId = $(this).attr('data-lessonId');
+			changeLessonDetailsDisplay(lessonId);
 
-			if(lessonDiv.classList.contains('d-none')){
-				lessonDiv.classList.remove('d-none');
+		});
+
+		function changeLessonDetailsDisplay(lessonId) {
+			let lessonBoxToDisplay = document.getElementById(lessonId);
+
+			if (lessonBoxToDisplay.classList.contains('d-none')) {
+
+				$.get(`/api/lessons?id=${lessonId}`, (data) => {
+					$('.lesson-box').html(generateHtmlForDetailsBox(data));
+				});
+
+				let lessonsBoxs = document.getElementsByClassName('lesson-box');
+				for (let i = 0; i < lessonsBoxs.length; i++) {
+					lessonsBoxs[i].classList.add('d-none');
+				}
+
+				setTimeout(function () {
+					lessonBoxToDisplay.classList.remove('d-none');
+				}, 100);
 			}
-			else{
-				lessonDiv.classList.add('d-none');
+			else {
+				lessonBoxToDisplay.classList.add('d-none');
 			}
+		}
+
+		function generateHtmlForDetailsBox(data){
+			let divElement = document.createElement('div');
+			divElement.classList.add('p-2');
+
+			let titleElement = formatTitle(data.title);
+			let contentElement = formatContent(data.content);
+			let dateElement = formatDate(data.begining, data.end);
+			let resourcesTitleElement = document.createElement('p');
+			resourcesTitleElement.style.cssText = "font-size: 18px; font-family: Verdana";
+			resourcesTitleElement.textContent = "Resources";
+			let resourceElement = formatResource(data.resources);
+
+			divElement.appendChild(titleElement);
+			divElement.appendChild(contentElement);
+			divElement.appendChild(dateElement);
+			divElement.appendChild(resourcesTitleElement);
+			divElement.appendChild(resourceElement);
+
+			return divElement;
+		}
+
+		function formatTitle(title){
+			let titleParagraphAsElement = document.createElement('p');
+
+			titleParagraphAsElement.style.cssText = "font-size: 18px; font-family: Verdana";
+			titleParagraphAsElement.textContent = title;
+
+			return titleParagraphAsElement;
+		}
+
+		function formatContent(content){
+			let contentAsArray = content.split(/\r?\n/);
+			let ulElement = document.createElement('ul');
+
+			for (let i = 0; i < contentAsArray.length; i++) {
+				let liElement = document.createElement('li');
+				liElement.innerHTML = contentAsArray[i];
+				ulElement.appendChild(liElement);
+			}
+
+			return ulElement;
+		}
+
+		function formatDate(begining, end){
+			let pElement = document.createElement('p');
+
+			let beginingAsDate = new Date(begining);
+			let endAsDate = new Date(end);
+
+			let date = beginingAsDate.toLocaleDateString('default', {day: '2-digit', month: 'long'});
+			let day = beginingAsDate.toLocaleDateString('default', {weekday: 'long'});
+			let from = getDateHoursAndMinutesToSecondDigit(beginingAsDate);
+			let to = getDateHoursAndMinutesToSecondDigit(endAsDate);
+
+			let dateAsString = `Date: ${date} (${day}), from ${from} to ${to}.`;
+
+			pElement.textContent = dateAsString;
+			return pElement;
+		}
+
+		function getDateHoursAndMinutesToSecondDigit(date){
+			return date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0');
+		}
+
+		function formatResource(resources){
+			let pElement = document.createElement('p');
+			pElement.textContent = "No resources yet";
+
+			if(resources.length != 0){
+
+				pElement.textContent = "";
+				for (let index = 0; index < resources.length; index++) {
+					let currentResource = resources[index];
+
+					let aElement = document.createElement('a');
+					aElement.href = currentResource.url;
+					aElement.textContent = currentResource.name;
+
+					pElement.appendChild(aElement);
+				}
+			}
+
+			return pElement;
 		}
 
 	</script>
@@ -197,10 +268,13 @@
 		let informationBtn = document.getElementById('show-information-btn');
 		let reviewBtn = document.getElementById('show-review-form-btn');
 
-		informationBtn.addEventListener('click', () => someFunc('information-box'));
-		reviewBtn.addEventListener('click', () => someFunc('review-form'));
+		informationBtn.addEventListener('click', () => displayMoreInformation('information-box'));
+		if(reviewBtn !== null){
+			reviewBtn.addEventListener('click', () => displayMoreInformation('review-form'));
+		}
 
-		function someFunc(elementId) {
+
+		function displayMoreInformation(elementId) {
 
 			let box = document.getElementById(elementId);
 

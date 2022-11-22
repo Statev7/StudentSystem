@@ -1,9 +1,9 @@
 ﻿namespace StudentSystem.ViewModels.Resource
 {
-	public class ResourceIdNameViewModel
+	public class ResourceNameURLViewModel
 	{
 		public string Name { get; set; }
 
-		public string ULR { get; set; }
+		public string Url { get; set; }
 	}
 }

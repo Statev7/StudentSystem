@@ -82,6 +82,7 @@
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            [Display(Name = "City")]
             public int? CityId { get; set; }
 
             public ICollection<CityIdNameViewModel> Cities { get; set; }

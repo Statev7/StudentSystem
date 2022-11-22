@@ -15,5 +15,7 @@
         public DateTime StartDate { get; set; }
 
         public double Duration { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

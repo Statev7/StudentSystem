@@ -55,7 +55,7 @@
 
             var courses = await this
                 .GetAllAsQueryable<CourseViewModel>()
-                .Where(c => !c.IsDeleted)
+                .Where(c => !c.IsDeleted && c.StartDate > DateTime.UtcNow)
                 .OrderBy(c => c.StartDate)
                 .ToListAsync();
 
@@ -197,25 +197,13 @@
                     EndDate = c.EndDate.ToString("d MMMM yyyy", CultureInfo.InvariantCulture),
                     Lessons = c.Lessons
                             .Where(l => !l.IsDeleted)
-                            .Select(l => new LessonDetailsViewModel
+                            .Select(l => new LessonIdNameViewModel
                             {
                                 Id = l.Id,
-                                Title = l.Title,
-                                Content = l.Content,
-                                Begining = l.Begining,
-                                End = l.End,
-                                Resources = l.Resources
-                                    .Where(r => !r.IsDeleted)
-                                    .OrderBy(r => r.Name)
-                                    .Select(r => new ResourceIdNameViewModel
-                                    {
-                                        Name = r.Name,
-                                        ULR = r.URL,
-                                    })
-                                    .ToList()
+                                Title = l.Title
                             })
                             .ToList(),
-                    Reviews = c.Reviews
+                   Reviews = c.Reviews
                         .Where(r => !r.IsDeleted)
                         .OrderByDescending(r => r.CreatedOn)
                         .Select(r => new ReviewViewModel

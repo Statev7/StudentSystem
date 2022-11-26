@@ -1,4 +1,6 @@
-﻿namespace StudentSystem.Web.Common
+﻿using System.Security;
+
+namespace StudentSystem.Web.Common
 {
     public static class NotificationsConstants
     {
@@ -22,7 +24,6 @@
 
         //Review
         public const string NOT_HAVE_PERMISSION_MESSAGE = "You do not have permission to {0} this review";
-        public const string INVALID_REVIEW_MESSAGE = "No such review exists";
         public const string NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE
             = "To leave a review, you must be registered in the course";
 
@@ -55,5 +56,6 @@
         public const string COURSE_KEYWORD = "course";
         public const string LESSON_KEYWORD = "lesson";
         public const string RESOURCE_KEYWORD = "resource";
+        public const string REVIEW_KEYWORD = "review";
     }
 }

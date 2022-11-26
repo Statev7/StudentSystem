@@ -1,7 +1,13 @@
 ﻿namespace StudentSystem.Services.Review.Models
 {
-	public class ReviewContentServiceModel
+    using System.ComponentModel.DataAnnotations;
+
+    using static StudentSystem.Data.Common.Constants;
+
+    public class ReviewContentServiceModel
 	{
-		public string Content { get; set; }
+		[Required]
+        [MaxLength(REVIEW_CONTENT_MAX_LENGTH)]
+        public string Content { get; set; }
 	}
 }

@@ -34,6 +34,11 @@
                 })
                 .SingleOrDefault(x => x.UserId == userId);
 
+            if (user == null)
+            {
+                return false;
+            }
+
             var isInCourse = user
                     .Courses
                     .Any(x => x.CourseId == courseId);

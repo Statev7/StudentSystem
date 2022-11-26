@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -32,7 +33,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync() 
+        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
             => await this.dbContext
                 .Users
                 .ProjectTo<UserViewModel>(this.mapper.ConfigurationProvider)
@@ -98,25 +99,53 @@
             return true;
         }
 
-        private async Task<bool> SetNewRoleAsync(ApplicationUser user, string oldRole, string newRole)
-        {
-            var isEmpty = string.IsNullOrEmpty(oldRole) && string.IsNullOrEmpty(newRole);
-            if (isEmpty)
-            {
-                return false;
-            }
-
-            await this.userManager.RemoveFromRoleAsync(user, oldRole);
-            await this.userManager.AddToRoleAsync(user, newRole);
-
-            return true;
-        }
+        public async Task<bool> IsUserBannedAsync(string userId)
+            => await this
+                .dbContext
+                .Users
+                .AnyAsync(u => u.Id == userId && u.IsDeleted);
 
         public async Task<bool> IsUserExistAsync(string id)
             => await this
                 .dbContext
                 .Users
                 .AnyAsync(u => u.Id == id);
+
+        private async Task<bool> SetNewRoleAsync(ApplicationUser user, string oldRoleName, string newRoleName)
+        {
+            var isEmpty = string.IsNullOrEmpty(oldRoleName) || 
+                          string.IsNullOrEmpty(newRoleName);
+            if (isEmpty)
+            {
+                return false;
+            }
+
+            var oldRole = await this.dbContext
+                    .Roles
+                    .FirstOrDefaultAsync(r => r.Name == oldRoleName);
+
+            var newRole = await this.dbContext
+                    .Roles
+                    .FirstOrDefaultAsync(r => r.Name == newRoleName);
+
+            if (oldRole == null || newRole == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var oldUserRoleRelation = await this.dbContext
+                    .UserRoles
+                    .FirstOrDefaultAsync(ur => ur.User == user && ur.Role == oldRole);
+
+            var newUserRoleRelation = new ApplicationUserRole() { User = user, Role = newRole };
+
+            this.dbContext.UserRoles.Remove(oldUserRoleRelation);
+            await this.dbContext.UserRoles.AddAsync(newUserRoleRelation);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
 
         private async Task<(string oldRole, string newRole)> DeterminateNewRole(ApplicationUser user)
         {
@@ -159,11 +188,5 @@
 
             return (oldRole, newRole);
         }
-
-        public async Task<bool> IsUserBannedAsync(string userId)
-            => await this
-                .dbContext
-                .Users
-                .AnyAsync(u => u.Id == userId && u.IsDeleted);
     }
 }

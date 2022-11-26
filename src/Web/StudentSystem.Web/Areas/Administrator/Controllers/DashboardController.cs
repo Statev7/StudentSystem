@@ -58,6 +58,13 @@
         [HttpGet]
         public async Task<IActionResult> Export(int courseId)
         {
+            var isCourseExist = await this.courseService.IsExistAsync(courseId);
+            if (!isCourseExist)
+            {
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
+            }
+
             var (data, contentType, fileName) = 
                 await this.excelExportService.ExportStudentsByCourseAsync(courseId);
 

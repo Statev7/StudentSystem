@@ -70,7 +70,7 @@
                 return this.View(lesson);
             }
 
-            var errorMessage = await this.ValidateModelAsync(lesson);
+            var errorMessage = await this.ValidateLessonDatesAgainstCourseDatesAsync(lesson);
             if (errorMessage != string.Empty)
             {
                 this.TempData[ERROR_NOTIFICATION] = errorMessage;
@@ -115,7 +115,7 @@
                 return this.View(lesson);
             }
 
-            var errorMessage = await this.ValidateModelAsync(lesson);
+            var errorMessage = await this.ValidateLessonDatesAgainstCourseDatesAsync(lesson);
             if (errorMessage != string.Empty)
             {
                 this.TempData[ERROR_NOTIFICATION] = errorMessage;
@@ -163,7 +163,7 @@
             .OrderBy(x => x.Name)
             .ToListAsync();
 
-        private async Task<string> ValidateModelAsync(LessonFormServiceModel lesson)
+        private async Task<string> ValidateLessonDatesAgainstCourseDatesAsync(LessonFormServiceModel lesson)
         {
             var isCourseExist = await this.courseService.IsExistAsync(lesson.CourseId);
             if (!isCourseExist)

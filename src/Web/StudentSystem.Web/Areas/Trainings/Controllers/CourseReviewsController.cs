@@ -41,7 +41,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(int courseId, string content)
         {
-            if (!this.ModelState.IsValid)
+            if (string.IsNullOrEmpty(content))
             {
                 return this.View("Details", content);
             }
@@ -86,7 +86,8 @@
 
             if (review == null)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, REVIEW_KEYWORD);
 
                 return this.RedirectToAction("Index", "Home");
             }
@@ -102,8 +103,8 @@
                 return this.View(review);
             }
 
-            var isValid = await this.reviewService.IsAuthorOrAdminAsync(id, this.User);
-            if (!isValid)
+            var hasPermishionToUpdate = await this.reviewService.IsAuthorOrAdminAsync(id, this.User);
+            if (!hasPermishionToUpdate)
             {
                 this.TempData[ERROR_NOTIFICATION] =
                     string.Format(NOT_HAVE_PERMISSION_MESSAGE, UPDATE);
@@ -119,17 +120,17 @@
         [HttpGet]
         public async Task<IActionResult> Delete(int reviewId, int courseId)
         {
-            var review = await this.reviewService.GetByIdAsync<ReviewUserIdServiceModel>(reviewId);
-
-            if (review == null)
+            var isReviewExist = await this.reviewService.IsExistAsync(reviewId);
+            if (!isReviewExist)
             {
-                this.TempData[ERROR_NOTIFICATION] = INVALID_REVIEW_MESSAGE;
+                this.TempData[ERROR_NOTIFICATION] = 
+                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, REVIEW_KEYWORD);
 
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var isValid = await this.reviewService.IsAuthorOrAdminAsync(reviewId, this.User);
-            if (!isValid)
+            var hasPermishionToDelete = await this.reviewService.IsAuthorOrAdminAsync(reviewId, this.User);
+            if (!hasPermishionToDelete)
             {
                 this.TempData[ERROR_NOTIFICATION] =
                     string.Format(NOT_HAVE_PERMISSION_MESSAGE, DELETE);

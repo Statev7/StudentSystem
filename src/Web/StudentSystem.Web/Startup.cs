@@ -20,10 +20,12 @@ namespace StudentSystem.Web
     using StudentSystem.Services.Lesson;
     using StudentSystem.Services.Resource;
     using StudentSystem.Services.Review;
+    using StudentSystem.Services.User;
     using StudentSystem.Web.Data;
     using StudentSystem.Web.Infrastructure.Extensions;
 
     using static StudentSystem.Data.Seed.Launcher;
+    using static StudentSystem.Data.Common.Constants;
 
     public class Startup
     {
@@ -48,6 +50,7 @@ namespace StudentSystem.Web
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = PASSWORD_MIN_LENGTH;
                 })
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<StudentSystemDbContext>();
@@ -118,6 +121,7 @@ namespace StudentSystem.Web
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
             services.AddTransient<IExcelExportService, ExcelExportService>();
+            services.AddTransient<IUserService, UserService>();
         }
     }
 }

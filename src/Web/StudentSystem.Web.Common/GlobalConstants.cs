@@ -17,7 +17,5 @@
         public const string ADMIN_ROLE = "Admin";
         public const string STUDENT_ROLE = "Student";
         public const string USER_ROLE = "User";
-
-        public const string ADMIN_OR_STUDENT = ADMIN_ROLE + "," + STUDENT_ROLE;
     }
 }

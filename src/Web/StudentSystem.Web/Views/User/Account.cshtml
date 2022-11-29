@@ -1,0 +1,43 @@
+﻿@model UserDetailsServiceModel
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+@section Styles{
+    <link href="/css/account.css" rel="stylesheet" />
+}
+
+<div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+    <div class="card p-4">
+        <div class="image d-flex flex-column justify-content-center align-items-center">
+            <button class="btn btn-secondary">
+                <img src="@Model.ImageUrl" height="100" width="100" />
+            </button>
+            <span class="name mt-3">@Model.FirstName @Model.LastName</span>
+            <span class="email">Email: @Model.Email</span>
+            <span class="email">
+                    <i class="fas fa-map-marker-alt pr-1">
+                        @{
+                        var cityName = "No information";
+                        if (!string.IsNullOrEmpty(Model.CityName))
+                        {
+                            cityName = Model.CityName;
+                        }
+                        <span>@cityName</span>
+                    }
+                    </i>
+            </span>
+            <div class="d-flex mt-2 text-white">
+                    <a asp-area="Identity" asp-controller="Account" asp-action="Manage" class="btn btn-primary">Manage</a>
+            </div>
+            <div class="px-2 rounded mt-4 date ">
+                <span class="join">Joined @Model.CreatedOn.ToString("MMMM", CultureInfo.InvariantCulture),@Model.CreatedOn.Year</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://kit.fontawesome.com/ddc00cf9b8.js" crossorigin="anonymous"></script>
+}

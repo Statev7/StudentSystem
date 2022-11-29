@@ -6,6 +6,7 @@
 
     using StudentSystem.Data.Models.StudentSystem;
     using StudentSystem.Services.ExcelExport.Models;
+    using StudentSystem.Services.User.Models;
     using StudentSystem.ViewModels.User;
 
     public class UserProfile : Profile
@@ -22,6 +23,10 @@
                 .ForMember(d => d.IsBanned, conf => conf.MapFrom(s => s.IsDeleted))
                 .ForMember(d => d.CityName, conf => conf
                     .MapFrom(s => s.City.Name ?? "No information"));
+
+            this.CreateMap<UpdateUserServiceModel, ApplicationUser>();
+            this.CreateMap<ApplicationUser, CreateUserServiceModel>().ReverseMap();
+            this.CreateMap<ApplicationUser, UserDetailsServiceModel>();
         }
     }
 }

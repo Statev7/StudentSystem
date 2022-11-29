@@ -10,6 +10,10 @@
 
 @inject UserManager<ApplicationUser> userManager
 
+@section Styles{
+	 <link href="/css/course.css" rel="stylesheet" />
+}
+
 <div class="text-center p-4" style="background-color: #F1F1F1">
 	<h1>@Model.Name</h1>
 	<h6>Start date: @Model.StartDate</h6>

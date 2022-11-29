@@ -98,19 +98,7 @@
             ReturnUrl = returnUrl;
             ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            var cities = (List<CityIdNameViewModel>)this.memoryCache.Get(CITIES_KEY);
-
-            if (cities == null)
-            {
-                cities = await this.cityService
-                        .GetAllAsQueryable<CityIdNameViewModel>()
-                        .OrderBy(x => x.Name)
-                        .ToListAsync();
-
-                this.memoryCache.Set(CITIES_KEY, cities, TimeSpan.FromDays(1));
-            }
-
-            this.ViewData["Cities"] = cities;
+            await this.ImportCitiesToView();
 
             return this.Page();
         }
@@ -143,22 +131,42 @@
                 };
 
                 var result = await this.userManager.CreateAsync(user, Input.Password);
-                await this.userManager.AddToRoleAsync(user, GlobalConstants.USER_ROLE);
 
                 if (result.Succeeded)
                 {
+                    await this.userManager.AddToRoleAsync(user, GlobalConstants.USER_ROLE);
                     await signInManager.SignInAsync(user, isPersistent: false);
+
                     return LocalRedirect(returnUrl);
                 }
 
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
+                    await this.ImportCitiesToView();
                 }
             }
 
+
             // If we got this far, something failed, redisplay form
             return this.Page();
+        }
+
+        private async Task ImportCitiesToView()
+        {
+            var cities = (List<CityIdNameViewModel>)this.memoryCache.Get(CITIES_KEY);
+
+            if (cities == null)
+            {
+                cities = await this.cityService
+                        .GetAllAsQueryable<CityIdNameViewModel>()
+                        .OrderBy(x => x.Name)
+                        .ToListAsync();
+
+                this.memoryCache.Set(CITIES_KEY, cities, TimeSpan.FromDays(1));
+            }
+
+            this.ViewData["Cities"] = cities;
         }
     }
 }

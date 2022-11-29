@@ -11,6 +11,8 @@
 
         public IEnumerable<ReviewForHomeViewModel> Reviews { get; set; }
 
+        public OpenCourseViewModel NewestCourse { get; set; }
+
         public IList<int> CategoriesIds { get; set; }
     }
 }

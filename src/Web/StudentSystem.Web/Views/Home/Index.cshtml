@@ -7,7 +7,7 @@
     var isUserStudentOrAdmin = this.User.IsInRole(GlobalConstants.STUDENT_ROLE) ||
                                this.User.IsInRole(GlobalConstants.ADMIN_ROLE);
 
-    var newestCourse = Model.CoursesReviews.OpenCourses.FirstOrDefault();
+    var newestCourse = Model.CoursesReviews.NewestCourse;                             
     var dateFormat = "dd/MM/yyyy";
 
 }
@@ -54,10 +54,6 @@
                             {
                                 <div>
                                     <a 
-                                        asp-area="Trainings"
-                                        asp-controller="Lessons"
-                                        asp-action="Details"
-                                        asp-route-id="@lesson.Id"
                                          style="color: #565656; font-size: 18px;">
                                         @lesson.Title
                                     </a>
@@ -166,7 +162,9 @@ else
                 </div>
                 <div class="col-lg-4">
                     <div class="box small h-100">
-                        @foreach (var course in Model.CoursesReviews.OpenCourses.Skip(1).Take(3))
+                        @foreach (var course in Model.CoursesReviews.OpenCourses
+                            .Where(x => x.Id != newestCourse.Id)
+                            .Take(3))
                         {
                             <div class="d-flex align-items-center mb-2">
                                 <div class="img">

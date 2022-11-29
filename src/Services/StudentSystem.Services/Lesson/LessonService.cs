@@ -98,10 +98,10 @@
                     End = l.End,
                     Resources = l.Resources
                         .Where(r => !r.IsDeleted)
-                        .Select(r => new ResourceNameURLViewModel
+                        .Select(r => new ResourceIdNameViewModel
                         {
+                            Id = r.Id,
                             Name = r.Name,
-                            Url = r.URL,
                         })
                 })
                 .FirstOrDefaultAsync();

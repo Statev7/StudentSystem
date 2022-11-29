@@ -82,7 +82,7 @@
                                             <div class="mb-2">
                                                 <form asp-action="Promotion" asp-route-id="@user.Id" method="post">
                                                     <button class="btn btn-primary w-100"
-                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.MODERATOR_ROLE 
+                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.STUDENT_ROLE 
                                                         ? "disabled" 
                                                         : string.Empty)>
                                                         Promote

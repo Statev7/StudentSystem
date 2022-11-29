@@ -27,7 +27,6 @@
             {
                 new ApplicationRole(USER_ROLE),
                 new ApplicationRole(STUDENT_ROLE),
-                new ApplicationRole(MODERATOR_ROLE),
                 new ApplicationRole(ADMIN_ROLE),
             };
 

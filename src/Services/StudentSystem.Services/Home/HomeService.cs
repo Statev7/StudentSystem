@@ -84,11 +84,24 @@
 
             model.CoursesReviews.CategoriesIds = categories;
 
-            model.CoursesReviews.OpenCourses = await this.courseService
-                .GetAllAsQueryable<OpenCourseViewModel>()
+            var newestCourseAsServiceModel = await this.courseService
+                .GetAllAsQueryable<OpenCourseSeviceModel>()
+                .Where(c => !c.IsDeleted)
+                .OrderByDescending(c => c.CreatedOn)
+                .FirstOrDefaultAsync();
+
+            var newestCourse = this.mapper.Map<OpenCourseViewModel>(newestCourseAsServiceModel);
+
+            model.CoursesReviews.NewestCourse = newestCourse;
+
+            var openCoursesAsServiceModels = await this.courseService
+                .GetAllAsQueryable<OpenCourseSeviceModel>()
                 .Where(c => !c.IsDeleted && c.StartDate > DateTime.UtcNow)
                 .Take(4)
                 .ToListAsync();
+
+            var openCourses = ConvertCoursesToViewModel(openCoursesAsServiceModels);
+            model.CoursesReviews.OpenCourses = openCourses;
 
             model.CoursesReviews.Reviews = await this.reviewService
                 .GetAllAsQueryable<ReviewForHomeViewModel>()
@@ -120,10 +133,11 @@
                                       .Select(l => new LessonScheduleServiceModel
                                       {
                                           Id = l.Id,
-                                          CourseName = us.Course.Name,
                                           Title = l.Title,
                                           Begining = l.Begining,
                                           End = l.End,
+                                          CourseId = l.CourseId,
+                                          CourseName = us.Course.Name,
                                           Resources = l.Resources
                                             .Where(r => r.Lesson.End >= DateTime.UtcNow)
                                             .Select(r => new ResourceViewModel
@@ -140,12 +154,13 @@
                     })
                     .FirstOrDefaultAsync();
 
-            var studentInformation = this.ConvertToViewModels(studentResources);
+            var studentInformation = this.ConvertStudentInformationToViewModels(studentResources);
 
             return studentInformation;
         }
 
-        private StudentAllResourcesViewModel ConvertToViewModels(StudentInformationServiceModel studentResources)
+        private StudentAllResourcesViewModel ConvertStudentInformationToViewModels(
+            StudentInformationServiceModel studentResources)
         {
             var coursesAsViewModels = new List<CourseIdNameViewModel>();
             var lessonsAsViewModels = new List<LessonScheduleViewModel>();
@@ -174,6 +189,18 @@
             };
 
             return studentInformation;
+        }
+
+        private IEnumerable<OpenCourseViewModel> ConvertCoursesToViewModel(IEnumerable<OpenCourseSeviceModel> courses)
+        {
+            var openCourses = new List<OpenCourseViewModel>();
+            foreach (var course in courses)
+            {
+                var mappedCourse = this.mapper.Map<OpenCourseViewModel>(course);
+                openCourses.Add(mappedCourse);
+            }
+
+            return openCourses;
         }
     }
 }

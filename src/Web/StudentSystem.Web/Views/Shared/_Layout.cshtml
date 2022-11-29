@@ -33,6 +33,10 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Trainings" asp-controller="Resources" asp-action="Index">Resources</a>
                             </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if(this.User.IsAdministrator()){
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Administrator" asp-controller="Dashboard" asp-action="Index">Admin</a>
                             </li>
@@ -47,6 +51,11 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <div>
+        <button onclick="GoTopFunction()" id="go-top-btn" title="Go to top">
+            <img src="~/Img/up-arrow.png" style="width: 30px; height: 30px" />
+        </button>
     </div>
 
     <footer class="border-top footer text-muted" style="background-color: #306085">
@@ -70,6 +79,22 @@
                 toastr.info('@this.TempData[NotificationsConstants.INFO_NNOTIFICATION]');
             }
         };
+    </script>
+
+    <script>
+        window.onscroll = function () { scroll() };
+
+        function scroll() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("go-top-btn").style.display = "block";
+            } else {
+                document.getElementById("go-top-btn").style.display = "none";
+            }
+        }
+
+        function GoTopFunction() {
+            document.documentElement.scrollTop = 0;
+        }
     </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -113,3 +113,23 @@ body {
     width: 306px;
     height: 208px;
 }
+
+#go-top-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: silver;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+#go-top-btn:hover {
+    background-color: #565656;
+}

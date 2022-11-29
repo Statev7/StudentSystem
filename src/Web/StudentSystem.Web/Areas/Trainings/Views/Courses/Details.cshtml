@@ -16,8 +16,8 @@
 </div>
 <div class="container">
 	<div class="shadow-box mt-5 mb-5">
-		<div class="p-3 text-center">
-			<h3>Lessons</h3>
+		<div class="p-3">
+			<h3 class="text-center">Lessons</h3>
 			<hr />
 		</div>
 		<div class="container overflow-hidden">
@@ -30,7 +30,7 @@
 								<span class="lesson-title">@(++count). @lesson.Title</span>
 							</div>
 						</div>
-						<div id="@lesson.Id" class="lesson-box d-none p-2 mt-1 border" data-is-content-loaded=@false>
+						<div id="@lesson.Id" class="lesson-box d-none p-2 mt-1 border">
 							@{
 								//Generate with js!
 							}
@@ -38,20 +38,14 @@
 					</div>
 				}
 			</div>
+			@if(this.User.IsAdministrator()){
+				<div class="d-flex justify-content-between align-items-center p-3">
+					<a asp-action="Update" asp-route-id="@Model.Id">Update</a>
+					<a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+				</div>
+			}
 		</div>
 	</div>
-	@if (this.User.IsAdministrator())
-	{
-		<div class="text-center mb-3">
-			<a asp-area="Trainings"
-		   asp-controller="Courses"
-		   asp-action="Update"
-		   asp-route-id="@Model.Id"
-		   class="btn btn-primary rounded-pill w-25 p-2">
-				Update
-			</a>
-		</div>
-	}
 	<div class="text-center">
 		<button id="show-information-btn" class="btn btn-primary rounded-pill mb-3 w-25 p-2">Show More</button>
 	</div>
@@ -250,9 +244,11 @@
 				pElement.textContent = "";
 				for (let index = 0; index < resources.length; index++) {
 					let currentResource = resources[index];
+					let id = currentResource.id;
 
 					let aElement = document.createElement('a');
-					aElement.href = currentResource.url;
+
+					aElement.href = `/Trainings/Resources/Details/${id}`;
 					aElement.textContent = currentResource.name;
 
 					pElement.appendChild(aElement);

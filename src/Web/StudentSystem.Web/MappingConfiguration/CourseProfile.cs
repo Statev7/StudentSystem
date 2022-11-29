@@ -1,6 +1,7 @@
 ﻿namespace StudentSystem.Web.MappingConfiguration
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using AutoMapper;
@@ -30,11 +31,12 @@
             this.CreateMap<Course, CourseIdNameViewModel>();
             this.CreateMap<CourseLessonScheduleServiceModel, CourseIdNameViewModel>();
             this.CreateMap<Course, CourseUsersServiceModel>();
-            this.CreateMap<Course, OpenCourseViewModel>()
+            this.CreateMap<Course, OpenCourseSeviceModel>()
                 .ForMember(d => d.Duration, conf => conf
                     .MapFrom(s => (s.EndDate - s.StartDate).TotalDays / 7 < 1
                             ? 1
                             : Math.Ceiling((s.EndDate - s.StartDate).TotalDays / 7)));
+            this.CreateMap<OpenCourseSeviceModel, OpenCourseViewModel>();
             this.CreateMap<Course, CourseNameViewModel>();
             this.CreateMap<Course, CourseDatesServiceModel>();
         }

@@ -159,11 +159,6 @@
                 oldRole = USER_ROLE;
                 newRole = STUDENT_ROLE;
             }
-            else if (usersRoles.Contains(STUDENT_ROLE))
-            {
-                oldRole = STUDENT_ROLE;
-                newRole = MODERATOR_ROLE;
-            }
 
             return (oldRole, newRole);
         }
@@ -179,11 +174,6 @@
             {
                 oldRole = STUDENT_ROLE;
                 newRole = USER_ROLE;
-            }
-            else if (usersRoles.Contains(MODERATOR_ROLE))
-            {
-                oldRole = MODERATOR_ROLE;
-                newRole = STUDENT_ROLE;
             }
 
             return (oldRole, newRole);

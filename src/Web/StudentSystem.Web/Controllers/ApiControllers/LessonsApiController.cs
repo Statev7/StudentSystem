@@ -19,7 +19,7 @@
         }
 
 		[HttpGet]
-		public async Task<LessonDetailsViewModel> Get(int id)
+		public async Task<LessonDetailsViewModel> GetDetails(int id)
 		{
 			var lesson = await
                 this.lessonService.GetDetailsAsync(id);

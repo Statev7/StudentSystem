@@ -9,13 +9,15 @@
     {
         public int Id { get; set; }
 
-        public string CourseName { get; set; }
-
         public string Title { get; set; }
 
         public DateTime Begining { get; set; }
 
         public DateTime End { get; set; }
+
+        public int CourseId { get; set; }
+
+        public string CourseName { get; set; }
 
         public IEnumerable<ResourceViewModel> Resources { get; set; }
     }

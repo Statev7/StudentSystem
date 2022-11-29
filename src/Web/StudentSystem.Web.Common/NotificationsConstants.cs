@@ -27,6 +27,9 @@ namespace StudentSystem.Web.Common
         public const string NOT_ALLOWED_TO_ADD_A_REVIEW_MESSAGE
             = "To leave a review, you must be registered in the course";
 
+        //Resource
+        public const string NOT_HAVE_PERMISSION_TO_RESOURCE = "Materials are only available to enrolled users in the course";
+
         //Admin panel 
         public const string USER_NOT_EXIST_MESSAGE = "Such a user not exist";
         public const string SUCCESSFULLY_PROMOTED_MESSAGE = "Successfully promoted a user";

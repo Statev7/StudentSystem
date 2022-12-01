@@ -19,7 +19,7 @@
                     .Select(ur => ur.Role.Name)
                     .FirstOrDefault()));
 
-            this.CreateMap<ApplicationUser, StudentsFromCourseExportServiceModel>()
+            this.CreateMap<ApplicationUser, UsersExportServiceModel>()
                 .ForMember(d => d.IsBanned, conf => conf.MapFrom(s => s.IsDeleted))
                 .ForMember(d => d.CityName, conf => conf
                     .MapFrom(s => s.City.Name ?? "No information"));

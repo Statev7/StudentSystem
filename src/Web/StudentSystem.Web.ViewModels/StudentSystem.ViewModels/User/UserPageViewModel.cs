@@ -3,11 +3,10 @@
     using System.Collections.Generic;
 
     using StudentSystem.ViewModels.Course;
+    using StudentSystem.ViewModels.Page;
 
-    public class UsersCoursesViewModel
+    public class UserPageViewModel : PageViewModel
     {
         public IEnumerable<UserViewModel> Users { get; set; }
-
-        public IEnumerable<CourseIdNameViewModel> Courses { get; set; }
     }
 }

@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center border-bottom">
         <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Back to list</a>
-        <h1>Create new course</h1>
+        <h1>@this.ViewData["Title"]</h1>
     </div>
    <partial name="_CourseFormPartial" model="@Model"> 
 </div>

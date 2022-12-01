@@ -22,5 +22,7 @@
         public int NextPage => this.CurrentPage + 1;
 
         public int[] Filters { get; set; }
+
+        public string Search { get; set; }
     }
 }

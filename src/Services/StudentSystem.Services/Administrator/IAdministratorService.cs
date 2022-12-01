@@ -1,6 +1,5 @@
 ﻿namespace StudentSystem.Services.Administrator
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using StudentSystem.Data.Models.StudentSystem;
@@ -8,7 +7,7 @@
 
     public interface IAdministratorService
     {
-        Task<IEnumerable<UserViewModel>> GetAllUsersAsync();
+        UserPageViewModel GetUsers(string search, int currentPage);
 
         Task<bool> PromoteAsync(ApplicationUser user);
 

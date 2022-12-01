@@ -31,7 +31,7 @@
                     .WithData(Users()))
                 .ShouldReturn()
                 .View(result => result
-                    .WithModelOfType<UsersCoursesViewModel>(model =>
+                    .WithModelOfType<UserPageViewModel>(model =>
                     {
                         Assert.Equal(10, model.Users.Count());
                         Assert.Equal(10, model.Courses.Count());

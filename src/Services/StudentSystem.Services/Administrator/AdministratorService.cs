@@ -11,33 +11,71 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
+    using StudentSystem.Data.Models.Abstraction;
     using StudentSystem.Data.Models.StudentSystem;
+    using StudentSystem.Services.Abstaction;
     using StudentSystem.ViewModels.User;
     using StudentSystem.Web.Data;
 
     using static StudentSystem.Web.Common.GlobalConstants;
 
-    public class AdministratorService : IAdministratorService
+    public class AdministratorService : BaseService<BaseModel>, IAdministratorService
     {
-        private readonly StudentSystemDbContext dbContext;
-        private readonly IMapper mapper;
+        private const int USERS_PER_PAGE = 5;
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public AdministratorService(
             StudentSystemDbContext dbContext,
             IMapper mapper,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager)   
+            :base(dbContext, mapper)
         {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
             this.userManager = userManager;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
-            => await this.dbContext
+        public UserPageViewModel GetUsers(string search, int currentPage)
+        {
+            var query = this.DbContext
                 .Users
-                .ProjectTo<UserViewModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                .OrderBy(u => u.UserRoles
+                    .Select(ur => ur.Role.Name)
+                    .FirstOrDefault())
+                .ThenBy(u => u.CreatedOn)
+                .ProjectTo<UserViewModel>(this.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            if (search != null)
+            {
+                search = search.ToLower();
+
+                query = query.Where(u =>
+                    u.FirstName.ToLower().Contains(search) ||
+                    u.LastName.ToLower().Contains(search) ||
+                    u.CityName.ToLower().Contains(search));
+            }
+
+            var usersCount = query.Count();
+            var users = new List<UserViewModel>();
+
+            if (query.Any())
+            {
+                users = this
+                    .Paging(query, currentPage, USERS_PER_PAGE)
+                    .ToList();
+            }
+
+            var model = new UserPageViewModel()
+            {
+                CurrentPage = currentPage,
+                TotalEntities = usersCount,
+                Search = search == null ? search : search.ToLower(),
+                EntitiesPerPage = USERS_PER_PAGE,
+                Users = users,
+            };
+
+            return model;
+        }
 
         public async Task<bool> PromoteAsync(ApplicationUser user)
         {
@@ -70,13 +108,13 @@
                 return false;
             }
 
-            var user = await this.dbContext.Users.FindAsync(userId);
+            var user = await this.DbContext.Users.FindAsync(userId);
 
             user.IsDeleted = true;
             user.DeletedOn = DateTime.UtcNow;
 
-            this.dbContext.Update(user);
-            await this.dbContext.SaveChangesAsync();
+            this.DbContext.Update(user);
+            await this.DbContext.SaveChangesAsync();
 
             return true;
         }
@@ -88,26 +126,26 @@
                 return false;
             }
 
-            var user = await this.dbContext.Users.FindAsync(userId);
+            var user = await this.DbContext.Users.FindAsync(userId);
 
             user.IsDeleted = false;
             user.DeletedOn = null;
 
-            this.dbContext.Update(user);
-            await this.dbContext.SaveChangesAsync();
+            this.DbContext.Update(user);
+            await this.DbContext.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> IsUserBannedAsync(string userId)
             => await this
-                .dbContext
+                .DbContext
                 .Users
                 .AnyAsync(u => u.Id == userId && u.IsDeleted);
 
         public async Task<bool> IsUserExistAsync(string id)
             => await this
-                .dbContext
+                .DbContext
                 .Users
                 .AnyAsync(u => u.Id == id);
 
@@ -120,29 +158,8 @@
                 return false;
             }
 
-            var oldRole = await this.dbContext
-                    .Roles
-                    .FirstOrDefaultAsync(r => r.Name == oldRoleName);
-
-            var newRole = await this.dbContext
-                    .Roles
-                    .FirstOrDefaultAsync(r => r.Name == newRoleName);
-
-            if (oldRole == null || newRole == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var oldUserRoleRelation = await this.dbContext
-                    .UserRoles
-                    .FirstOrDefaultAsync(ur => ur.User == user && ur.Role == oldRole);
-
-            var newUserRoleRelation = new ApplicationUserRole() { User = user, Role = newRole };
-
-            this.dbContext.UserRoles.Remove(oldUserRoleRelation);
-            await this.dbContext.UserRoles.AddAsync(newUserRoleRelation);
-
-            await this.dbContext.SaveChangesAsync();
+            await this.userManager.RemoveFromRoleAsync(user, oldRoleName);
+            await this.userManager.AddToRoleAsync(user, newRoleName);
 
             return true;
         }

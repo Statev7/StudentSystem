@@ -47,7 +47,8 @@
             if (coursesIds.Any())
             {
                 lessons = lessons
-                    .Where(x => coursesIds.Contains(x.CourseId))
+                    .Where(x => coursesIds
+                        .Contains(x.CourseId))
                     .ToList();
             }
 

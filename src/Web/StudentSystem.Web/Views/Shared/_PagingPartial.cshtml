@@ -11,7 +11,7 @@
     <ul class="pagination justify-content-center">
         <li class="page-item @(Model.HasPrevious == false ? "disabled" : string.Empty)">
             <a class="page-link" href="@Url.Page("",
-					new {currentPage = Model.PreviousPage, filters = Model.Filters})">
+					new {currentPage = Model.PreviousPage, filters = Model.Filters, search = Model.Search})">
                 Previous
             </a>
         </li>
@@ -22,7 +22,7 @@
             {
                 <li class="page-item">
                     <a class="page-link" href="@Url.Page("",
-							new {currentPage = index, filters = Model.Filters})">
+							new {currentPage = index, filters = Model.Filters, search = Model.Search})">
                         @index
                     </a>
                 </li>
@@ -31,7 +31,7 @@
 
         <li class="page-item active">
             <a class="page-link" href="@Url.Page("",
-					new {currentPage = Model.CurrentPage, filters = Model.Filters})">
+					new {currentPage = Model.CurrentPage, filters = Model.Filters, search = Model.Search})">
                 @Model.CurrentPage
             </a>
         </li>
@@ -42,7 +42,7 @@
             {
                 <li class="page-item">
                     <a class="page-link" href="@Url.Page("",
-							new {currentPage = Model.CurrentPage + index, filters = Model.Filters})">
+							new {currentPage = Model.CurrentPage + index, filters = Model.Filters, search = Model.Search})">
                         @(Model.CurrentPage + index)
                     </a>
                 </li>
@@ -50,7 +50,7 @@
         }
         <li class="page-item @(Model.HasNext == false ? "disabled" : string.Empty)">
             <a class="page-link" href="@Url.Page("",
-					new {currentPage = Model.NextPage, filters = Model.Filters})">
+					new {currentPage = Model.NextPage, filters = Model.Filters, search = Model.Search})">
                 Next
             </a>
         </li>

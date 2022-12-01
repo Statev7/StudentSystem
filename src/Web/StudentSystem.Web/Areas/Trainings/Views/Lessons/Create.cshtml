@@ -5,6 +5,10 @@
 }
 
 <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center border-bottom">
+        <a class="btn btn-primary" asp-controller="Lessons" asp-action="Index">Back to list</a>
+        <h1>@this.ViewData["Title"]</h1>
+    </div>
     <partial name="_LessonFormPartial" model="@Model">
 </div>
 

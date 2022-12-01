@@ -1,0 +1,78 @@
+﻿@using StudentSystem.Services.ExcelExport.Enums
+@using StudentSystem.Services.ExcelExport.Models
+
+@model ExportDataServiceModel
+
+@{
+    this.ViewData["Title"] = "Export"; 
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+}
+
+<div class="container mt-5">
+    <div class="offset-3 col-6">
+        <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+            <form asp-action="Export" class="w-100" method="get">
+                <div class="form-group">
+                    <label class="control-label">Export by</label>
+                    <select id="export-type" asp-for="@Model.ExportType" class="form-control">
+                        <option value="@ExportType.Course">@ExportType.Course</option>
+                        <option value="@ExportType.City">@ExportType.City</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="entity-export" asp-for=@Model.EntityToExportId class="form-control">
+                    </select>
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-success w-50">Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let exportTypeElement = document.getElementById("export-type");
+
+        if (exportTypeElement.value == "Course"){
+            populateData(exportTypeElement.value);
+        }
+
+        exportTypeElement.addEventListener('change', function(){
+            populateData(exportTypeElement.value);
+        });
+
+        function populateData(exportType){
+
+            if (exportType == "Course") {
+                $.get('/api/exportDashboard/courses', (data) => {
+                    populateSelect(data);
+                });
+            }
+            else if (exportType == "City") {
+                $.get('/api/exportDashboard/cities', (data) => {
+                    populateSelect(data);
+                });
+            }
+        }
+
+        function populateSelect(data){
+            let select = document.getElementById("entity-export");
+            select.innerHTML = "";
+
+            for (let index = 0; index < data.length; index++) {
+                let currentEntity = data[index];
+                
+                let option = document.createElement('option');
+                option.value = currentEntity.id;
+                option.innerHTML = currentEntity.name;
+
+                select.appendChild(option);
+            }
+        }
+    </script>
+}

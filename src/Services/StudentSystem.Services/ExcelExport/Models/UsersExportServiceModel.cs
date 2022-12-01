@@ -1,6 +1,6 @@
 ﻿namespace StudentSystem.Services.ExcelExport.Models
 {
-    public class StudentsFromCourseExportServiceModel
+    public class UsersExportServiceModel
     {
         public string FirstName { get; set; }
 

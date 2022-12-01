@@ -36,9 +36,10 @@
                         }
                     </ul>
                     <ul class="navbar-nav">
-                        @if(this.User.IsAdministrator()){
+                        @if (this.User.IsAdministrator())
+                        {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="Administrator" asp-controller="Dashboard" asp-action="Index">Admin</a>
+                                <a class="nav-link text-white" asp-area="Administrator" asp-controller="Dashboard" asp-action="Index">Administration</a>
                             </li>
                         }
                     </ul>

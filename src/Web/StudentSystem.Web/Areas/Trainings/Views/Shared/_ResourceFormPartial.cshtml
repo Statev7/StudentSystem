@@ -14,7 +14,7 @@
             <span asp-validation-for="@Model.URL" class="text-danger"></span>
         </div>
         <div class="form-group control-label">
-            <select asp-for="@Model.LessonId" class="form-control">
+            <select asp-for="@Model.LessonId" class="selectpicker w-100" data-live-search="true">
                 @foreach (var lesson in Model.Lessons)
                 {
                     <option value="@lesson.Id">@lesson.Title</option>

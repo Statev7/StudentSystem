@@ -21,7 +21,10 @@
 
     public class UserController : Controller
 	{
-		private readonly IUserService userService;
+        private const string DEFAULT_IMAGE = "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg";
+
+
+        private readonly IUserService userService;
 		private readonly ICityService cityService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -108,7 +111,7 @@
                 LastName = registerModel.LastName,
                 Email = registerModel.Email,
                 UserName = registerModel.Email,
-                ImageURL = registerModel.ImageUrl,
+                ImageURL = registerModel.ImageUrl ?? DEFAULT_IMAGE,
                 CityId = registerModel.CityId ?? null,
                 CreatedOn = DateTime.UtcNow,
             };

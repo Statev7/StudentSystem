@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public interface IBaseService
+    public interface IBaseService : IPageing
     {
         IQueryable<T> GetAllAsQueryable<T>(bool withDeleted = false);
 
@@ -13,10 +13,6 @@
         Task<T> GetByIdAsync<T>(int id);
 
         Task DeleteAsync(int id);
-
-        IEnumerable<T> Paging<T>(IList<T> data, int currentPage, int entitiesPerPage);
-
-        IQueryable<T> Paging<T>(IQueryable<T> data, int currentPage, int entitiesPerPage);
 
         Task<bool> IsExistAsync(int id);
 

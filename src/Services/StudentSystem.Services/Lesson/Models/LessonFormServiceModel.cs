@@ -29,6 +29,7 @@
         [Required]
         public DateTime? End { get; set; }
 
+        [Display(Name = "Course")]
         public int CourseId { get; set; }
 
         public IEnumerable<CourseIdNameViewModel> Courses { get; set; }

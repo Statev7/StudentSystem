@@ -18,6 +18,7 @@
         [Url]
         public string URL { get; set; }
 
+        [Display(Name = "Lesson")]
         public int LessonId { get; set; }
 
         public IEnumerable<LessonIdNameViewModel> Lessons { get; set; }

@@ -40,35 +40,12 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string search = null, int currentPage = 1)
         {
-            var users = await this.administratorService
-                .GetAllUsersAsync();
+            var users = this.administratorService
+                .GetUsers(search, currentPage);
 
-            var model = new UsersCoursesViewModel()
-            {
-                Users = users,
-                Courses = await this.courseService
-                    .GetAllAsync<CourseIdNameViewModel>(),
-            };
-
-            return this.View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Export(int courseId)
-        {
-            var isCourseExist = await this.courseService.IsExistAsync(courseId);
-            if (!isCourseExist)
-            {
-                this.TempData[ERROR_NOTIFICATION] = 
-                    string.Format(SUCH_A_ENTITY_DOES_NOT_EXIST, COURSE_KEYWORD);
-            }
-
-            var (data, contentType, fileName) = 
-                await this.excelExportService.ExportStudentsByCourseAsync(courseId);
-
-            return File(data, contentType, fileName);
+            return this.View(users);
         }
 
         [HttpPost]

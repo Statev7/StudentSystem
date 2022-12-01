@@ -1,4 +1,4 @@
-﻿@model UsersCoursesViewModel
+﻿@model UserPageViewModel
 
 @{
     this.ViewData["Title"] = "Admin";
@@ -15,17 +15,14 @@
                     <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                         <div class="d-flex justify-content-between align-items-center">
                             <form>
-                                <select id="courseSelect" class="selectpicker" data-live-search="true">
-                                @foreach (var course in this.Model.Courses)
-                                {
-                                    <option value="@course.Id">@course.Name</option>
-                                }
-                                </select>
-                                <a id="exportLink" 
-                                    asp-action="Export"
-                                    asp-route-courseId="@Model.Courses.First().Id"
-                                    class="btn btn-success">Export</a>
+                                <div class="input-group rounded">
+                                    <input asp-for=@Model.Search class="form-control rounded" placeholder="Search" aria-label="Search" />
+                                    <button class="btn btn-primary ml-1">Search</button>
+                                </div>
                             </form>
+                            <div>
+                                <a class="btn btn-success" asp-controller="ExportDashboard" asp-action="Index">Export Dashboard</a>
+                            </div>
                         </div>
                         <table class="table manage-candidates-top mb-0">
                             <thead>
@@ -63,7 +60,7 @@
                                                                 {
                                                                     cityName = @user.CityName;
                                                                 }
-                                                                                                                                            <span>@cityName</span>
+                                                                    <span>@cityName</span>
                                                             }
                                                         </li>
                                                     </ul>
@@ -82,19 +79,19 @@
                                             <div class="mb-2">
                                                 <form asp-action="Promotion" asp-route-id="@user.Id" method="post">
                                                     <button class="btn btn-primary w-100"
-                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.STUDENT_ROLE 
-                                                        ? "disabled" 
-                                                        : string.Empty)>
+                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.STUDENT_ROLE
+                                                    ? "disabled"
+                                                    : string.Empty)>
                                                         Promote
                                                     </button>
                                                 </form>
                                             </div>
                                             <div class="mb-2">
                                                 <form asp-action="Demotion" asp-route-id="@user.Id" method="post">
-                                                    <button class="btn btn-secondary w-100" 
-                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.USER_ROLE 
-                                                        ? "disabled" 
-                                                        : string.Empty)>
+                                                    <button class="btn btn-secondary w-100"
+                                                    @(user.IsUserBanned || user.RoleName == GlobalConstants.USER_ROLE
+                                                    ? "disabled"
+                                                    : string.Empty)>
                                                         Demote
                                                     </button>
                                                 </form>
@@ -106,7 +103,7 @@
                                         {
                                             <div class="mb-2">
                                                 <form asp-action="BanUser" asp-route-id="@user.Id" method="post">
-                                                    <button class="btn btn-danger w-100" 
+                                                    <button class="btn btn-danger w-100"
                                                     @(user.IsUserBanned ? "disabled" : string.Empty)>
                                                         Ban
                                                     </button>
@@ -126,6 +123,9 @@
                             }
                         </tbody>
                     </table>
+                    <div>
+                        <partial name="_PagingPartial" model="@Model">
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,21 +134,4 @@
 
 @section Scripts{
     <script src="https://kit.fontawesome.com/ddc00cf9b8.js" crossorigin="anonymous"></script>
-
-    <script>
-        let selectAsElement = document.getElementById("courseSelect");
-
-            selectAsElement.addEventListener("change", function () {
-            let value = selectAsElement.value;
-
-            let aElement = document.getElementById("exportLink");
-            let href = aElement.getAttribute("href");
-            let indexOf = href.indexOf("?");
-
-            let subHref = href.substring(0, indexOf);
-            let newHref = `${subHref}?courseId=${value}`;
-
-            aElement.setAttribute("href", newHref);
-        });
-    </script>
 }

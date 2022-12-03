@@ -18,15 +18,16 @@
     {
         private const string ROUTE = "Administrator/Dashboard";
 
-        [Fact]
-        public void IndexShouldReturnView()
+        [Theory]
+        [InlineData(1)]
+        public void IndexShouldReturnView(int currentPage)
             => MyMvc
                 .Pipeline()
                 .ShouldMap(request => request
-                    .WithLocation($"{ROUTE}/Index")
+                    .WithLocation($"{ROUTE}/Index?currentPage{currentPage}")
                     .WithUser(new[] {ADMIN_ROLE})
                     .WithAntiForgeryToken())
-                .To<DashboardController>(c => c.Index())
+                .To<DashboardController>(c => c.Index(null, 1))
                 .Which(controller => controller
                     .WithData(Users()))
                 .ShouldReturn()
@@ -34,81 +35,7 @@
                     .WithModelOfType<UserPageViewModel>(model =>
                     {
                         Assert.Equal(10, model.Users.Count());
-                        Assert.Equal(10, model.Courses.Count());
                     }));
-
-        [Theory]
-        [InlineData(1)]
-        public void ExportShouldReturnFile(int id)
-            => MyMvc
-                .Pipeline()
-                .ShouldMap(request => request
-                    .WithLocation($"{ROUTE}/Export?courseId={id}")
-                    .WithUser(new[] { ADMIN_ROLE })
-                    .WithAntiForgeryToken())
-                .To<DashboardController>(c => c.Export(id))
-                .Which(controller => controller
-                    .WithData(Courses()))
-                .ShouldReturn()
-                .File();
-
-        [Theory]
-        [InlineData("UserId")]
-        [InlineData("StudentId")]
-        public void PromotionShouldPromoteUser(string id)
-            => MyMvc
-                .Pipeline()
-                .ShouldMap(requst => requst
-                    .WithMethod(HttpMethod.Post)
-                    .WithLocation($"{ROUTE}/Promotion")
-                    .WithFormField("id", id)
-                    .WithUser(new[] { ADMIN_ROLE })
-                    .WithAntiForgeryToken())
-                .To<DashboardController>(c => c.Promotion(id))
-                .Which(controller => controller
-                    .WithData(UsersForPromotionAndDemotion()))
-                .ShouldHave()
-                .Data(data => data
-                    .WithSet<ApplicationUser>(users => users
-                        .Any(u =>
-                            u.Id == id &&
-                            u.UserRoles.Count == 1 &&
-                            u.UserRoles
-                                .Any(ur => ur.Role.Name == STUDENT_ROLE || ur.Role.Name == MODERATOR_ROLE))))
-                .TempData(tempData => tempData
-                    .ContainingEntryWithKey(SUCCESS_NOTIFICATION))
-                .AndAlso()
-                .ShouldReturn()
-                .RedirectToAction("Index");
-
-        [Theory]
-        [InlineData("StudentId")]
-        [InlineData("ModeratorId")]
-        public void DemoteShouldDemoteUser(string id)
-            => MyMvc
-                .Pipeline()
-                .ShouldMap(request => request
-                    .WithMethod(HttpMethod.Post)
-                    .WithLocation($"{ROUTE}/Demotion")
-                    .WithFormField("Id", id)
-                    .WithUser(new[] { ADMIN_ROLE })
-                    .WithAntiForgeryToken())
-                .To<DashboardController>(c => c.Demotion(id))
-                .Which(controller => controller
-                    .WithData(UsersForPromotionAndDemotion())
-                .ShouldHave()
-                .Data(data => data
-                    .WithSet<ApplicationUser>(users => users
-                        .Any(u =>
-                            u.Id == id &&
-                            u.UserRoles.Count == 1 &&
-                            u.UserRoles
-                                .Any(ur => ur.Role.Name == USER_ROLE || ur.Role.Name == STUDENT_ROLE))))
-                .TempData(tempData => tempData
-                    .ContainingEntryWithKey(SUCCESS_NOTIFICATION))
-                .AndAlso()
-                .ShouldReturn()
-                .RedirectToAction("Index"));
 
         [Theory]
         [InlineData("UserId")]

@@ -66,22 +66,6 @@
                             }
                         }
                     }
-                },
-                 new ApplicationUser()
-                {
-                    Id = "ModeratorId",
-                    UserRoles = new List<ApplicationUserRole>()
-                    {
-                        new ApplicationUserRole()
-                        {
-                            UserId = "ModeratorId",
-                            Role = new ApplicationRole()
-                            {
-                                Id = "ModeratorRole",
-                                Name = MODERATOR_ROLE,
-                            }
-                        }
-                    }
                 }
             };
 

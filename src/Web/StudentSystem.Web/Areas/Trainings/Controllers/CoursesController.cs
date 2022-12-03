@@ -39,7 +39,6 @@
         }
 
         [HttpGet]
-
         public async Task<IActionResult> Index(int[] filters, int currentPage = 1)
         {
             var courses = await this.courseService
@@ -110,6 +109,7 @@
         {
             if (!ModelState.IsValid)
             {
+                courseToUpdate.Categories = await this.GetCategoriesAsync();
                 return this.View(courseToUpdate);
             }
 

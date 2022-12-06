@@ -29,7 +29,7 @@
                 LastName = ADMIN_LAST_NAME,
                 Email = ADMIN_EMAIL,
                 UserName = ADMIN_EMAIL,
-                ImageURL = "https://i.pinimg.com/736x/33/32/6d/33326dcddbf15c56d631e374b62338dc.jpg",
+                ImageURL = "https://preview.redd.it/cbc20oz17dg71.jpg?width=640&crop=smart&auto=webp&s=83e70dc910a8558c9955e9e6ee43cd0a98ccaa04",
                 CreatedOn = DateTime.UtcNow,
             };
 

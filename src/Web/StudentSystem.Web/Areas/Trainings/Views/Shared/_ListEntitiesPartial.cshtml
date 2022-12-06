@@ -1,6 +1,11 @@
 ﻿@using StudentSystem.ViewModels.Page
 @model IEnumerable<EntityForPageViewModel>
 
+@{
+	var parentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+	var isResourceController = parentControllerName == "Resources";
+}
+
 <table class="table mt-3">
 	<tbody class="border-bottom">
 		<tr>
@@ -16,7 +21,16 @@
 				<td>
 					<div class="d-flex justify-content-between align-items-center">
 						<div style="font-size: 20px;">
-							<span>@entity.Name</span>
+							@if (isResourceController)
+							{
+								<a asp-action="Details" asp-route-id="@entity.Id">
+									@entity.Name
+								</a>
+							}
+							else
+							{
+								<span>@entity.Name</span>
+							}
 						</div>
 						<div>
 							<a class="options-bar" asp-action="Update" asp-route-id="@entity.Id">

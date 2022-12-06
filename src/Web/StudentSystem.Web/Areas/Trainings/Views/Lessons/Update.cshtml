@@ -1,10 +1,11 @@
 ﻿@model LessonFormServiceModel
 
 @{
-    this.ViewData["Title"] = $"Details: {Model.Title}";
+    this.ViewData["Title"] = $"Update: {Model.Title}";
 }
 
 <div class="container mt-4">
+    <partial name="_UpdateHeaderPartial" model="@Model">
     <partial name="_LessonFormPartial" model="@Model">
 </div>
 

@@ -11,6 +11,8 @@
     using StudentSystem.Data.Seed.Contracts;
     using StudentSystem.Web.Data;
 
+    using static StudentSystem.Web.Common.GlobalConstants;
+
     public class CourseSeeder : ISeeder
     {
         public async Task SeedAsync(IServiceScope serviceScope)
@@ -145,6 +147,7 @@
                     StartDate = DateTime.UtcNow.AddDays(5),
                     EndDate = DateTime.UtcNow.AddMonths(2),
                     Lessons = lessonsForCSharpOOPCourse,
+                    Reviews = new List<Review>(),
                 },
                 new Course
                 {
@@ -155,6 +158,7 @@
                     StartDate = DateTime.UtcNow.AddDays(6),
                     EndDate = DateTime.UtcNow.AddMonths(2),
                     Lessons = lessonsForJavaAdvanced,
+                    Reviews = new List<Review>(),
                 },
                 new Course
                 {
@@ -165,6 +169,7 @@
                     StartDate = DateTime.UtcNow.AddDays(7),
                     EndDate = DateTime.UtcNow.AddMonths(1).AddDays(7),
                     Lessons = lessonsForReactCourse,
+                    Reviews = new List<Review>(),
                 },
                 new Course
                 {
@@ -175,8 +180,31 @@
                     StartDate = DateTime.UtcNow.AddDays(7),
                     EndDate = DateTime.UtcNow.AddMonths(4).AddDays(7),
                     Lessons = lessonsForPythonAiCourse,
+                    Reviews = new List<Review>(),
                 }
             };
+
+            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == ADMIN_EMAIL);
+            courses[0].Reviews.Add(new Review
+            {
+                User = user,
+                Content = "Amazing course!",
+                CreatedOn = DateTime.UtcNow,
+            });
+
+            courses[1].Reviews.Add(new Review
+            {
+                User = user,
+                Content = "Very good course!",
+                CreatedOn = DateTime.UtcNow.AddDays(2),
+            });
+
+            courses[2].Reviews.Add(new Review
+            {
+                User = user,
+                Content = "I recommend!",
+                CreatedOn = DateTime.UtcNow.AddDays(1),
+            });
 
             courses[0].CourseCategories.Add(new CourseCategory
             {

@@ -1,6 +1,15 @@
 ﻿@model ResouceDetailsViewModel
+@{
+    this.ViewData["Title"] = $"Details: {Model.Name}";
+}
 
-<div class="container">
-    <div>@Model.Name</div>
-    <div>@Model.URL</div>
+<div class="container mt-5">
+    <div class="offset-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body text-center">
+                <h5 class="card-title">@Model.Name</h5>
+                <a href="@Model.URL" target="_blank" class="btn btn-primary">To resource</a>
+            </div>
+        </div>
+    </div>
 </div>

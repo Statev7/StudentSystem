@@ -18,6 +18,7 @@
 	using StudentSystem.ViewModels.City;
 
     using static StudentSystem.Web.Common.GlobalConstants;
+    using static StudentSystem.Web.Common.NotificationsConstants;
 
     public class UserController : Controller
 	{
@@ -168,9 +169,16 @@
         [HttpPost]
 		public async Task<IActionResult> Edit(UpdateUserServiceModel user)
 		{
+            if (!this.ModelState.IsValid)
+            {
+                user.Cities = await this.GetCitiesOrderedByNameAsync();
+                return this.View(user);
+            }
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 			await this.userService.UpdateAsync(userId, user);
+            this.TempData[SUCCESS_NOTIFICATION] = SUCCESSFULLY_UPDATE_USER;
 
             return this.RedirectToAction("Index", "Home");
 		}

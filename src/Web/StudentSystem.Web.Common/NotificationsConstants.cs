@@ -30,7 +30,7 @@ namespace StudentSystem.Web.Common
         //Resource
         public const string NOT_HAVE_PERMISSION_TO_RESOURCE = "Materials are only available to enrolled users in the course";
 
-        //Admin panel 
+        //User panel 
         public const string USER_NOT_EXIST_MESSAGE = "Such a user not exist";
         public const string SUCCESSFULLY_PROMOTED_MESSAGE = "Successfully promoted a user";
         public const string SUCCESSFULLY_DEMOTE_MESSSAGE = "Successfully demote a user";
@@ -44,6 +44,7 @@ namespace StudentSystem.Web.Common
         public const string CANNOT_BAN_ADMIN_MESSAGE = "Cannot ban user with admin role!";
         public const string CANNOT_PROMOTE_A_BANNED_USER = "Cannot promote a banned user!";
         public const string CANNOT_DEMOTE_A_BANNED_USER = "Cannot demote a banned user!";
+        public const string SUCCESSFULLY_UPDATE_USER = "Successfully update your profile!";
 
         //CRUD
 

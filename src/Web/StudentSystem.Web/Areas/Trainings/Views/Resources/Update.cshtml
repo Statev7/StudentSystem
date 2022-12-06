@@ -4,7 +4,8 @@
     this.ViewData["Title"] = $"Update {Model.Name}";
 }
 
-<div class="container mt-4">
+<div class="container">
+    <partial name="_UpdateHeaderPartial" model="@Model">
     <partial name="_ResourceFormPartial" model="@Model">
 </div>
 

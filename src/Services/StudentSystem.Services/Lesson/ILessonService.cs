@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using StudentSystem.Services.Abstaction;
+    using StudentSystem.Services.Contracts;
     using StudentSystem.ViewModels.Lesson;
 
     public interface ILessonService : IBaseService, ICreateUpdateService

@@ -122,6 +122,7 @@ namespace StudentSystem.Web
             services.AddTransient<IAdministratorService, AdministratorService>();
             services.AddTransient<IExcelExportService, ExcelExportService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddHttpContextAccessor();
         }
     }
 }

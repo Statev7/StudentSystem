@@ -4,6 +4,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;
 
+    using StudentSystem.Web.Infrastructure.Helpers;
+
     using static StudentSystem.Web.Common.NotificationsConstants;
 
     public class DateLessThanTodayAttribute : ValidationAttribute
@@ -15,9 +17,19 @@
             this.canBeToday = canBeToday;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext context)
         {
             var startTimeValue = (DateTime)value;
+
+            var isDifferent = Helper
+                .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue)
+                .GetAwaiter()
+                .GetResult();
+
+            if (!isDifferent)
+            {
+                return ValidationResult.Success;
+            }
 
             if (!this.canBeToday && startTimeValue.Date <= DateTime.UtcNow.Date)
             {

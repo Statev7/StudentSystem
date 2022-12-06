@@ -1,4 +1,4 @@
-﻿namespace StudentSystem.Services.Abstaction
+﻿namespace StudentSystem.Services.Contracts
 {
     using System.Threading.Tasks;
 

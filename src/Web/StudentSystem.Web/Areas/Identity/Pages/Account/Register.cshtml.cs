@@ -50,8 +50,6 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        //TODO: Move error messages to contants
-
         public class InputModel
         {
             [Required]

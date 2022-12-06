@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using StudentSystem.Services.Abstaction;
+    using StudentSystem.Services.Contracts;
 
     public interface IReviewService : IBaseService, ICreateUpdateService
 	{

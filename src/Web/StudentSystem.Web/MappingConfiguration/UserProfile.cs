@@ -24,7 +24,7 @@
                 .ForMember(d => d.CityName, conf => conf
                     .MapFrom(s => s.City.Name ?? "No information"));
 
-            this.CreateMap<UpdateUserServiceModel, ApplicationUser>();
+            this.CreateMap<ApplicationUser, UpdateUserServiceModel>().ReverseMap();
             this.CreateMap<ApplicationUser, CreateUserServiceModel>().ReverseMap();
             this.CreateMap<ApplicationUser, UserDetailsServiceModel>();
         }

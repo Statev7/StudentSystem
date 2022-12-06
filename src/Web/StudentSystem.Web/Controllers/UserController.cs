@@ -157,7 +157,7 @@
 		public async Task<IActionResult> Edit()
 		{
 			var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var user = await this.userService.GetByIdAsync<CreateUserServiceModel>(userId);
+			var user = await this.userService.GetByIdAsync<UpdateUserServiceModel>(userId);
 
             user.Cities = await this.GetCitiesOrderedByNameAsync();
 
@@ -166,7 +166,7 @@
 
         [Authorize]
         [HttpPost]
-		public async Task<IActionResult> Edit(CreateUserServiceModel user)
+		public async Task<IActionResult> Edit(UpdateUserServiceModel user)
 		{
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 

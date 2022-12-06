@@ -4,6 +4,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
+    using StudentSystem.Web.Infrastructure.Helpers;
+
     using static StudentSystem.Web.Common.NotificationsConstants;
 
     public class DateLessThanAttribute : ValidationAttribute
@@ -15,17 +17,27 @@
             this.comparisonProperty = comparisonProperty;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            var startTimeValue = (DateTime)value;
+            var endTimeAsProperty = context.ObjectType.GetProperty(this.comparisonProperty);
 
-            var endTimeAsProperty = validationContext.ObjectType.GetProperty(this.comparisonProperty);
             if (endTimeAsProperty == null)
             {
                 throw new ArgumentNullException("Property with this name not found");
             }
 
-            var endTimeValue = (DateTime)endTimeAsProperty.GetValue(validationContext.ObjectInstance);
+            var startTimeValue = (DateTime)value;
+            var endTimeValue = (DateTime)endTimeAsProperty.GetValue(context.ObjectInstance);
+
+            var isDifferent = Helper
+                .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue, endTimeValue)
+                .GetAwaiter()
+                .GetResult();
+
+            if (!isDifferent)
+            {
+                return ValidationResult.Success;
+            }
 
             if (startTimeValue > endTimeValue)
             {
@@ -34,14 +46,14 @@
                         .Cast<DisplayAttribute>()
                         .SingleOrDefault();
 
-                var endTimeDisplayName = endTimeDisplayAttribute == null 
-                        ? endTimeAsProperty.Name 
+                var endTimeDisplayName = endTimeDisplayAttribute == null
+                        ? endTimeAsProperty.Name
                         : endTimeDisplayAttribute.Name;
 
-                 var errorMessage = 
-                    string.Format(THE_START_TIME_CANNOT_BE_LATER_THAN_THE_END_TIME, 
-                    validationContext.DisplayName, 
-                    endTimeDisplayName.ToLower());
+                var errorMessage =
+                   string.Format(THE_START_TIME_CANNOT_BE_LATER_THAN_THE_END_TIME,
+                   context.DisplayName,
+                   endTimeDisplayName.ToLower());
 
                 return new ValidationResult(errorMessage);
             }

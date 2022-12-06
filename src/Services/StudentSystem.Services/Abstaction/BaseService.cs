@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using StudentSystem.Data.Models.Abstraction;
+    using StudentSystem.Services.Contracts;
     using StudentSystem.Web.Data;
 
     public abstract class BaseService<TEntity> : IBaseService, ICreateUpdateService

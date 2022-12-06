@@ -32,25 +32,9 @@
                     Id = x + 1,
                 });
 
-        public static IEnumerable<ApplicationUser> UsersForPromotionAndDemotion()
+        public static IEnumerable<ApplicationUser> UsersForPromote()
             => new List<ApplicationUser>()
             {
-                new ApplicationUser()
-                {
-                    Id = "UserId",
-                    UserRoles = new List<ApplicationUserRole>()
-                    {
-                        new ApplicationUserRole()
-                        {
-                            UserId = "UserId",
-                            Role = new ApplicationRole()
-                            {
-                                Id = "UserRole",
-                                Name = USER_ROLE,
-                            }
-                        }
-                    }
-                },
                 new ApplicationUser()
                 {
                     Id = "StudentId",
@@ -66,42 +50,25 @@
                             }
                         }
                     }
-                }
-            };
 
-        public static IEnumerable<ApplicationUser> UsersForBanAndUnban()
-            => new List<ApplicationUser>()
-            {
+                },
                 new ApplicationUser()
                 {
                     Id = "UserId",
-                    IsDeleted = false,
                     UserRoles = new List<ApplicationUserRole>()
                     {
                         new ApplicationUserRole()
                         {
+                            UserId = "UserId",
                             Role = new ApplicationRole()
                             {
+                                Id = "UserRole",
                                 Name = USER_ROLE,
                             }
                         }
                     }
-                },
-                new ApplicationUser()
-                {
-                    Id = "StudentId",
-                    IsDeleted = false,
-                    UserRoles = new List<ApplicationUserRole>()
-                    {
-                        new ApplicationUserRole()
-                        {
-                            Role = new ApplicationRole()
-                            {
-                                Name = STUDENT_ROLE,
-                            }
-                        }
-                    }
-                },
+                }
             };
+
     }
 }

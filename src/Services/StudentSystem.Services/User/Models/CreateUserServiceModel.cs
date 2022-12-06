@@ -16,5 +16,9 @@
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; }
-	}
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
 }

@@ -62,7 +62,7 @@
 <br>
 Парола: Admin@admin.admin
 
-<h2>Технически стек:</h2>
+<h2>Технически стек</h2>
 <ul>
   <li>ASP.NET 5.0</li>
   <li>Entity Framework Core 5.0</li>

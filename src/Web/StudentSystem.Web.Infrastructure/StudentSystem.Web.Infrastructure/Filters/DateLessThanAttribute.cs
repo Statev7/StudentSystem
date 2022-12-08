@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
+    using StudentSystem.Web.Infrastructure.Extensions;
     using StudentSystem.Web.Infrastructure.Helpers;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
@@ -29,14 +30,18 @@
             var startTimeValue = (DateTime)value;
             var endTimeValue = (DateTime)endTimeAsProperty.GetValue(context.ObjectInstance);
 
-            var isDifferent = Helper
-                .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue, endTimeValue)
-                .GetAwaiter()
-                .GetResult();
-
-            if (!isDifferent)
+            var isUpdateAction = context.IsRequestCallUpdateAction();
+            if (isUpdateAction)
             {
-                return ValidationResult.Success;
+                var hasDifferent = Helper
+                    .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue, endTimeValue)
+                    .GetAwaiter()
+                    .GetResult();
+
+                if (!hasDifferent)
+                {
+                    return ValidationResult.Success;
+                }
             }
 
             if (startTimeValue > endTimeValue)

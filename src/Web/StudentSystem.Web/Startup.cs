@@ -46,14 +46,14 @@ namespace StudentSystem.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
-                {
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequiredLength = PASSWORD_MIN_LENGTH;
-                })
-                .AddRoles<ApplicationRole>()
-                .AddEntityFrameworkStores<StudentSystemDbContext>();
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = PASSWORD_MIN_LENGTH;
+            })
+            .AddRoles<ApplicationRole>()
+            .AddEntityFrameworkStores<StudentSystemDbContext>();
 
             services.AddControllersWithViews();
 

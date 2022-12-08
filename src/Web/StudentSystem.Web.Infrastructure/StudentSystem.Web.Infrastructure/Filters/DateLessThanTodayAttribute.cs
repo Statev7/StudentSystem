@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;
 
+    using StudentSystem.Web.Infrastructure.Extensions;
     using StudentSystem.Web.Infrastructure.Helpers;
 
     using static StudentSystem.Web.Common.NotificationsConstants;
@@ -21,14 +22,18 @@
         {
             var startTimeValue = (DateTime)value;
 
-            var isDifferent = Helper
-                .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue)
-                .GetAwaiter()
-                .GetResult();
-
-            if (!isDifferent)
+            var isUpdateAction = context.IsRequestCallUpdateAction();
+            if (isUpdateAction)
             {
-                return ValidationResult.Success;
+                var hasDifferent = Helper
+                    .CheckIfInputDatesHasDiffThanCurrentOnesAsync(context, startTimeValue)
+                    .GetAwaiter()
+                    .GetResult();
+
+                if (!hasDifferent)
+                {
+                    return ValidationResult.Success;
+                }
             }
 
             if (!this.canBeToday && startTimeValue.Date <= DateTime.UtcNow.Date)

@@ -4,8 +4,8 @@
     {
         // Users
 
-        //public const string ADMIN_EMAIL = "Inka@abv.bg";
-        //public const string ADMIN_PASSWORD = "Gadinka123";
+        public const string SHAMTKA_EMAIL = "Inka@abv.bg";
+        public const string SHAMTKA_PASSWORD = "Gadinka123";
 
         public const string ADMIN_FIRST_NAME = "FAdmin";
         public const string ADMIN_LAST_NAME = "LAdmin";

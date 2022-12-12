@@ -33,8 +33,21 @@
                 CreatedOn = DateTime.UtcNow,
             };
 
+            var secondAdmin = new ApplicationUser
+            {
+                FirstName = "Inka",
+                LastName = "Gadinka",
+                Email = SHAMTKA_EMAIL,
+                UserName = SHAMTKA_EMAIL,
+                ImageURL = "https://animemotivation.com/wp-content/uploads/2022/07/levi-ackerman-aot-bad-ass.jpg",
+                CreatedOn = DateTime.UtcNow,
+            };
+
             await userManager.CreateAsync(admin, ADMIN_PASSWORD);
             await userManager.AddToRoleAsync(admin, ADMIN_ROLE);
+
+            await userManager.CreateAsync(secondAdmin, SHAMTKA_PASSWORD);
+            await userManager.AddToRoleAsync(secondAdmin, ADMIN_ROLE);
         }
     }
 }

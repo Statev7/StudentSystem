@@ -175,6 +175,8 @@
                 return this.View(user);
             }
 
+            user.ImageUrl ??= DEFAULT_IMAGE;
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 			await this.userService.UpdateAsync(userId, user);

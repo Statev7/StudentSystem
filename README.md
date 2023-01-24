@@ -58,7 +58,7 @@
 Потребител с роля Admin:
 <br>
 <br>
-Емейл: Admin@admin.admin
+Имейл: Admin@admin.admin
 <br>
 Парола: Admin@admin.admin
 
